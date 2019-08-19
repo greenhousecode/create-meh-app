@@ -1,0 +1,27 @@
+{
+  "name": "create-meh-app",
+  "version": "1.0.0",
+  "description": "",
+  "bin": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "rollup -cw",
+    "build": "rollup -c",
+    "lint": "eslint --fix --ignore-path .gitignore .",
+    "prepublishOnly": "yarn lint && yarn build"
+  },
+  "license": "MIT",
+  "repository": "github:greenhousecode/create-meh-app",
+  "author": "Rick Stevens <rick.stevens@greenhousegroup.com> (http://www.greenhousegroup.com/)",
+  "devDependencies": {
+    "eslint": "6.1.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2",
+    "rollup": "^1.19.4"
+  }
+}
