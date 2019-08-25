@@ -11,7 +11,7 @@
     "prepublishOnly": "yarn lint"
   },
   "lint-staged": {
-    "*.js": ["eslint --ignore-path .gitignore . --fix", "git add"]
+    "*.js": ["yarn lint --fix", "git add"]
   },
   "husky": {
     "hooks": {
