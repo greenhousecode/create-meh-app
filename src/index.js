@@ -1,11 +1,14 @@
+const { existsSync, mkdirSync } = require('fs');
+const { spawn } = require('child_process');
+const { prompt, ui } = require('inquirer');
 const { Gitlab } = require('gitlab');
-const { prompt } = require('inquirer');
 const boxen = require('boxen');
 const chalk = require('chalk');
 const clear = require('clear');
 const { version } = require('../package.json');
 
 const GITLAB_MEH_NAMESPACE = 'GreenhouseGroup/meh';
+const GITLAB_MEH_NAMESPACE_ID = 4495257;
 let gitlab;
 
 const filter = input => input.trim().replace(/\s+/g, ' ');
@@ -19,10 +22,10 @@ const filter = input => input.trim().replace(/\s+/g, ' ');
       padding: 1,
       margin: 1,
     }),
+    chalk.gray('\nWe need to know a few things…'),
   );
-  console.log(chalk.gray('We need to know a few things…'));
 
-  const answers = await prompt([
+  const { slugName, description } = await prompt([
     {
       mask: '*',
       type: 'password',
@@ -66,22 +69,9 @@ const filter = input => input.trim().replace(/\s+/g, ' ');
           .replace(/[^0-9a-z\s]+/g, '')
           .replace(/\s+/g, '-'),
       filter,
-      async validate(slugName) {
-        if (!/^[0-9a-z]+(-[0-9a-z]+)*$/.test(slugName)) {
-          return 'Please only use kebab-case, without any special characters';
-        }
-
-        try {
-          await gitlab.Projects.show(`${GITLAB_MEH_NAMESPACE}/${slugName}`);
-          return 'This project slug name already exists!';
-        } catch ({ message }) {
-          if (message !== 'Not Found') {
-            return `Couldn't check for duplicates: ${message}`;
-          }
-        }
-
-        return true;
-      },
+      validate: slugName =>
+        /^[0-9a-z]+(-[0-9a-z]+)*$/.test(slugName) ||
+        'Please only use kebab-case, without any special characters',
     },
     {
       type: 'input',
@@ -90,7 +80,38 @@ const filter = input => input.trim().replace(/\s+/g, ' ');
       default: 'To make the world a better place.',
       filter,
     },
+    {
+      name: 'react',
+      type: 'confirm',
+      message: `Are you planning to use React? (Only affects linting)`,
+      default: false,
+    },
   ]);
 
-  console.log('answers', answers);
+  console.log(chalk.gray('\nInstalling…'));
+  const bar = new ui.BottomBar();
+  bar.updateBottomBar(chalk.gray('Creating GitLab project…'));
+
+  try {
+    const { ssh_url_to_repo, http_url_to_repo, web_url } = await gitlab.Projects.create({
+      namespace_id: GITLAB_MEH_NAMESPACE_ID,
+      name: slugName,
+      description,
+    });
+
+    bar.updateBottomBar('');
+    console.log(chalk.green('✔ Created GitLab project'));
+  } catch (err) {
+    bar.updateBottomBar('');
+    console.log(chalk.red(`✘ Creating GitLab project failed (${err.message}):`));
+    console.error(err.description);
+    process.exit(1);
+  }
+
+  if (!existsSync(slugName)) {
+    mkdirSync(slugName);
+    console.log(chalk.green(`✔ Created new directory "${slugName}"`));
+  } else {
+    console.log(chalk.yellow(`✔ Directory "${slugName}" already exists`));
+  }
 })();
