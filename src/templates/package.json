@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "",
+  "version": "1.0.0",
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "echo 'No test specified' && exit 0",
+    "build": "echo 'No build specified' && exit 0",
+    "deploy-env": "",
+    "start": "echo 'No start specified' && exit 0"
+  },
+  "lint-staged": {
+    "*.js": ["lint --fix", "git add"]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn deploy-env"
+    }
+  }
+}

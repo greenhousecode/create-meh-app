@@ -1,2 +1,4 @@
 package-lock.json
 node_modules
+secrets.yml
+.env
