@@ -6,7 +6,7 @@ const { GITLAB_MEH_NAMESPACE } = require('../config.json');
 const filter = input => input.trim().replace(/\s+/g, ' ');
 
 module.exports = () => {
-  console.log(chalk.gray('\nWe need to know a few things…'));
+  console.log(chalk.gray('We need to know a few things…'));
 
   return prompt([
     {

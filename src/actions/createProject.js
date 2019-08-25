@@ -4,6 +4,8 @@ const chalk = require('chalk');
 const { GITLAB_MEH_NAMESPACE_ID } = require('../config.json');
 
 module.exports = async ({ token, slugName, description }) => {
+  console.log(chalk.gray('\nInstalling…'));
+
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Creating GitLab project…'));
 

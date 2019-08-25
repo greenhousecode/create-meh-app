@@ -21,7 +21,7 @@ const { version } = require('../package.json');
   const answers = await askQuestions();
   const project = await createProject(answers);
   const cwd = createDirectory(answers);
-  await cloneRepository(answers, project, cwd);
+  await cloneRepository(project, cwd);
   // copyFiles(answers, direcory); // & rewriteFiles(answers, direcory);
   // installDependencies(answers, direcory);
 })();

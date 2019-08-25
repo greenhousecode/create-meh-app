@@ -10,7 +10,7 @@
     "start": "echo 'No start specified' && exit 0"
   },
   "lint-staged": {
-    "*.js": ["lint --fix", "git add"]
+    "*.js": ["yarn lint --fix", "git add"]
   },
   "husky": {
     "hooks": {
