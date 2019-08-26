@@ -22,7 +22,6 @@ const { version } = require('../package.json');
   );
 
   const answers = await askQuestions();
-  console.log(answers);
   const project = await createProject(answers);
   await createDeployToken(/* answers, project */);
   const cwd = createDirectory(answers);
