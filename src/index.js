@@ -23,7 +23,7 @@ const { version } = require('../package.json');
 
   const answers = await askQuestions();
   const project = await createProject(answers);
-  await createDeployToken(/* answers, project */);
+  await createDeployToken(/* answers, project */); // TODO: wait for deploy key or token support
   const cwd = createDirectory(answers);
   await cloneRepository(answers, project, cwd);
   await copyFiles(cwd);
