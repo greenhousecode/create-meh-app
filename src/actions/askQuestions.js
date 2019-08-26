@@ -66,8 +66,15 @@ module.exports = () => {
     {
       name: 'react',
       type: 'confirm',
-      message: `Are you planning on using React? (Only affects linting)`,
+      message: 'Are you planning on using React? (Only affects linting)',
       default: false,
+    },
+    {
+      type: 'list',
+      name: 'protocol',
+      message: 'Clone repository using:',
+      choices: ['SSH', 'HTTPS'],
+      default: 0,
     },
   ]);
 };

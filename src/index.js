@@ -1,10 +1,13 @@
 const boxen = require('boxen');
 const chalk = require('chalk');
 const clear = require('clear');
+const installDependencies = require('./actions/installDependencies');
+const createDeployToken = require('./actions/createDeployToken');
 const createDirectory = require('./actions/createDirectory');
 const cloneRepository = require('./actions/cloneRepository');
 const createProject = require('./actions/createProject');
 const askQuestions = require('./actions/askQuestions');
+const copyFiles = require('./actions/copyFiles');
 const { version } = require('../package.json');
 
 (async () => {
@@ -19,9 +22,13 @@ const { version } = require('../package.json');
   );
 
   const answers = await askQuestions();
+  console.log(answers);
   const project = await createProject(answers);
+  await createDeployToken(/* answers, project */);
   const cwd = createDirectory(answers);
-  await cloneRepository(project, cwd);
-  // copyFiles(answers, direcory); // & rewriteFiles(answers, direcory);
-  // installDependencies(answers, direcory);
+  await cloneRepository(answers, project, cwd);
+  await copyFiles(cwd);
+  await installDependencies(answers, cwd);
+
+  console.log(chalk.bold.green('\nAll finished!'));
 })();

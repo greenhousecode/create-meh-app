@@ -14,9 +14,7 @@
     "*.js": ["yarn lint --fix", "git add"]
   },
   "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+    "hooks": { "pre-commit": "lint-staged" }
   },
   "license": "MIT",
   "repository": "github:greenhousecode/create-meh-app",

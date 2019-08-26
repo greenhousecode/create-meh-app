@@ -1,12 +1,12 @@
 {
   "private": true,
-  "name": "",
+  "name": "{{slugName}}",
   "version": "1.0.0",
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "test": "echo 'No test specified' && exit 0",
     "build": "echo 'No build specified' && exit 0",
-    "deploy-env": "",
+    "deploy-env": "echo 'No deploy-env specified' && exit 0",
     "start": "echo 'No start specified' && exit 0"
   },
   "lint-staged": {
@@ -17,5 +17,6 @@
       "pre-commit": "lint-staged",
       "pre-push": "yarn deploy-env"
     }
-  }
+  },
+  "author": "{{author}}"
 }

@@ -7,6 +7,7 @@ RUN yarn
 
 # Build
 COPY . .
+RUN yarn build
 
 # Serve
 EXPOSE 3000
