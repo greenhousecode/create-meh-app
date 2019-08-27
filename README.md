@@ -19,7 +19,18 @@ yarn create meh-app
 Based on your input data:
 
 1. Creates a GitLab project
-2. Creates a `read_registry` GitLab deploy token, and publishes it through `kubectl`
-3. Creates a directory, and clones the new repository
-4. Copies over configuration files to the cwd, and installs dependencies
-5. Every time you `push` through `git`: Converts your `.env` to `secrets.yml`, and publishes it through `kubectl`
+2. Creates a directory, and clones the new project's repository
+3. Scaffolds, and installs dependencies
+4. Every time you `git push` to
+   - `master`: applies your `.env-prod`\* through `kubectl`
+   - `develop`: applies your `.env-acc`\* through `kubectl`
+   - other branches: applies your `.env-test`\* through `kubectl`
+
+_\*if it exists_
+
+.env > secrets.yml (name: {{slugName}}__STAGE__-secret-env)
+GitLab: GET /groups/:id/variables/MEH_K8S_CLUSTER_CONFIG > value
+value > base64 decode > tmp file
+KUBECONFIG=tmpfilepath kubectl apply -f secrets.yml
+delete secrets.yml
+delete tmp file

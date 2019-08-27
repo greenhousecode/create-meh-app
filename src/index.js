@@ -2,7 +2,6 @@ const boxen = require('boxen');
 const chalk = require('chalk');
 const clear = require('clear');
 const installDependencies = require('./actions/installDependencies');
-const createDeployToken = require('./actions/createDeployToken');
 const createDirectory = require('./actions/createDirectory');
 const cloneRepository = require('./actions/cloneRepository');
 const createProject = require('./actions/createProject');
@@ -21,13 +20,18 @@ const { version } = require('../package.json');
     }),
   );
 
-  const answers = await askQuestions();
-  const project = await createProject(answers);
-  await createDeployToken(/* answers, project */); // TODO: wait for deploy key or token support
-  const cwd = createDirectory(answers);
-  await cloneRepository(answers, project, cwd);
-  await copyFiles(cwd);
-  await installDependencies(answers, cwd);
+  try {
+    const answers = await askQuestions();
+    const project = await createProject(answers);
+    const cwd = createDirectory(answers);
+    await cloneRepository(answers, project, cwd);
+    copyFiles(answers, cwd);
+    await installDependencies(answers, cwd);
+  } catch (err) {
+    console.log(chalk.red(`\nSomething went wrong (${err.message})…`));
+    console.log(err.description || err);
+    process.exit(1);
+  }
 
   console.log(chalk.bold.green('\nAll finished!'));
 })();

@@ -3,7 +3,6 @@ email: meh@greenhousegroup.com
 version: __VERSION__
 dockerImage: registry.gitlab.com/greenhousegroup/meh/{{slugName}}:__VERSION__
 webReplicas: __REPLICAS__
-gitlabDeployToken: {{slugName}}-gitlab-deploy-token
 ingress:
   createIngress: true
   tls: true
@@ -13,3 +12,4 @@ containerResources:
   limits:
     memory: "256M"
     cpu: 100m
+envSecretName: {{slugName}}__STAGE__-secret-env

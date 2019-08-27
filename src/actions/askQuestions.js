@@ -1,14 +1,16 @@
 const { prompt } = require('inquirer');
 const { Gitlab } = require('gitlab');
 const chalk = require('chalk');
-const { GITLAB_MEH_NAMESPACE } = require('../config.json');
+const { GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_VARIABLE_KEY } = require('../config.json');
 
 const filter = input => input.trim().replace(/\s+/g, ' ');
 
-module.exports = () => {
+module.exports = async () => {
   console.log(chalk.gray('We need to know a few things…'));
 
-  return prompt([
+  let gitlabData;
+
+  const answers = await prompt([
     {
       mask: '*',
       name: 'token',
@@ -23,8 +25,12 @@ module.exports = () => {
         try {
           const gitlab = new Gitlab({ token });
 
-          // TODO: find a better way to determine access
-          await gitlab.GroupProjects.all(GITLAB_MEH_NAMESPACE, { maxPages: 1, perPage: 1 });
+          const [{ value: clusterConfig }, { name, email }] = await Promise.all([
+            gitlab.GroupVariables.show(GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_VARIABLE_KEY),
+            gitlab.Users.current(),
+          ]);
+
+          gitlabData = { clusterConfig, name, email };
 
           return true;
         } catch ({ message }) {
@@ -70,6 +76,16 @@ module.exports = () => {
       default: false,
     },
     {
+      name: 'stages',
+      type: 'checkbox',
+      message: 'Select the deployment stages you want to use:',
+      choices: [
+        { name: 'Testing', value: 'test', checked: true },
+        { name: 'Acceptance', value: 'acc', checked: true },
+        { name: 'Production', disabled: 'always enabled' },
+      ],
+    },
+    {
       type: 'list',
       name: 'protocol',
       message: 'Clone repository using:',
@@ -77,4 +93,9 @@ module.exports = () => {
       default: 0,
     },
   ]);
+
+  return {
+    ...answers,
+    gitlabData,
+  };
 };
