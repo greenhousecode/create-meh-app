@@ -1,7 +1,7 @@
 const { prompt } = require('inquirer');
 const { Gitlab } = require('gitlab');
 const chalk = require('chalk');
-const { GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_VARIABLE_KEY } = require('../config.json');
+const { GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_CLUSTER_VARIABLE_KEY } = require('../config.json');
 
 const filter = input => input.trim().replace(/\s+/g, ' ');
 
@@ -26,7 +26,7 @@ module.exports = async () => {
           const gitlab = new Gitlab({ token });
 
           const [{ value: clusterConfig }, { name, email }] = await Promise.all([
-            gitlab.GroupVariables.show(GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_VARIABLE_KEY),
+            gitlab.GroupVariables.show(GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_CLUSTER_VARIABLE_KEY),
             gitlab.Users.current(),
           ]);
 
@@ -70,10 +70,10 @@ module.exports = async () => {
       filter,
     },
     {
-      name: 'react',
-      type: 'confirm',
-      message: 'Are you planning on using React? (Only affects linting)',
-      default: false,
+      type: 'list',
+      name: 'framework',
+      message: 'Which framework are you planning on using? (Only affects linting)',
+      choices: ['None', 'React', 'Vue'],
     },
     {
       name: 'stages',
@@ -90,7 +90,6 @@ module.exports = async () => {
       name: 'protocol',
       message: 'Clone repository using:',
       choices: ['SSH', 'HTTPS'],
-      default: 0,
     },
   ]);
 

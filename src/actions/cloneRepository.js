@@ -1,11 +1,11 @@
-const { spawn } = require('child_process');
 const { ui } = require('inquirer');
 const chalk = require('chalk');
+const { join } = require('path');
+const spawnPromise = require('../utils/spawnPromise');
 
-module.exports = (
-  { protocol, token },
+module.exports = async (
+  { token, slugName, protocol },
   { ssh_url_to_repo: sshUrl, https_url_to_repo: httpsUrl },
-  cwd,
 ) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Cloning repository…'));
@@ -13,19 +13,15 @@ module.exports = (
   const repoUrl =
     protocol === 'SSH' ? sshUrl : httpsUrl.replace('https://', `https://gitlab-ci-token:${token}@`);
 
-  return new Promise(resolve => {
-    const job = spawn('git', ['clone', repoUrl], { cwd });
+  try {
+    await spawnPromise('git', ['clone', repoUrl]);
+  } catch (err) {
+    bar.updateBottomBar('');
+    console.log(chalk.red('✘ Cloning failed'));
+    process.exit(1);
+  }
 
-    job.on('close', code => {
-      bar.updateBottomBar('');
-
-      if (code !== 0) {
-        console.log(chalk.red('✘ Cloning failed'));
-        process.exit(1);
-      }
-
-      console.log(chalk.green('✔ Cloned repository'));
-      resolve();
-    });
-  });
+  bar.updateBottomBar('');
+  console.log(chalk.green('✔ Cloned repository'));
+  return join(process.cwd(), slugName);
 };

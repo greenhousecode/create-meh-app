@@ -1,13 +1,14 @@
-const { spawn } = require('child_process');
 const { ui } = require('inquirer');
 const chalk = require('chalk');
+const spawnPromise = require('../utils/spawnPromise');
 
-module.exports = async ({ react }, cwd) => {
+module.exports = async ({ framework }, cwd) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Installing dependencies…'));
 
-  const installing = new Promise((resolve, reject) => {
-    const job = spawn(
+  try {
+    // Install dependencies
+    await spawnPromise(
       'yarn',
       [
         'add',
@@ -21,29 +22,22 @@ module.exports = async ({ react }, cwd) => {
       { cwd },
     );
 
-    job.on('close', code => (code === 0 ? resolve() : reject()));
-  });
-
-  const installingAirbnb = new Promise((resolve, reject) => {
-    const job = spawn(
+    // Install Airbnb ESLint config
+    await spawnPromise(
       'npx',
       [
         'install-peerdeps',
-        react ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
+        framework === 'React' ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
         '--dev',
         '--yarn',
       ],
       { cwd },
     );
-
-    job.on('close', code => (code === 0 ? resolve() : reject()));
-  });
-
-  await Promise.all([installing, installingAirbnb]).catch(() => {
+  } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Installing failed'));
     process.exit(1);
-  });
+  }
 
   bar.updateBottomBar('');
   console.log(chalk.green('✔ Installed dependencies'));

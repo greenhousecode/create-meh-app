@@ -3,6 +3,8 @@ const { ui } = require('inquirer');
 const { join } = require('path');
 const chalk = require('chalk');
 
+const templateDir = join(__dirname, '../templates');
+
 module.exports = (answers, cwd) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Copying files…'));
@@ -11,7 +13,7 @@ module.exports = (answers, cwd) => {
 
   const data = {
     ...answers,
-    airbnb: answers.react ? 'airbnb' : 'airbnb-base',
+    airbnb: answers.framework === 'React' ? 'airbnb' : 'airbnb-base',
     author: `${name} <${email}>`,
   };
 
@@ -22,13 +24,15 @@ module.exports = (answers, cwd) => {
   answers.stages.forEach(stage => writeFileSync(join(cwd, `.env-${stage}`), ''));
 
   // Copy over template files and replace macros
-  readdirSync('../templates').forEach(filePath => {
+  readdirSync(templateDir).forEach(fileName => {
+    const filePath = join(templateDir, fileName);
+
     const fileContents = readFileSync(filePath, 'utf8').replace(
       /{{([^}]+)}}/g,
       (_, match) => data[match],
     );
 
-    writeFileSync(join(cwd, filePath.replace(/^_/, '.')), fileContents);
+    writeFileSync(join(cwd, fileName.replace(/^_/, '.')), fileContents);
   });
 
   bar.updateBottomBar('');
