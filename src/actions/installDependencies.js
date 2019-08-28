@@ -17,6 +17,7 @@ module.exports = async ({ framework }, cwd) => {
         'prettier',
         'eslint-config-prettier',
         'eslint-plugin-prettier',
+        framework === 'Vue' ? 'eslint-plugin-vue' : '',
         '--dev',
       ],
       { cwd },

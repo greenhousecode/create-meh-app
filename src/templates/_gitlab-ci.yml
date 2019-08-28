@@ -101,35 +101,7 @@ build:
     - cp -r /usr/helm/scripts ./scripts
 
 # REMOVE DEPLOYMENT STAGES THAT YOU DO NOT NEED BELOW
-test_deploy:
-  <<: *deploy_config
-  when: on_success
-  script:
-  - source init-kubectl.sh
-  - echo 1 > REPLICAS && echo '-test' > STAGE
-  - sh ./scripts/replace_values_yaml.sh values.template.yml
-  - helm upgrade --install "$CI_PROJECT_NAME-test" ./chart/
-  environment:
-    name: test
-  except:
-    refs:
-      - master
-
-acceptance_deploy:
-  <<: *deploy_config
-  when: on_success
-  script:
-  - source init-kubectl.sh
-  - echo 1 > REPLICAS && echo '-acc' > STAGE
-  - sh ./scripts/replace_values_yaml.sh values.template.yml
-  - helm upgrade --install "$CI_PROJEC_NAME-acc" ./chart/
-  environment:
-    name: acceptance
-  only:
-    refs:
-    - develop
-
-production_deploy:
+{{testStage}}{{accStage}}production_deploy:
   <<: *deploy_config
   when: on_success
   script:

@@ -3,7 +3,7 @@
   "name": "{{slugName}}",
   "version": "1.0.0",
   "scripts": {
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "{{lintScript}}",
     "test": "echo 'No test specified' && exit 0",
     "build": "echo 'No build specified' && exit 0",
     "deploy-env": "echo 'No deploy-env specified' && exit 0",
