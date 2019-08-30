@@ -25,12 +25,13 @@ module.exports = async () => {
         try {
           const gitlab = new Gitlab({ token });
 
-          const [{ value: clusterConfig }, { name, email }] = await Promise.all([
+          const [, { name, email }] = await Promise.all([
+            // Determine user has access to the MEH namespace within GitLab
             gitlab.GroupVariables.show(GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_CLUSTER_VARIABLE_KEY),
             gitlab.Users.current(),
           ]);
 
-          gitlabData = { clusterConfig, name, email };
+          gitlabData = { name, email };
 
           return true;
         } catch ({ message }) {
