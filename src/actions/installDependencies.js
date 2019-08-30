@@ -21,8 +21,7 @@ module.exports = async ({ framework }, cwd) => {
         'lint-staged',
         'eslint-config-prettier',
         'eslint-plugin-prettier',
-        framework === 'Vue' ? 'eslint-plugin-vue' : '',
-        '--dev',
+        ...(framework === 'Vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),
       ],
       { cwd },
     );
