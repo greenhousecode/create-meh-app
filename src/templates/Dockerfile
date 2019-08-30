@@ -1,3 +1,4 @@
+# Remove -alpine when you're planning on using advanced system features, like VPN
 FROM node:10-alpine
 WORKDIR /usr/src/app
 
@@ -10,5 +11,6 @@ COPY . .
 RUN yarn build
 
 # Serve
+USER node
 EXPOSE 3000
 CMD ["yarn", "start"]

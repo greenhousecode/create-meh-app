@@ -94,7 +94,7 @@ build:
   - versioning
   - build
   stage: deploy
-  image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:latest
+  image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:1.0.4
   before_script:
     - export K8S_CONFIG=$MEH_K8S_CLUSTER_CONFIG
     - cp -r /usr/helm/chart ./chart
