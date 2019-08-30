@@ -5,7 +5,7 @@ const { GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_CLUSTER_VARIABLE_KEY } = require('..
 
 const filter = input => input.trim().replace(/\s+/g, ' ');
 
-module.exports = async () => {
+module.exports = async slugName => {
   console.log(chalk.gray('We need to know a few things…'));
 
   let gitlabData;
@@ -45,23 +45,10 @@ module.exports = async () => {
       name: 'name',
       type: 'input',
       message: `What's the name of your app?`,
-      default: 'My App',
+      default: () =>
+        slugName.replace(/-/g, ' ').replace(/^[a-z]| [a-z]/g, match => match.toUpperCase()),
       filter,
       validate: name => !!name || 'Please provide a name',
-    },
-    {
-      type: 'input',
-      name: 'slugName',
-      message: `What's the slug name for your app?`,
-      default: ({ name }) =>
-        name
-          .toLowerCase()
-          .replace(/[^0-9a-z\s]+/g, '')
-          .replace(/\s+/g, '-'),
-      filter,
-      validate: slugName =>
-        /^[0-9a-z]+(-[0-9a-z]+)*$/.test(slugName) ||
-        'Please only use kebab-case, without any special characters',
     },
     {
       type: 'input',
@@ -79,12 +66,11 @@ module.exports = async () => {
     {
       name: 'stages',
       type: 'checkbox',
-      message: 'Select the deployment stages you want to use:',
+      message: 'Select the deployment stages (besides production) you wish to use:',
       filter: choices => [...choices, 'prod'],
       choices: [
         { name: 'Testing', value: 'test', checked: true },
         { name: 'Acceptance', value: 'acc', checked: true },
-        { name: 'Production', disabled: 'always enabled' },
       ],
     },
     {
@@ -98,5 +84,6 @@ module.exports = async () => {
   return {
     ...answers,
     gitlabData,
+    slugName,
   };
 };

@@ -5,7 +5,7 @@
 ## Usage
 
 ```shell
-yarn create meh-app
+yarn create meh-app <app-name>
 ```
 
 ## Prerequisites

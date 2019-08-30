@@ -5,7 +5,7 @@ const spawnPromise = require('../utils/spawnPromise');
 
 module.exports = async (
   { token, slugName, protocol },
-  { ssh_url_to_repo: sshUrl, https_url_to_repo: httpsUrl },
+  { ssh_url_to_repo: sshUrl, http_url_to_repo: httpsUrl },
 ) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Cloning repository…'));
