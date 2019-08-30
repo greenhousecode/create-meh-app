@@ -79,6 +79,7 @@ module.exports = async () => {
       name: 'stages',
       type: 'checkbox',
       message: 'Select the deployment stages you want to use:',
+      filter: choices => [...choices, 'prod'],
       choices: [
         { name: 'Testing', value: 'test', checked: true },
         { name: 'Acceptance', value: 'acc', checked: true },

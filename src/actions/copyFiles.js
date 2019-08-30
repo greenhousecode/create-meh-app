@@ -45,26 +45,37 @@ const eslintExtends = {
   Vue: '["plugin:vue/recommended", "airbnb-base", "prettier/vue", "plugin:prettier/recommended"]',
 };
 
+const lintStagedGlobs = {
+  None: '*.js',
+  React: '*.{js,jsx}',
+  Vue: '*.{js,vue}',
+};
+
 module.exports = (answers, cwd) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Copying files…'));
 
-  const { name, email, clusterConfig } = answers.gitlabData;
+  const { name, email } = answers.gitlabData;
 
   const data = {
     ...answers,
     author: `${name} <${email}>`,
     lintScript: lintScripts[answers.framework],
     eslintExtends: eslintExtends[answers.framework],
+    lintStagedGlob: lintStagedGlobs[answers.framework],
     accStage: answers.stages.includes('acc') ? accStage : '',
     testStage: answers.stages.includes('test') ? testStage : '',
   };
 
-  // Create .env, CLUSTER_CONFIG is used for applying secrets through kubectl
-  writeFileSync(join(cwd, '.env'), `CLUSTER_CONFIG=${clusterConfig}\n`);
+  // Create .env
+  writeFileSync(
+    join(cwd, '.env'),
+    `# Used by \`yarn apply-env\` for applying secrets through kubectl\n` +
+      `GITLAB_PERSONAL_ACCESS_TOKEN=${answers.token}\n`,
+  );
 
-  // Optionally create .env-test, .env-acc
-  answers.stages.forEach(stage => writeFileSync(join(cwd, `.env-${stage}`), ''));
+  // Create .env.prod, and optionally .env.acc and .env.test
+  answers.stages.forEach(stage => writeFileSync(join(cwd, `.env.${stage}`), ''));
 
   // Copy over template files and replace macros
   readdirSync(templateDir).forEach(fileName => {

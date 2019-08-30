@@ -1,21 +1,21 @@
 {
   "private": true,
   "name": "{{slugName}}",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "scripts": {
     "lint": "{{lintScript}}",
     "test": "echo 'No test specified' && exit 0",
     "build": "echo 'No build specified' && exit 0",
-    "deploy-env": "echo 'No deploy-env specified' && exit 0",
-    "start": "echo 'No start specified' && exit 0"
+    "start": "echo 'No start specified' && exit 1",
+    "apply-env": "node applyEnv.js"
   },
   "lint-staged": {
-    "*.js": ["yarn lint --fix", "git add"]
+    "{{lintStagedGlob}}": ["yarn lint --fix", "git add"]
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn deploy-env"
+      "pre-push": "yarn test && yarn apply-env"
     }
   },
   "author": "{{author}}"

@@ -7,14 +7,18 @@ module.exports = async ({ framework }, cwd) => {
   bar.updateBottomBar(chalk.gray('Installing dependencies…'));
 
   try {
-    // Install dependencies
+    // Install devDependencies
     await spawnPromise(
       'yarn',
       [
         'add',
         'husky',
-        'lint-staged',
+        'tempy',
+        'dotenv',
+        'gitlab',
         'prettier',
+        'git-branch',
+        'lint-staged',
         'eslint-config-prettier',
         'eslint-plugin-prettier',
         framework === 'Vue' ? 'eslint-plugin-vue' : '',
