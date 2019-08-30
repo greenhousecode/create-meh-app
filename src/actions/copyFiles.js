@@ -1,7 +1,8 @@
-const { readdirSync, readFileSync, writeFileSync } = require('fs');
+const { writeFileSync } = require('fs');
 const { ui } = require('inquirer');
 const { join } = require('path');
 const chalk = require('chalk');
+const copyTemplates = require('../utils/copyTemplates');
 
 const templateDir = join(__dirname, '../templates');
 
@@ -78,16 +79,9 @@ module.exports = (answers, cwd) => {
   answers.stages.forEach(stage => writeFileSync(join(cwd, `.env.${stage}`), ''));
 
   // Copy over template files and replace macros
-  readdirSync(templateDir).forEach(fileName => {
-    const filePath = join(templateDir, fileName);
-
-    const fileContents = readFileSync(filePath, 'utf8').replace(
-      /{{([^}]+)}}/g,
-      (_, match) => data[match],
-    );
-
-    writeFileSync(join(cwd, fileName.replace(/^_/, '.')), fileContents);
-  });
+  copyTemplates(templateDir, cwd, fileContents =>
+    fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match]),
+  );
 
   bar.updateBottomBar('');
   console.log(chalk.green('✔ Copied files'));

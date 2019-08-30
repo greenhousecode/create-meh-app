@@ -35,14 +35,17 @@ data: {}
   const secretsPath = file({ extension: 'yml' });
   let secretsContents = getSecretsTemplate(stage);
 
-  const gitlab = new Gitlab({ token: parse(readFileSync('.env')).GITLAB_PERSONAL_ACCESS_TOKEN });
+  const gitlab = new Gitlab({
+    token: parse(readFileSync(`${__dirname}/../.env`)).GITLAB_PERSONAL_ACCESS_TOKEN,
+  });
+
   const { value: clusterConfig } = await gitlab.GroupVariables.show(
     4495257,
     'MEH_K8S_CLUSTER_CONFIG',
   );
 
   try {
-    const env = parse(readFileSync(`.env.${stage}`));
+    const env = parse(readFileSync(`${__dirname}/../.env.${stage}`));
 
     if (Object.keys(env).length) {
       secretsContents = secretsContents.replace(
