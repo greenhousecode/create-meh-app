@@ -1,9 +1,9 @@
 const { Gitlab } = require('gitlab');
 const { ui } = require('inquirer');
 const chalk = require('chalk');
-const { GITLAB_MEH_NAMESPACE_ID } = require('../config.json');
+const { GITLAB_NAMESPACES } = require('../config.json');
 
-module.exports = async ({ token, slugName, description }) => {
+module.exports = async ({ namespace, token, slugName, description }) => {
   console.log(chalk.gray('\nInstalling…'));
 
   const bar = new ui.BottomBar();
@@ -12,7 +12,7 @@ module.exports = async ({ token, slugName, description }) => {
   try {
     const gitlab = new Gitlab({ token });
     const project = await gitlab.Projects.create({
-      namespace_id: GITLAB_MEH_NAMESPACE_ID,
+      namespace_id: GITLAB_NAMESPACES[namespace].id,
       name: slugName,
       description,
     });
@@ -24,8 +24,6 @@ module.exports = async ({ token, slugName, description }) => {
     bar.updateBottomBar('');
     console.log(chalk.red(`✘ Creating GitLab project failed (${err.message}):`));
     console.log(err.description);
-    process.exit(1);
+    return process.exit(1);
   }
-
-  return null;
 };

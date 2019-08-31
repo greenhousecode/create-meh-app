@@ -1,7 +1,7 @@
 const { prompt } = require('inquirer');
 const { Gitlab } = require('gitlab');
 const chalk = require('chalk');
-const { GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_CLUSTER_VARIABLE_KEY } = require('../config.json');
+const { GITLAB_NAMESPACES } = require('../config.json');
 
 const filter = input => input.trim().replace(/\s+/g, ' ');
 
@@ -12,11 +12,21 @@ module.exports = async slugName => {
 
   const answers = await prompt([
     {
+      type: 'list',
+      name: 'namespace',
+      message: 'Choose a GitLab namespace:',
+      choices: Object.keys(GITLAB_NAMESPACES).map(key => ({
+        name: GITLAB_NAMESPACES[key].name,
+        value: key,
+      })),
+    },
+    ...Object.keys(GITLAB_NAMESPACES).map(key => ({
       mask: '*',
       name: 'token',
       type: 'password',
-      message: 'Please provide your GitLab personal access token:',
+      message: 'Provide your GitLab personal access token:',
       filter,
+      when: ({ namespace }) => namespace === key,
       async validate(token) {
         if (!token) {
           return 'Please provide a token';
@@ -26,8 +36,11 @@ module.exports = async slugName => {
           const gitlab = new Gitlab({ token });
 
           const [, { name, email }] = await Promise.all([
-            // Determine user has access to the MEH namespace within GitLab
-            gitlab.GroupVariables.show(GITLAB_MEH_NAMESPACE_ID, GITLAB_MEH_CLUSTER_VARIABLE_KEY),
+            // Determine user has access to the chosen namespace
+            gitlab.GroupVariables.show(
+              GITLAB_NAMESPACES[key].id,
+              GITLAB_NAMESPACES[key].clusterVariableKey,
+            ),
             gitlab.Users.current(),
           ]);
 
@@ -36,11 +49,11 @@ module.exports = async slugName => {
           return true;
         } catch ({ message }) {
           return message === 'Not Found'
-            ? `You don't have access to the "MEH" group`
+            ? `You don't have access to the "${GITLAB_NAMESPACES[key].name}" namespace`
             : `There was an issue with your token: ${message}`;
         }
       },
-    },
+    })),
     {
       name: 'name',
       type: 'input',
