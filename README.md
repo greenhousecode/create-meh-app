@@ -2,6 +2,8 @@
 
 > Quickly scaffold a new MEH project, and automate the boring stuff.
 
+![Screenshot](docs/screenshot.png)
+
 ## Usage
 
 ```shell
@@ -11,19 +13,20 @@ yarn create meh-app <app-name>
 ## Prerequisites
 
 - [x] [Yarn](https://yarnpkg.com/) installed
-- [x] `kubectl` installed and set up with Kubernetes
-- [x] A GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) with `api` scope
+- [x] [Kubectl v1.11.5](https://storage.googleapis.com/kubernetes-release/release/v1.11.5/bin/darwin/amd64/kubectl) installed
+- [x] An `api` scoped GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens)
 
-## What it does
+## Git hooks
 
-Based on your input data:
+#### Pre-commit
 
-1. Creates a GitLab project
-2. Creates a directory, and clones the new project's repository
-3. Scaffolds, and installs dependencies
-4. Every time you `git push` to
-   - `master`: applies your `.env.prod`\* through `kubectl`
-   - `develop`: applies your `.env.acc`\* through `kubectl`
-   - other branches: applies your `.env.test`\* through `kubectl`
+- Lints and attempts to autofix your staged files (ESLint)
+- Formats and attempts to autoformat your staged files (Prettier)
+
+#### Pre-push
+
+- `master` branch: Applies your `.env.prod`\* through `kubectl`
+- `develop` branch: Applies your `.env.acc`\* through `kubectl`
+- Other branches: Applies your `.env.test`\* through `kubectl`
 
 _\*if file exists_

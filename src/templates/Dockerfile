@@ -10,6 +10,9 @@ RUN yarn
 COPY . .
 RUN yarn build
 
+# Or preferably: Move build
+#COPY ./build ./build
+
 # Serve
 USER node
 EXPOSE 3000
