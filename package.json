@@ -8,13 +8,23 @@
   ],
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
+    "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss}'",
     "prepublishOnly": "yarn lint"
   },
   "lint-staged": {
-    "*.js": ["yarn lint --fix", "git add"]
+    "*.js": [
+      "yarn lint --fix",
+      "git add"
+    ],
+    "*.{css,graphql,html,json,md,scss}": [
+      "yarn format --write",
+      "git add"
+    ]
   },
   "husky": {
-    "hooks": { "pre-commit": "lint-staged" }
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "license": "MIT",
   "repository": "github:greenhousecode/create-meh-app",

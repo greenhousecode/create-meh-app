@@ -22,6 +22,7 @@ testing:
   stage: testing
   script:
   - yarn lint
+  - yarn format
   - yarn test
 
 versioning:
