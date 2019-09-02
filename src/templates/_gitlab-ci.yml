@@ -11,44 +11,44 @@ stages:
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
-    - ~/.cache/yarn
+      - ~/.cache/yarn
   before_script:
-  - yarn
+    - yarn
 
 testing:
   <<: *project_shared
   tags:
-  - kube-02.bmidevelopment
+    - kube-02.bmidevelopment
   stage: testing
   script:
-  - yarn lint
-  - yarn format
-  - yarn test
+    - yarn lint
+    - yarn format
+    - yarn test
 
 versioning:
   tags:
-  - kube-02.bmidevelopment
+    - kube-02.bmidevelopment
   stage: versioning
   image:
     name: alpine/git
-    entrypoint: [""]
+    entrypoint: ['']
   script:
-  - git rev-parse HEAD > VERSION
+    - git rev-parse HEAD > VERSION
   artifacts:
     name: version
     paths:
-    - VERSION
+      - VERSION
 
 prebuild:
   <<: *project_shared
   tags:
-  - kube-02.bmidevelopment
+    - kube-02.bmidevelopment
   stage: prebuild
   dependencies:
-  - testing
-  - versioning
+    - testing
+    - versioning
   script:
-  - yarn build
+    - yarn build
   artifacts:
     paths:
       - build
@@ -58,12 +58,12 @@ build:
     - kube-02.bmidevelopment
   stage: build
   dependencies:
-  - testing
-  - versioning
-  - prebuild
+    - testing
+    - versioning
+    - prebuild
   image:
     name: gcr.io/kaniko-project/executor:debug-v0.4.0
-    entrypoint: [""]
+    entrypoint: ['']
   script:
     - export IMAGE_TAG=$CI_REGISTRY_IMAGE:$(cat VERSION)
     - mkdir -p /root/.docker
@@ -90,10 +90,10 @@ build:
 
 .deploy_config: &deploy_config
   tags:
-  - kube-02.bmidevelopment
+    - kube-02.bmidevelopment
   dependencies:
-  - versioning
-  - build
+    - versioning
+    - build
   stage: deploy
   image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:1.0.4
   before_script:
@@ -106,12 +106,12 @@ build:
   <<: *deploy_config
   when: on_success
   script:
-  - source init-kubectl.sh
-  - echo 1 > REPLICAS && echo '' > STAGE
-  - sh ./scripts/replace_values_yaml.sh values.template.yml
-  - helm upgrade --install $CI_PROJECT_NAME ./chart/
+    - source init-kubectl.sh
+    - echo 1 > REPLICAS && echo '' > STAGE
+    - sh ./scripts/replace_values_yaml.sh values.template.yml
+    - helm upgrade --install $CI_PROJECT_NAME ./chart/
   environment:
     name: production
   only:
     refs:
-    - master
+      - master

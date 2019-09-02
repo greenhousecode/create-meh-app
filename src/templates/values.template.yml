@@ -10,6 +10,6 @@ ingress:
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 containerResources:
   limits:
-    memory: "256M"
+    memory: '256M'
     cpu: 100m
 envSecretName: {{slugName}}__STAGE__-secret-env
