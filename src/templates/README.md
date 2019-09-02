@@ -2,6 +2,12 @@
 
 > {{description}}
 
+## Install
+
+```shell
+yarn
+```
+
 ## Environment variables
 
 | Key                          | Description                                                                                                                                |
