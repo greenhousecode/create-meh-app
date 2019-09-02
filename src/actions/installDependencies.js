@@ -2,7 +2,7 @@ const { ui } = require('inquirer');
 const chalk = require('chalk');
 const spawnPromise = require('../utils/spawnPromise');
 
-module.exports = async ({ framework }, cwd) => {
+module.exports = async ({ framework, typescript }, cwd) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Installing dependencies…'));
 
@@ -27,16 +27,32 @@ module.exports = async ({ framework }, cwd) => {
     );
 
     // Install Airbnb ESLint config
-    await spawnPromise(
-      'npx',
-      [
-        'install-peerdeps',
-        framework === 'React' ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
-        '--dev',
-        '--yarn',
-      ],
-      { cwd },
-    );
+    if (typescript) {
+      await spawnPromise(
+        'yarn',
+        [
+          'add',
+          'eslint-config-airbnb-typescript',
+          'eslint-plugin-import',
+          '@typescript-eslint/eslint-plugin',
+          ...(framework === 'React'
+            ? ['eslint-plugin-jsx-a11y', 'eslint-plugin-react', '--dev']
+            : ['--dev']),
+        ],
+        { cwd },
+      );
+    } else {
+      await spawnPromise(
+        'npx',
+        [
+          'install-peerdeps',
+          framework === 'React' ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
+          '--dev',
+          '--yarn',
+        ],
+        { cwd },
+      );
+    }
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Installing failed'));

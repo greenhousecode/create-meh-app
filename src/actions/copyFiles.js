@@ -46,10 +46,23 @@ const eslintExtends = {
   Vue: '["plugin:vue/recommended", "airbnb-base", "prettier/vue", "plugin:prettier/recommended"]',
 };
 
+const eslintExtendsTypescript = {
+  None: '["airbnb-typescript/base", "plugin:prettier/recommended"]',
+  React: '["airbnb-typescript", "plugin:prettier/recommended"]',
+  Vue:
+    '["plugin:vue/recommended", "airbnb-typescript/base", "prettier/vue", "plugin:prettier/recommended"]',
+};
+
 const lintStagedGlobs = {
   None: '*.js',
   React: '*.{js,jsx}',
   Vue: '*.{js,vue}',
+};
+
+const lintStagedGlobsTypescript = {
+  None: '*.{js,ts}',
+  React: '*.{js,jsx,ts,tsx}',
+  Vue: '*.{js,ts,vue}',
 };
 
 module.exports = (answers, cwd) => {
@@ -62,8 +75,12 @@ module.exports = (answers, cwd) => {
     ...answers,
     author: `${name} <${email}>`,
     lintScript: lintScripts[answers.framework],
-    eslintExtends: eslintExtends[answers.framework],
-    lintStagedGlob: lintStagedGlobs[answers.framework],
+    eslintExtends: answers.typescript
+      ? eslintExtendsTypescript[answers.framework]
+      : eslintExtends[answers.framework],
+    lintStagedGlob: answers.typescript
+      ? lintStagedGlobsTypescript[answers.framework]
+      : lintStagedGlobs[answers.framework],
     accStage: answers.stages.includes('acc') ? accStage : '',
     testStage: answers.stages.includes('test') ? testStage : '',
   };

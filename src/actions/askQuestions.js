@@ -77,6 +77,12 @@ module.exports = async slugName => {
       choices: ['None', 'React', 'Vue'],
     },
     {
+      type: 'confirm',
+      name: 'typescript',
+      message: 'Will you be using TypeScript? (Only affects linting)',
+      default: false,
+    },
+    {
       name: 'stages',
       type: 'checkbox',
       message: 'Select the deployment stages (besides production) you wish to use:',
