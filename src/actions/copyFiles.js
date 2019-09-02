@@ -96,9 +96,11 @@ module.exports = (answers, cwd) => {
   answers.stages.forEach(stage => writeFileSync(join(cwd, `.env.${stage}`), ''));
 
   // Copy over template files and replace macros
-  copyTemplates(templateDir, cwd, fileContents =>
-    fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match]),
-  );
+  copyTemplates(templateDir, cwd, file => ({
+    ...file,
+    fileName: file.fileName.replace(/^_/, '.'),
+    fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match]),
+  }));
 
   bar.updateBottomBar('');
   console.log(chalk.green('✔ Copied files'));

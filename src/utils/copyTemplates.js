@@ -8,7 +8,7 @@ const {
   lstatSync,
 } = require('fs');
 
-const copyTemplates = (source, target, callback = fileContents => fileContents) => {
+const copyTemplates = (source, target, callback = file => file) => {
   if (!existsSync(target)) {
     mkdirSync(target);
   }
@@ -19,8 +19,12 @@ const copyTemplates = (source, target, callback = fileContents => fileContents) 
     if (lstatSync(filePath).isDirectory()) {
       copyTemplates(filePath, join(target, fileName), callback);
     } else {
-      const fileContents = callback(readFileSync(filePath, 'utf8'));
-      writeFileSync(join(target, fileName.replace(/^_/, '.')), fileContents);
+      const { fileName: newFileName, fileContents: newFileContents } = callback({
+        fileName,
+        fileContents: readFileSync(filePath, 'utf8'),
+      });
+
+      writeFileSync(join(target, newFileName), newFileContents);
     }
   });
 };
