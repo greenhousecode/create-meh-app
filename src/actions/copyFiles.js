@@ -40,6 +40,12 @@ const lintScripts = {
   Vue: 'eslint --ext .js,.vue --ignore-path .gitignore .',
 };
 
+const lintScriptsTypescript = {
+  None: 'eslint --ext .js,.ts --ignore-path .gitignore .',
+  React: 'eslint --ext .js,.ts,.jsx,.tsx --ignore-path .gitignore .',
+  Vue: 'eslint --ext .js,.ts,.vue --ignore-path .gitignore .',
+};
+
 const eslintExtends = {
   None: '["airbnb-base", "plugin:prettier/recommended"]',
   React: '["airbnb", "plugin:prettier/recommended"]',
@@ -74,7 +80,9 @@ module.exports = (answers, cwd) => {
   const data = {
     ...answers,
     author: `${name} <${email}>`,
-    lintScript: lintScripts[answers.framework],
+    lintScript: answers.typescript
+      ? lintScriptsTypescript[answers.framework]
+      : lintScripts[answers.framework],
     eslintExtends: answers.typescript
       ? eslintExtendsTypescript[answers.framework]
       : eslintExtends[answers.framework],
