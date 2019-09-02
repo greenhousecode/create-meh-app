@@ -40,8 +40,8 @@ data: {}
   });
 
   const { value: clusterConfig } = await gitlab.GroupVariables.show(
-    4495257,
-    'MEH_K8S_CLUSTER_CONFIG',
+    '{{gitlabNamespaceId}}',
+    '{{clusterVariableKey}}',
   );
 
   try {

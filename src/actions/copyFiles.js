@@ -3,6 +3,7 @@ const { ui } = require('inquirer');
 const { join } = require('path');
 const chalk = require('chalk');
 const copyTemplates = require('../utils/copyTemplates');
+const { GITLAB_NAMESPACES } = require('../config.json');
 
 const templateDir = join(__dirname, '../templates');
 
@@ -91,6 +92,8 @@ module.exports = (answers, cwd) => {
       : lintStagedGlobs[answers.framework],
     accStage: answers.stages.includes('acc') ? accStage : '',
     testStage: answers.stages.includes('test') ? testStage : '',
+    gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
+    clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
   };
 
   // Create .env
