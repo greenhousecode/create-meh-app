@@ -72,7 +72,7 @@ const lintStagedGlobsTypescript = {
   Vue: '*.{js,ts,vue}',
 };
 
-module.exports = (answers, cwd) => {
+module.exports = answers => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Copying files…'));
 
@@ -98,16 +98,16 @@ module.exports = (answers, cwd) => {
 
   // Create .env
   writeFileSync(
-    join(cwd, '.env'),
+    join(answers.cwd, '.env'),
     `# Used by \`yarn apply-env\` for applying secrets through kubectl\n` +
       `GITLAB_PERSONAL_ACCESS_TOKEN=${answers.token}\n`,
   );
 
   // Create .env.prod, and optionally .env.acc and .env.test
-  answers.stages.forEach(stage => writeFileSync(join(cwd, `.env.${stage}`), ''));
+  answers.stages.forEach(stage => writeFileSync(join(answers.cwd, `.env.${stage}`), ''));
 
   // Copy over template files and replace macros
-  copyTemplates(templateDir, cwd, file => ({
+  copyTemplates(templateDir, answers.cwd, file => ({
     ...file,
     fileName: file.fileName.replace(/^_/, '.'),
     fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match]),

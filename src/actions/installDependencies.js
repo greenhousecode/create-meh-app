@@ -2,7 +2,7 @@ const { ui } = require('inquirer');
 const chalk = require('chalk');
 const spawnPromise = require('../utils/spawnPromise');
 
-module.exports = async ({ framework, typescript }, cwd) => {
+module.exports = async ({ framework, typescript, cwd }) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Installing dependencies…'));
 
@@ -17,7 +17,6 @@ module.exports = async ({ framework, typescript }, cwd) => {
         'dotenv',
         'gitlab',
         'prettier',
-        'git-branch',
         'lint-staged',
         'eslint-config-prettier',
         'eslint-plugin-prettier',
@@ -32,8 +31,9 @@ module.exports = async ({ framework, typescript }, cwd) => {
         'yarn',
         [
           'add',
-          'eslint-config-airbnb-typescript',
+          'typescript',
           'eslint-plugin-import',
+          'eslint-config-airbnb-typescript',
           '@typescript-eslint/eslint-plugin',
           ...(framework === 'React'
             ? ['eslint-plugin-jsx-a11y', 'eslint-plugin-react', '--dev']

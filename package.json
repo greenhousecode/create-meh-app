@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
     "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss}'",
-    "prepublishOnly": "yarn lint"
+    "prepublishOnly": "yarn lint && yarn format"
   },
   "lint-staged": {
     "*.js": [
@@ -45,6 +45,7 @@
     "clear": "^0.1.0",
     "commander": "^3.0.1",
     "gitlab": "^11.0.1",
-    "inquirer": "^7.0.0"
+    "inquirer": "^7.0.0",
+    "simple-git": "^1.126.0"
   }
 }

@@ -6,6 +6,7 @@
 
 - [x] Linting & formatting
 - [x] Creates & clones GitLab repo
+- [x] Initial commit on `master` and `develop`
 - [x] Automatic Kubernetes deployment
 - [x] Automatic `.env.<stage>` deployment
 
@@ -41,5 +42,5 @@ _\*if file exists_
 
 ## Roadmap
 
-- [ ] Stage initial commit
+- [ ] Support integrated Airflow DAGs
 - [ ] Reduce amount of `devDependencies`

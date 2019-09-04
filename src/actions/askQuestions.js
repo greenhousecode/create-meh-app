@@ -1,5 +1,6 @@
 const { prompt } = require('inquirer');
 const { Gitlab } = require('gitlab');
+const { join } = require('path');
 const chalk = require('chalk');
 const { GITLAB_NAMESPACES } = require('../config.json');
 
@@ -104,5 +105,6 @@ module.exports = async slugName => {
     ...answers,
     gitlabData,
     slugName,
+    cwd: join(process.cwd(), slugName),
   };
 };
