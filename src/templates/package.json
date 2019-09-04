@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "name": "{{slugName}}",
+  "version": "0.1.0",
+  "scripts": {
+    "lint": "{{lintScript}}",
+    "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss,yml}'",
+    "test": "echo 'No test specified' && exit 0",
+    "build": "echo 'No build specified' && exit 0",
+    "start": "echo 'No start specified' && exit 1",
+    "apply-env": "node tools/applyEnv"
+  },
+  "lint-staged": {
+    "{{lintStagedGlob}}": [
+      "yarn lint --fix",
+      "git add"
+    ],
+    "*.{css,graphql,html,json,md,scss,yml}": [
+      "yarn format --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn test && yarn apply-env"
+    }
+  },
+  "author": "{{author}}"
+}

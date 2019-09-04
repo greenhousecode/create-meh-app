@@ -1,16 +1,30 @@
 {
   "name": "create-meh-app",
   "version": "1.0.0",
-  "description": "",
-  "bin": "dist/index.js",
+  "description": "Quickly scaffolds a new MEH project by setting up linting, formatting and automatic deployment.",
+  "bin": "src/index.js",
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
-    "dev": "rollup -cw",
-    "build": "rollup -c",
-    "lint": "eslint --fix --ignore-path .gitignore .",
-    "prepublishOnly": "yarn lint && yarn build"
+    "lint": "eslint --ignore-path .gitignore .",
+    "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss}'",
+    "prepublishOnly": "yarn lint && yarn format"
+  },
+  "lint-staged": {
+    "*.js": [
+      "yarn lint --fix",
+      "git add"
+    ],
+    "*.{css,graphql,html,json,md,scss}": [
+      "yarn format --write",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "license": "MIT",
   "repository": "github:greenhousecode/create-meh-app",
@@ -18,10 +32,20 @@
   "devDependencies": {
     "eslint": "6.1.0",
     "eslint-config-airbnb-base": "14.0.0",
-    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
-    "prettier": "^1.18.2",
-    "rollup": "^1.19.4"
+    "husky": "^3.0.4",
+    "lint-staged": "^9.2.5",
+    "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "boxen": "^4.1.0",
+    "chalk": "^2.4.2",
+    "clear": "^0.1.0",
+    "commander": "^3.0.1",
+    "gitlab": "^11.0.1",
+    "inquirer": "^7.0.0",
+    "simple-git": "^1.126.0"
   }
 }
