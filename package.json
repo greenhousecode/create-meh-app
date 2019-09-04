@@ -45,6 +45,7 @@
     "clear": "^0.1.0",
     "commander": "^3.0.1",
     "gitlab": "^11.0.1",
-    "inquirer": "^7.0.0"
+    "inquirer": "^7.0.0",
+    "simple-git": "^1.126.0"
   }
 }

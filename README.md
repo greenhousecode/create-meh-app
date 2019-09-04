@@ -41,5 +41,5 @@ _\*if file exists_
 
 ## Roadmap
 
-- [ ] Stage initial commit
+- [ ] Support integrated Airflow DAGs
 - [ ] Reduce amount of `devDependencies`

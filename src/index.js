@@ -4,10 +4,13 @@ const chalk = require('chalk');
 const clear = require('clear');
 const app = require('commander');
 const installDependencies = require('./actions/installDependencies');
+const createDevelopBranch = require('./actions/createDevelopBranch');
 const cloneRepository = require('./actions/cloneRepository');
 const { version, description } = require('../package.json');
 const createProject = require('./actions/createProject');
+const initialCommit = require('./actions/initialCommit');
 const askQuestions = require('./actions/askQuestions');
+const pushBranches = require('./actions/pushBranches');
 const copyFiles = require('./actions/copyFiles');
 
 let slugName;
@@ -59,9 +62,12 @@ console.log(
   try {
     const answers = await askQuestions(slugName);
     const project = await createProject(answers);
-    const cwd = await cloneRepository(answers, project);
-    copyFiles(answers, cwd);
-    await installDependencies(answers, cwd);
+    await cloneRepository(answers, project);
+    copyFiles(answers);
+    await installDependencies(answers);
+    await initialCommit(answers);
+    await createDevelopBranch(answers);
+    await pushBranches(answers);
     console.log(chalk.bold.green('\nAll finished!'));
   } catch (err) {
     console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
