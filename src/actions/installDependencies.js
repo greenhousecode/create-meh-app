@@ -17,7 +17,6 @@ module.exports = async ({ framework, typescript }, cwd) => {
         'dotenv',
         'gitlab',
         'prettier',
-        'git-branch',
         'lint-staged',
         'eslint-config-prettier',
         'eslint-plugin-prettier',

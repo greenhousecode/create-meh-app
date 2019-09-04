@@ -2,9 +2,11 @@
 const { file } = require('tempy');
 const { parse } = require('dotenv');
 const { Gitlab } = require('gitlab');
-const getBranch = require('git-branch');
 const { spawn } = require('child_process');
 const { readFileSync, writeFileSync } = require('fs');
+
+const getBranchName = () =>
+  readFileSync(`${__dirname}/../.git/HEAD`).match(/ref: refs\/heads\/(.+)/)[1];
 
 const getStageByBranch = branch => {
   switch (branch) {
@@ -29,7 +31,7 @@ data: {}
 `;
 
 (async () => {
-  const branch = await getBranch();
+  const branch = getBranchName();
   const stage = getStageByBranch(branch);
   const clusterConfigPath = file({ extension: 'yml' });
   const secretsPath = file({ extension: 'yml' });
