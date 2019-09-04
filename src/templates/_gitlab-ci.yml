@@ -1,0 +1,117 @@
+stages:
+  - testing
+  - versioning
+  - prebuild
+  - build
+  - deploy
+
+.project_shared: &project_shared
+  image:
+    name: node:10-alpine
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - ~/.cache/yarn
+  before_script:
+    - yarn
+
+testing:
+  <<: *project_shared
+  tags:
+    - kube-02.bmidevelopment
+  stage: testing
+  script:
+    - yarn lint
+    - yarn format
+    - yarn test
+
+versioning:
+  tags:
+    - kube-02.bmidevelopment
+  stage: versioning
+  image:
+    name: alpine/git
+    entrypoint: ['']
+  script:
+    - git rev-parse HEAD > VERSION
+  artifacts:
+    name: version
+    paths:
+      - VERSION
+
+prebuild:
+  <<: *project_shared
+  tags:
+    - kube-02.bmidevelopment
+  stage: prebuild
+  dependencies:
+    - testing
+    - versioning
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - build
+
+build:
+  tags:
+    - kube-02.bmidevelopment
+  stage: build
+  dependencies:
+    - testing
+    - versioning
+    - prebuild
+  image:
+    name: gcr.io/kaniko-project/executor:debug-v0.4.0
+    entrypoint: ['']
+  script:
+    - export IMAGE_TAG=$CI_REGISTRY_IMAGE:$(cat VERSION)
+    - mkdir -p /root/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /root/.docker/config.json
+    - |
+      /kaniko/executor --cache \
+                       --context $CI_PROJECT_DIR \
+                       --dockerfile $CI_PROJECT_DIR/Dockerfile \
+                       --destination $IMAGE_TAG \
+                       --build-arg VERSION="$(cat VERSION)" \
+                       --build-arg PRIVATE_DEPS_USER="gitlab-ci-token" \
+                       --build-arg PRIVATE_DEPS_TOKEN="$CI_JOB_TOKEN"
+    - |
+      if [ "$CI_COMMIT_REF_NAME" = "master" ];
+      then
+        /kaniko/executor --cache \
+                         --context $CI_PROJECT_DIR \
+                         --dockerfile $CI_PROJECT_DIR/Dockerfile \
+                         --destination "$CI_REGISTRY_IMAGE:latest" \
+                         --build-arg VERSION="$(cat VERSION)" \
+                         --build-arg PRIVATE_DEPS_USER="gitlab-ci-token" \
+                         --build-arg PRIVATE_DEPS_TOKEN="$CI_JOB_TOKEN"
+      fi
+
+.deploy_config: &deploy_config
+  tags:
+    - kube-02.bmidevelopment
+  dependencies:
+    - versioning
+    - build
+  stage: deploy
+  image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:1.0.4
+  before_script:
+    - export K8S_CONFIG=$MEH_K8S_CLUSTER_CONFIG
+    - cp -r /usr/helm/chart ./chart
+    - cp -r /usr/helm/scripts ./scripts
+
+# REMOVE DEPLOYMENT STAGES THAT YOU DO NOT NEED BELOW
+{{testStage}}{{accStage}}production_deploy:
+  <<: *deploy_config
+  when: on_success
+  script:
+    - source init-kubectl.sh
+    - echo 1 > REPLICAS && echo '' > STAGE
+    - sh ./scripts/replace_values_yaml.sh values.template.yml
+    - helm upgrade --install $CI_PROJECT_NAME ./chart/
+  environment:
+    name: production
+  only:
+    refs:
+      - master
