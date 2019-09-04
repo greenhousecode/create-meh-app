@@ -1,4 +1,4 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-extraneous-dependencies, import/no-unresolved */
 const { file } = require('tempy');
 const { parse } = require('dotenv');
 const { Gitlab } = require('gitlab');
