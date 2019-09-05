@@ -69,6 +69,7 @@ console.log(
     await createDevelopBranch(answers);
     await pushBranches(answers);
     console.log(chalk.bold.green('\nAll finished!'));
+    process.exit(0);
   } catch (err) {
     console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
     console.log(err.description || err);

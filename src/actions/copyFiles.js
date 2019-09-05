@@ -58,7 +58,8 @@ const eslintExtendsTypescript = {
     '["airbnb-base", "plugin:@typescript-eslint/recommended", "prettier", "prettier/@typescript-eslint"]',
   React:
     '["airbnb", "plugin:@typescript-eslint/recommended", "prettier", "prettier/@typescript-eslint"]',
-  Vue: '["plugin:vue/recommended", "airbnb-base", "prettier/vue", "prettier/@typescript-eslint"]',
+  Vue:
+    '["plugin:vue/recommended", "airbnb-base", "plugin:@typescript-eslint/recommended", "prettier/vue", "prettier/@typescript-eslint"]',
 };
 
 const lintStagedGlobs = {

@@ -20,7 +20,7 @@ module.exports = async ({ framework, typescript, cwd }) => {
         'lint-staged',
         'eslint-config-prettier',
         ...(typescript
-          ? ['@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
+          ? ['typescript', '@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
           : ['eslint-plugin-prettier']),
         ...(framework === 'Vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),
       ],
