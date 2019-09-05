@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": {{eslintExtends}}
+  {{eslintParser}}"extends": {{eslintExtends}}
 }

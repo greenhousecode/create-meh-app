@@ -54,10 +54,11 @@ const eslintExtends = {
 };
 
 const eslintExtendsTypescript = {
-  None: '["airbnb-typescript/base", "plugin:prettier/recommended"]',
-  React: '["airbnb-typescript", "plugin:prettier/recommended"]',
-  Vue:
-    '["plugin:vue/recommended", "airbnb-typescript/base", "prettier/vue", "plugin:prettier/recommended"]',
+  None:
+    '["airbnb-base", "plugin:@typescript-eslint/recommended", "prettier", "prettier/@typescript-eslint"]',
+  React:
+    '["airbnb", "plugin:@typescript-eslint/recommended", "prettier", "prettier/@typescript-eslint"]',
+  Vue: '["plugin:vue/recommended", "airbnb-base", "prettier/vue", "prettier/@typescript-eslint"]',
 };
 
 const lintStagedGlobs = {
@@ -84,6 +85,7 @@ module.exports = answers => {
     lintScript: answers.typescript
       ? lintScriptsTypescript[answers.framework]
       : lintScripts[answers.framework],
+    eslintParser: answers.typescript ? '"parser": "@typescript-eslint/parser",\n  ' : '',
     eslintExtends: answers.typescript
       ? eslintExtendsTypescript[answers.framework]
       : eslintExtends[answers.framework],

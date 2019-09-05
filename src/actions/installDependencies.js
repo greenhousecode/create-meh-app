@@ -19,41 +19,25 @@ module.exports = async ({ framework, typescript, cwd }) => {
         'prettier',
         'lint-staged',
         'eslint-config-prettier',
-        'eslint-plugin-prettier',
+        ...(typescript
+          ? ['@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
+          : ['eslint-plugin-prettier']),
         ...(framework === 'Vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),
       ],
       { cwd },
     );
 
     // Install Airbnb ESLint config
-    if (typescript) {
-      await spawnPromise(
-        'yarn',
-        [
-          'add',
-          'eslint',
-          'typescript',
-          'eslint-plugin-import',
-          'eslint-config-airbnb-typescript',
-          '@typescript-eslint/eslint-plugin',
-          ...(framework === 'React'
-            ? ['eslint-plugin-jsx-a11y', 'eslint-plugin-react', '--dev']
-            : ['--dev']),
-        ],
-        { cwd },
-      );
-    } else {
-      await spawnPromise(
-        'npx',
-        [
-          'install-peerdeps',
-          framework === 'React' ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
-          '--dev',
-          '--yarn',
-        ],
-        { cwd },
-      );
-    }
+    await spawnPromise(
+      'npx',
+      [
+        'install-peerdeps',
+        framework === 'React' ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
+        '--dev',
+        '--yarn',
+      ],
+      { cwd },
+    );
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Installing failed'));
