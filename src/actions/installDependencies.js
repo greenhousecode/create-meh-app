@@ -31,6 +31,7 @@ module.exports = async ({ framework, typescript, cwd }) => {
         'yarn',
         [
           'add',
+          'eslint',
           'typescript',
           'eslint-plugin-import',
           'eslint-config-airbnb-typescript',
