@@ -4,7 +4,7 @@
 
 ## Features
 
-- [x] Linting & formatting
+- [x] Linting & formatting (supports TypeScript, React and Vue)
 - [x] Creates & clones GitLab repo
 - [x] Initial commit on `master` and `develop`
 - [x] Automatic Kubernetes deployment

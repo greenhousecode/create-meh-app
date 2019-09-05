@@ -22,7 +22,7 @@ module.exports = async slugName => {
       })),
     },
     ...Object.keys(GITLAB_NAMESPACES).map(key => ({
-      mask: '*',
+      mask: '●',
       name: 'token',
       type: 'password',
       message: 'Provide your GitLab personal access token:',
