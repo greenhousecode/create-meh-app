@@ -1,6 +1,6 @@
 {
   "name": "create-meh-app",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Quickly scaffolds a new MEH project by setting up linting, formatting and automatic deployment.",
   "bin": "src/index.js",
   "files": [
