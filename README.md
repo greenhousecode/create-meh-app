@@ -28,7 +28,7 @@ yarn create meh-app <app-name>
 
 #### Pre-commit
 
-- Lints and formats, and attempts to autofix your staged files (`*.{js,jsx,ts,tsx,vue}`) through [ESLint](https://eslint.org/) (extending [Airbnb](https://github.com/airbnb/javascript#readme)) and [Prettier](https://prettier.io/)
+- Lints and formats, and attempts to autofix your staged files (`*.{js,jsx,ts,tsx,vue}`) through [ESLint](https://eslint.org/) (extending [Airbnb](https://github.com/airbnb/javascript#readme) and [Prettier](https://prettier.io/))
 - Formats and attempts to autoformat your staged files (`*.{css,graphql,html,json,md,scss,yml}`) through Prettier
 
 #### Pre-push
