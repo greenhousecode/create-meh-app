@@ -1,7 +1,7 @@
 domain: {{slugName}}__STAGE__.meh.greenhousegroup.com
 email: meh@greenhousegroup.com
 version: __VERSION__
-dockerImage: registry.gitlab.com/greenhousegroup/meh/{{slugName}}:__VERSION__
+dockerImage: registry.gitlab.com/{{gitlabNamespace}}/{{slugName}}:__VERSION__
 webReplicas: __REPLICAS__
 ingress:
   createIngress: true

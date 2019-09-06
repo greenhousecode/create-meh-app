@@ -95,6 +95,7 @@ module.exports = answers => {
       : lintStagedGlobs[answers.framework],
     accStage: answers.stages.includes('acc') ? accStage : '',
     testStage: answers.stages.includes('test') ? testStage : '',
+    gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
   };

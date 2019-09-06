@@ -6,7 +6,7 @@ const { spawn } = require('child_process');
 const { readFileSync, writeFileSync } = require('fs');
 
 const getBranchName = () =>
-  readFileSync(`${__dirname}/../.git/HEAD`).match(/ref: refs\/heads\/(.+)/)[1];
+  readFileSync(`${__dirname}/../.git/HEAD`, 'utf8').match(/ref: refs\/heads\/(.+)/)[1];
 
 const getStageByBranch = branch => {
   switch (branch) {
