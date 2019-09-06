@@ -26,7 +26,7 @@ const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
 
     curl[method](
       url,
-      ...(method !== 'post' || !body ? curlOpts.splice(0) : curlOpts),
+      ...(method !== 'post' || !body ? curlOpts.slice(1) : curlOpts),
       (err, response, data) => {
         if (err) {
           return reject(err);
@@ -34,7 +34,7 @@ const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
 
         let output = null;
         try {
-          output = JSON.parse(output);
+          output = JSON.parse(data);
         } catch (e) {
           output = data;
         }
