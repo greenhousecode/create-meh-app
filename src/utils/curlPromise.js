@@ -60,7 +60,6 @@ const requestOptions = {
  * Promised curl request
  *
  * @param {string} url
-<<<<<<< HEAD
  * @param {'get'|'post'|'put'|'delete'} method
  * @param {{body: string | *[] | {[key: string]: *}, options: {[key: string]: *}}} param2
  * @returns {Promise<[undefined|Error,*, *]>} Returns a tuple of error, response object, and data
@@ -68,14 +67,6 @@ const requestOptions = {
 const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
   // eslint-disable-next-line consistent-return
   new Promise(resolve => {
-=======
- * @param {'get'|'post'} method
- * @param {{body: string | *[] | {[key: string]: *}, options: {[key: string]: *}}} param2
- * @returns {[*, *]} Returns a tuple of response object and data
- */
-const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
-  new Promise((resolve, reject) => {
->>>>>>> rebased feature onto develop
     const prefilledOptions = Object.assign(
       options,
       json
@@ -90,7 +81,6 @@ const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
 
     const curlOpts = [typeof body === 'object' ? JSON.stringify(body) : body, prefilledOptions];
 
-<<<<<<< HEAD
     try {
       requestOptions[method](
         url,
@@ -113,26 +103,6 @@ const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
     } catch (err) {
       return resolve([err]);
     }
-=======
-    curl[method](
-      url,
-      ...(method !== 'post' || !body ? curlOpts.splice(0) : curlOpts),
-      (err, response, data) => {
-        if (err) {
-          return reject(err);
-        }
-
-        let output = null;
-        try {
-          output = JSON.parse(output);
-        } catch (e) {
-          output = data;
-        }
-
-        return resolve([response, output]);
-      },
-    );
->>>>>>> rebased feature onto develop
   });
 
 module.exports = curlPromise;
