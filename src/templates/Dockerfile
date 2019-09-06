@@ -1,4 +1,4 @@
-# Remove -alpine when you're planning on using advanced system features, like VPN
+# Remove -alpine when using advanced system features, like VPN
 FROM node:10-alpine
 WORKDIR /usr/src/app
 
