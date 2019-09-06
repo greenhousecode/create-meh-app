@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const { Gitlab } = require('gitlab');
 const { ui } = require('inquirer');
 const chalk = require('chalk');
@@ -35,7 +36,7 @@ const pickAll = (keys, arr) =>
 
 module.exports = async ({ sentry, namespace, token, slugName: name }) => {
   if (!sentry) {
-    return;
+    return null;
   }
 
   const bar = new ui.BottomBar();
@@ -56,16 +57,18 @@ module.exports = async ({ sentry, namespace, token, slugName: name }) => {
       throw new Error(`Missing 'SENTRY_AUTH_TOKEN' Gitlab variable for namespace ${namespace}`);
     }
 
-    const [response] = await curlPromise(`${BASE_URL}/teams/${SENTRY_ORG}/meh/projects/`, 'post', {
-      options: {
-        auth: {
-          bearer: SENTRY_AUTH_TOKEN,
+    const [response, data] = await curlPromise(
+      `${BASE_URL}/teams/${SENTRY_ORG}/meh/projects/`,
+      'post',
+      {
+        options: {
+          auth: {
+            bearer: SENTRY_AUTH_TOKEN,
+          },
         },
+        body: { name },
       },
-      body: JSON.stringify({
-        name,
-      }),
-    });
+    );
 
     if ([200, 201, 202].indexOf(response.statusCode) === -1) {
       const { detail } = JSON.parse(response.body);
@@ -74,10 +77,17 @@ module.exports = async ({ sentry, namespace, token, slugName: name }) => {
 
     bar.updateBottomBar('');
     console.log(chalk.green('✔ Created Sentry project'));
+
+    return {
+      id: data.id,
+      slug: data.slug,
+      token: SENTRY_AUTH_TOKEN,
+      org: SENTRY_ORG,
+    };
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red(`✘ Creating Sentry project failed (${err.message}):`));
     console.log(err.description);
-    process.exit(1);
+    return process.exit(1);
   }
 };
