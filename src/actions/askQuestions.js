@@ -84,6 +84,12 @@ module.exports = async slugName => {
       default: false,
     },
     {
+      type: 'confirm',
+      name: 'sentry',
+      message: 'Do you want to use Sentry for this project?',
+      default: false,
+    },
+    {
       name: 'stages',
       type: 'checkbox',
       message: 'Select the deployment stages (besides production) you wish to use:',
