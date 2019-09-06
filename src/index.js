@@ -8,7 +8,8 @@ const createDevelopBranch = require('./actions/createDevelopBranch');
 const cloneRepository = require('./actions/cloneRepository');
 const { version, description } = require('../package.json');
 const createProject = require('./actions/createProject');
-const createSentry = require('./actions/createSentry');
+const createSentry = require('./actions/createSentryProject');
+const fetchSentryDSN = require('./actions/fetchSentryDSN');
 const initialCommit = require('./actions/initialCommit');
 const askQuestions = require('./actions/askQuestions');
 const pushBranches = require('./actions/pushBranches');
@@ -62,10 +63,10 @@ console.log(
 (async () => {
   try {
     const answers = await askQuestions(slugName);
-    await createSentry(answers);
+    const sentry = await fetchSentryDSN(await createSentry(answers));
     const project = await createProject(answers);
     await cloneRepository(answers, project);
-    copyFiles(answers);
+    copyFiles({ ...answers, ...sentry });
     await installDependencies(answers);
     await initialCommit(answers);
     await createDevelopBranch(answers);
