@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 # Install
 COPY package.json yarn.lock ./
-RUN yarn
+RUN yarn --production
 COPY . .
 # Or preferably, move build folder only:
 #COPY ./build ./build
