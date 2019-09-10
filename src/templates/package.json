@@ -7,7 +7,7 @@
     "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss,yml}'",
     "test": "echo 'No test specified' && exit 0",
     "build": "echo 'No build specified' && exit 0",
-    "start": "echo 'No start specified' && exit 1",
+    "start": "echo 'No start specified' && exit 0",
     "apply-env": "node tools/applyEnv"
   },
   "lint-staged": {

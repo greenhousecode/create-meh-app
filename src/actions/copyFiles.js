@@ -11,10 +11,10 @@ const testStage = `test_deploy:
   <<: *deploy_config
   when: on_success
   script:
-  - source init-kubectl.sh
-  - echo 1 > REPLICAS && echo '-test' > STAGE
-  - sh ./scripts/replace_values_yaml.sh values.template.yml
-  - helm upgrade --install "$CI_PROJECT_NAME-test" ./chart/
+    - source init-kubectl.sh
+    - echo 1 > REPLICAS && echo '-test' > STAGE
+    - sh ./scripts/replace_values_yaml.sh values.template.yml
+    - helm upgrade --install "$CI_PROJECT_NAME-test" ./chart/
   environment:
     name: test
   except:
@@ -25,10 +25,10 @@ const accStage = `acceptance_deploy:
   <<: *deploy_config
   when: on_success
   script:
-  - source init-kubectl.sh
-  - echo 1 > REPLICAS && echo '-acc' > STAGE
-  - sh ./scripts/replace_values_yaml.sh values.template.yml
-  - helm upgrade --install "$CI_PROJEC_NAME-acc" ./chart/
+    - source init-kubectl.sh
+    - echo 1 > REPLICAS && echo '-acc' > STAGE
+    - sh ./scripts/replace_values_yaml.sh values.template.yml
+    - helm upgrade --install "$CI_PROJEC_NAME-acc" ./chart/
   environment:
     name: acceptance
   only:
