@@ -81,5 +81,7 @@ _\*if file exists_
 
 ## Roadmap
 
+- [ ] Path arg support `yarn create meh-app /my/folder/my-app`
+- [ ] Undo previous steps on fail
 - [ ] Support integrated Airflow DAGs
 - [ ] Reduce amount of `devDependencies`
