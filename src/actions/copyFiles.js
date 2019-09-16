@@ -7,11 +7,6 @@ const { GITLAB_NAMESPACES } = require('../config.json');
 
 const templateDir = join(__dirname, '../templates');
 
-// const sentryScript = projectName => `
-//   curl -H 'Authorization: Bearer "$"'
-//   sh scripts/scripts/sentry-upload-sourcemaps.sh ${projectName}
-// `
-
 const testStage = `test_deploy:
   <<: *deploy_config
   when: on_success
@@ -39,6 +34,9 @@ const accStage = `acceptance_deploy:
   only:
     refs:
     - develop\n\n`;
+
+const sentryScript = ({ sentrySlug }) =>
+  `sh ./scripts/sentry-upload-sourcemaps.sh ${sentrySlug} "$SENTRY_RELEASE_ID"`;
 
 const lintScripts = {
   None: 'eslint --ignore-path .gitignore .',
@@ -100,7 +98,7 @@ module.exports = answers => {
       : lintStagedGlobs[answers.framework],
     accStage: answers.stages.includes('acc') ? accStage : '',
     testStage: answers.stages.includes('test') ? testStage : '',
-    // useSentry: answers.sentry ? '' : ''
+    sentryScript: answers.sentry ? sentryScript(answers) : '',
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
