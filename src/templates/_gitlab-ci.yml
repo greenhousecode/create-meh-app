@@ -99,4 +99,24 @@ build:
   before_script:
     - export K8S_CONFIG=$MEH_K8S_CLUSTER_CONFIG
     - cp -r /usr/helm/chart ./chart
+<<<<<<< HEAD
     - cp -r /usr/helm/scripts ./scripts{{deployTesting}}{{deployAcceptance}}{{deployProduction}}{{deployDags}}
+=======
+    - cp -r /usr/helm/scripts ./scripts
+
+# REMOVE DEPLOYMENT STAGES THAT YOU DO NOT NEED BELOW
+{{testStage}}{{accStage}}production_deploy:
+  <<: *deploy_config
+  when: on_success
+  script:
+    - source init-kubectl.sh
+    - echo 1 > REPLICAS && echo '' > STAGE
+    - sh ./scripts/replace_values_yaml.sh values.template.yml
+    - {{sentryScript}}
+    - helm upgrade --install $CI_PROJECT_NAME ./chart/
+  environment:
+    name: production
+  only:
+    refs:
+      - master
+>>>>>>> added sentry script find replace
