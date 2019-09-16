@@ -76,5 +76,6 @@ console.log(
   } catch (err) {
     console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
     console.log(err.description || err);
+    process.exit(1);
   }
 })();
