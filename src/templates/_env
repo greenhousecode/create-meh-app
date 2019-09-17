@@ -1,0 +1,2 @@
+# Used by `yarn apply-env` for applying secrets through kubectl
+GITLAB_PERSONAL_ACCESS_TOKEN={{token}}
