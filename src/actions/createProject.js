@@ -3,7 +3,7 @@ const { ui } = require('inquirer');
 const chalk = require('chalk');
 const { GITLAB_NAMESPACES } = require('../config.json');
 
-module.exports = async ({ namespace, token, slugName, description }) => {
+module.exports = async ({ namespace, token, appName, description }) => {
   console.log(chalk.gray('\nInstalling…'));
 
   const bar = new ui.BottomBar();
@@ -13,7 +13,7 @@ module.exports = async ({ namespace, token, slugName, description }) => {
     const gitlab = new Gitlab({ token });
     const project = await gitlab.Projects.create({
       namespace_id: GITLAB_NAMESPACES[namespace].id,
-      name: slugName,
+      name: appName,
       description,
     });
 
