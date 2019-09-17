@@ -2,12 +2,12 @@
   "GITLAB_NAMESPACES": {
     "meh": {
       "id": 4495257,
-      "name": "GreenhouseGroup/meh",
+      "name": "greenhousegroup/meh",
       "clusterVariableKey": "MEH_K8S_CLUSTER_CONFIG"
     },
     "creativedevelopment": {
       "id": 4495269,
-      "name": "GreenhouseGroup/creativedevelopment",
+      "name": "greenhousegroup/creativedevelopment",
       "clusterVariableKey": "MEH_K8S_CLUSTER_CONFIG"
     }
   }
