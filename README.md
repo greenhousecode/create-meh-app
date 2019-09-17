@@ -2,11 +2,25 @@
 
 > Quickly scaffolds a new MEH project by setting up linting, formatting and automatic deployment.
 
+## Usage
+
+```shell
+yarn create meh-app <app-name>
+```
+
+Examples:
+
+- `yarn create meh-app my-app`
+- `yarn create meh-app folder/my-app`
+- `yarn create meh-app /folder/my-app`
+
+![Screenshot](docs/screenshot.png)
+
 ## Features
 
 - [x] Linting & formatting (supports TypeScript, React and Vue)
-- [x] Creates & clones GitLab repo
-- [x] Initial commit on `master` and `develop`
+- [x] Creates & clones a GitLab repository
+- [x] Initial commits on `master` and `develop`
 - [x] Automatic Kubernetes deployment
 - [x] Automatic `.env.<stage>` deployment
 
@@ -15,14 +29,6 @@
 - [Yarn](https://yarnpkg.com/)
 - [Kubectl v1.11.5](https://storage.googleapis.com/kubernetes-release/release/v1.11.5/bin/darwin/amd64/kubectl)
 - GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) (`api` scoped)
-
-## Usage
-
-```shell
-yarn create meh-app <app-name>
-```
-
-![Screenshot](docs/screenshot.png)
 
 ## Git hooks
 
@@ -81,7 +87,6 @@ _\*if file exists_
 
 ## Roadmap
 
-- [ ] Path arg support `yarn create meh-app /my/folder/my-app`
 - [ ] Undo previous steps on fail
 - [ ] Support integrated Airflow DAGs
 - [ ] Reduce amount of `devDependencies`
