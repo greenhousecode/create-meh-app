@@ -13,7 +13,7 @@ const askQuestions = require('./actions/askQuestions');
 const pushBranches = require('./actions/pushBranches');
 const copyFiles = require('./actions/copyFiles');
 
-let slugName;
+let input;
 
 app
   .name('yarn create meh-app')
@@ -22,12 +22,12 @@ app
   .usage('<app-name>')
   .arguments('<app-name>')
   .action(appName => {
-    slugName = appName;
+    input = appName;
   })
   .parse(process.argv);
 
 // App name validation
-if (!slugName) {
+if (!input) {
   console.log(
     chalk.red(
       `Please supply an ${chalk.bold('app name')}: "yarn create meh-app ${chalk.bold('my-app')}"`,
@@ -35,7 +35,7 @@ if (!slugName) {
   );
 
   process.exit(1);
-} else if (!/^[0-9a-z]+(-[0-9a-z]+)*$/.test(slugName)) {
+} else if (!/^\/?([\w-]+\/)*[0-9a-z]+(-[0-9a-z]+)*$/.test(input)) {
   console.log(
     chalk.red(
       `For your ${chalk.bold(
@@ -60,7 +60,7 @@ console.log(
 
 (async () => {
   try {
-    const answers = await askQuestions(slugName);
+    const answers = await askQuestions(input);
     const project = await createProject(answers);
     await cloneRepository(answers, project);
     copyFiles(answers);

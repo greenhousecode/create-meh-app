@@ -24,7 +24,7 @@ const getStageByBranch = branch => {
 const getSecretsTemplate = stage => `apiVersion: v1
 kind: Secret
 metadata:
-  name: {{slugName}}${stage !== 'prod' ? `-${stage}` : ''}-secret-env
+  name: {{appName}}${stage !== 'prod' ? `-${stage}` : ''}-secret-env
   namespace: bmidevelopment
 type: Opaque
 data: {}

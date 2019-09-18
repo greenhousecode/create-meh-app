@@ -10,7 +10,7 @@ const {
 
 const copyTemplates = (source, target, callback = file => file) => {
   if (!existsSync(target)) {
-    mkdirSync(target);
+    mkdirSync(target, { recursive: true });
   }
 
   readdirSync(source).forEach(fileName => {
