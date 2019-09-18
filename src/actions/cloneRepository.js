@@ -1,9 +1,10 @@
 const git = require('simple-git/promise');
 const { ui } = require('inquirer');
+const { join } = require('path');
 const chalk = require('chalk');
 
 module.exports = async (
-  { token, protocol },
+  { token, protocol, cwd },
   { ssh_url_to_repo: sshUrl, http_url_to_repo: httpsUrl },
 ) => {
   const bar = new ui.BottomBar();
@@ -13,7 +14,7 @@ module.exports = async (
     protocol === 'SSH' ? sshUrl : httpsUrl.replace('https://', `https://gitlab-ci-token:${token}@`);
 
   try {
-    await git().clone(repoUrl);
+    await git(join(cwd, '..')).clone(repoUrl);
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Cloning failed'));

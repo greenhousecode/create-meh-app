@@ -103,10 +103,5 @@ module.exports = async input => {
     },
   ]);
 
-  return {
-    ...answers,
-    gitlabData,
-    appName,
-    cwd,
-  };
+  return { ...answers, gitlabData, appName, cwd };
 };
