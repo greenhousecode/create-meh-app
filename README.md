@@ -18,11 +18,12 @@ Examples:
 
 ## Features
 
-- [x] Linting & formatting (supports TypeScript, React and Vue)
+- [x] Lints & formats `.js(x)`, `.ts(x)`, and `.vue`
+- [x] Formats `.graphql`, `.html`, `.json`, `.md`, `.(s)css`, and `.yml`
 - [x] Creates & clones a GitLab repository
 - [x] Initial commits on `master` and `develop`
-- [x] Automatic Kubernetes deployment
 - [x] Automatic `.env.<stage>` deployment
+- [x] Automatic Kubernetes deployment
 
 ## Prerequisites
 
@@ -34,8 +35,8 @@ Examples:
 
 #### Pre-commit
 
-- Lints and formats, and attempts to autofix your staged files (`*.{js,jsx,ts,tsx,vue}`) through [ESLint](https://eslint.org/) (extending [Airbnb](https://github.com/airbnb/javascript#readme) and [Prettier](https://prettier.io/))
-- Formats and attempts to autoformat your staged files (`*.{css,graphql,html,json,md,scss,yml}`) through Prettier
+- Lints and formats, and attempts to autofix your staged (`.js(x)`, `.ts(x)`, and `.vue`) files through [ESLint](https://eslint.org/) (extending [Airbnb](https://github.com/airbnb/javascript#readme) and [Prettier](https://prettier.io/))
+- Formats and attempts to autoformat your staged (`.graphql`, `.html`, `.json`, `.md`, `.(s)css`, and `.yml`) files through Prettier
 
 #### Pre-push
 
