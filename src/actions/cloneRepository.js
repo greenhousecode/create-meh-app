@@ -1,3 +1,4 @@
+const { existsSync, mkdirSync } = require('fs');
 const git = require('simple-git/promise');
 const { ui } = require('inquirer');
 const { join } = require('path');
@@ -13,8 +14,14 @@ module.exports = async (
   const repoUrl =
     protocol === 'SSH' ? sshUrl : httpsUrl.replace('https://', `https://gitlab-ci-token:${token}@`);
 
+  const rootFolder = join(cwd, '..');
+
+  if (!existsSync(rootFolder)) {
+    mkdirSync(rootFolder, { recursive: true });
+  }
+
   try {
-    await git(join(cwd, '..')).clone(repoUrl);
+    await git(rootFolder).clone(repoUrl);
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Cloning failed'));
