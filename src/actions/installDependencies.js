@@ -4,7 +4,7 @@ const spawnPromise = require('../utils/spawnPromise');
 
 module.exports = async ({ framework, typescript, cwd }) => {
   const bar = new ui.BottomBar();
-  bar.updateBottomBar(chalk.gray('Installing dependencies…'));
+  bar.updateBottomBar(chalk.gray('Installing dependencies (this can take a minute)…'));
 
   try {
     // Install devDependencies
