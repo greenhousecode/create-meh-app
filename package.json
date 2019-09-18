@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "lint": "eslint --ignore-path .gitignore .",
-    "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss}'",
+    "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss.yml}'",
     "prepublishOnly": "yarn lint && yarn format"
   },
   "lint-staged": {

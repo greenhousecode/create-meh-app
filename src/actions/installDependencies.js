@@ -22,7 +22,7 @@ module.exports = async ({ framework, typescript, cwd }) => {
         ...(typescript
           ? ['typescript', '@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
           : ['eslint-plugin-prettier']),
-        ...(framework === 'Vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),
+        ...(framework === 'vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),
       ],
       { cwd },
     );
@@ -32,7 +32,7 @@ module.exports = async ({ framework, typescript, cwd }) => {
       'npx',
       [
         'install-peerdeps',
-        framework === 'React' ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
+        framework === 'react' ? 'eslint-config-airbnb' : 'eslint-config-airbnb-base',
         '--dev',
         '--yarn',
       ],

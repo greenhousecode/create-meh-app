@@ -77,7 +77,11 @@ module.exports = async input => {
       type: 'list',
       name: 'framework',
       message: 'Which framework are you planning on using? (Only affects linting)',
-      choices: ['None', 'React', 'Vue'],
+      choices: [
+        { name: 'None', value: 'none' },
+        { name: 'React', value: 'react' },
+        { name: 'Vue', value: 'vue' },
+      ],
     },
     {
       type: 'confirm',
