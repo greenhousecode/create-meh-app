@@ -86,6 +86,8 @@ _\*if file exists_
 }
 ```
 
+We disable Prettier from formatting JS(X), TS(X), and Vue files, to prevent conflicts, because ESLint takes care of them (using Prettier under the hood).
+
 ## Roadmap
 
 - [ ] Undo previous steps on fail
