@@ -6,10 +6,12 @@ const { GITLAB_NAMESPACES } = require('../config.json');
 
 const filter = input => input.trim().replace(/\s+/g, ' ');
 
-module.exports = async slugName => {
-  console.log(chalk.gray('We need to know a few things…'));
-
+module.exports = async input => {
+  const cwd = input.match(/^\//) ? input : join(process.cwd(), input);
+  const appName = input.match(/[0-9a-z-]+$/)[0];
   let gitlabData;
+
+  console.log(chalk.gray(`Creating ${cwd}…`));
 
   const answers = await prompt([
     {
@@ -60,7 +62,7 @@ module.exports = async slugName => {
       type: 'input',
       message: `What's the name of your app?`,
       default: () =>
-        slugName.replace(/-/g, ' ').replace(/^[a-z]| [a-z]/g, match => match.toUpperCase()),
+        appName.replace(/-/g, ' ').replace(/^[a-z]| [a-z]/g, match => match.toUpperCase()),
       filter,
       validate: name => !!name || 'Please provide a name',
     },
@@ -75,7 +77,11 @@ module.exports = async slugName => {
       type: 'list',
       name: 'framework',
       message: 'Which framework are you planning on using? (Only affects linting)',
-      choices: ['None', 'React', 'Vue'],
+      choices: [
+        { name: 'None', value: 'none' },
+        { name: 'React', value: 'react' },
+        { name: 'Vue', value: 'vue' },
+      ],
     },
     {
       type: 'confirm',
@@ -101,10 +107,5 @@ module.exports = async slugName => {
     },
   ]);
 
-  return {
-    ...answers,
-    gitlabData,
-    slugName,
-    cwd: join(process.cwd(), slugName),
-  };
+  return { ...answers, gitlabData, appName, cwd };
 };

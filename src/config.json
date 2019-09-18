@@ -2,13 +2,42 @@
   "GITLAB_NAMESPACES": {
     "meh": {
       "id": 4495257,
-      "name": "GreenhouseGroup/meh",
+      "name": "greenhousegroup/meh",
       "clusterVariableKey": "MEH_K8S_CLUSTER_CONFIG"
     },
     "creativedevelopment": {
       "id": 4495269,
-      "name": "GreenhouseGroup/creativedevelopment",
+      "name": "greenhousegroup/creativedevelopment",
       "clusterVariableKey": "MEH_K8S_CLUSTER_CONFIG"
     }
+  },
+  "LINT_STAGED_GLOBS": {
+    "none": "*.js",
+    "noneTypescript": "*.{js,ts}",
+    "react": "*.{js,jsx}",
+    "reactTypescript": "*.{js,jsx,ts,tsx}",
+    "vue": "*.{js,vue}",
+    "vueTypescript": "*.{js,ts,vue}"
+  },
+  "LINT_SCRIPTS": {
+    "none": "eslint --ignore-path .gitignore .",
+    "noneTypescript": "eslint --ext .js,.ts --ignore-path .gitignore .",
+    "react": "eslint --ext .js,.jsx --ignore-path .gitignore .",
+    "reactTypescript": "eslint --ext .js,.ts,.jsx,.tsx --ignore-path .gitignore .",
+    "vue": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "vueTypescript": "eslint --ext .js,.ts,.vue --ignore-path .gitignore ."
+  },
+  "ESLINT_EXTENDS": {
+    "none": "[\"airbnb-base\", \"plugin:prettier/recommended\"]",
+    "noneTypescript": "[\"airbnb-base\", \"plugin:@typescript-eslint/recommended\", \"prettier\", \"prettier/@typescript-eslint\"]",
+    "react": "[\"airbnb\", \"plugin:prettier/recommended\"]",
+    "reactTypescript": "[\"airbnb\", \"plugin:@typescript-eslint/recommended\", \"prettier\", \"prettier/@typescript-eslint\"]",
+    "vue": "[\"plugin:vue/recommended\", \"airbnb-base\", \"prettier/vue\", \"plugin:prettier/recommended\"]",
+    "vueTypescript": "[\"plugin:vue/recommended\", \"airbnb-base\", \"plugin:@typescript-eslint/recommended\", \"prettier/vue\", \"prettier/@typescript-eslint\"]"
+  },
+  "STAGES_DEPLOY_SCRIPTS": {
+    "test": "\n\ndeploy_test:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '-test' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml\n    - helm upgrade --install \"$CI_PROJECT_NAME-test\" ./chart/\n  environment:\n    name: test\n  except:\n    refs:\n      - master",
+    "acc": "\n\ndeploy_acceptance:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '-acc' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml\n    - helm upgrade --install \"$CI_PROJECT_NAME-acc\" ./chart/\n  environment:\n    name: acceptance\n  only:\n    refs:\n    - develop",
+    "prod": "\n\ndeploy_production:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml\n    - helm upgrade --install $CI_PROJECT_NAME ./chart/\n  environment:\n    name: production\n  only:\n    refs:\n      - master"
   }
 }

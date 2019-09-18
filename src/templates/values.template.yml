@@ -1,7 +1,7 @@
-domain: {{slugName}}__STAGE__.meh.greenhousegroup.com
+domain: {{appName}}__STAGE__.meh.greenhousegroup.com
 email: meh@greenhousegroup.com
 version: __VERSION__
-dockerImage: registry.gitlab.com/{{gitlabNamespace}}/{{slugName}}:__VERSION__
+dockerImage: registry.gitlab.com/{{gitlabNamespace}}/{{appName}}:__VERSION__
 webReplicas: __REPLICAS__
 ingress:
   createIngress: true
@@ -12,4 +12,4 @@ containerResources:
   limits:
     memory: '256M'
     cpu: 100m
-envSecretName: {{slugName}}__STAGE__-secret-env
+envSecretName: {{appName}}__STAGE__-secret-env
