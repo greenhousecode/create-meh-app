@@ -109,7 +109,7 @@ module.exports = async input => {
       name: 'dags',
       default: false,
       type: 'confirm',
-      message: 'Do you want to add an Airflow DAG(s)?',
+      message: 'Do you want to add Airflow DAG(s)?',
     },
     {
       type: 'input',
