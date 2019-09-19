@@ -11,7 +11,7 @@ module.exports = async input => {
   const appName = input.match(/[0-9a-z-]+$/)[0];
   let gitlabData;
 
-  console.log(chalk.gray(`Creating ${cwd}…`));
+  console.log(chalk.gray(`Creating ${chalk.bold(cwd)}…`));
 
   const answers = await prompt([
     {
