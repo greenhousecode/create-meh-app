@@ -15,7 +15,6 @@ author_email = search('<(.*)>', author).group(1)
 
 default_args = {
     'on_failure_callback': on_failure_slack_callback(dag_id, '#dev_hotline'),
-    'schedule_interval': '{{dagInterval}}',
     'description': '{{dagDescription}}',
     'retry_delay': timedelta(minutes=1),
     'start_date': datetime({{year}}, {{month}}, {{day}}),
@@ -27,6 +26,7 @@ default_args = {
 }
 
 dag = DAG(
+    schedule_interval='{{dagInterval}}',
     default_args=default_args,
     catchup=False,
     dag_id=dag_id,
