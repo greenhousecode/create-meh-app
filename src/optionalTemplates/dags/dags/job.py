@@ -13,7 +13,6 @@ dag_id = '__NAME__-' + filename
 author = '__AUTHOR__'
 author_email = search('<(.*)>', author).group(1)
 
-# Customize where necessary
 default_args = {
     'on_failure_callback': on_failure_slack_callback(dag_id, '#dev_hotline'),
     'schedule_interval': '{{dagInterval}}',
