@@ -8,7 +8,7 @@
 yarn create meh-app <app-name>
 ```
 
-Examples:
+#### Examples
 
 - `yarn create meh-app my-app`
 - `yarn create meh-app folder/my-app` (or `./folder/my-app`, or `../folder/my-app`)
@@ -24,6 +24,7 @@ Examples:
 - [x] Initial commits on `master` and `develop`
 - [x] Automatic `.env.<stage>` deployment
 - [x] Automatic Kubernetes deployment
+- [x] Automatic Airflow DAG(s) deployment
 
 ## Prerequisites
 
@@ -91,5 +92,4 @@ We disable Prettier from formatting JS(X), TS(X), and Vue files, to prevent conf
 ## Roadmap
 
 - [ ] Undo previous steps on fail
-- [ ] Support integrated Airflow DAGs
 - [ ] Reduce amount of `devDependencies`
