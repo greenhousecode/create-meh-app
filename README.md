@@ -48,6 +48,14 @@ yarn create meh-app <app-name>
 
 _\*if file exists_
 
+## Airflow DAGs
+
+If you opted in for Airflow DAG(s) during setup, the following will be added:
+
+- `/dags/<dagName>.py` (containing the interval and description you entered)
+- `start:<dagName>` script in `package.json` (the Airflow pod will call `yarn start:<dagName>`)
+- `deploy_dags` script in `.gitlab-ci.yml` (this will deploy any `*.py` file in `/dags` when pushing to `master`)
+
 ## Recommended Visual Studio Code settings
 
 #### Extensions
