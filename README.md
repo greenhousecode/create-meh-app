@@ -22,7 +22,7 @@ yarn create meh-app <app-name>
 - [x] Formats `.graphql`, `.html`, `.json`, `.md`, `.(s)css`, and `.yml`
 - [x] Creates & clones a GitLab repository
 - [x] Initial commits on `master` and `develop`
-- [x] Automatic `.env.<stage>` deployment
+- [x] Automatic `.env.<stage>` secrets deployment
 - [x] Automatic Kubernetes deployment
 - [x] Automatic Airflow DAG(s) deployment
 
@@ -54,7 +54,7 @@ If you opted in for Airflow DAG(s) during setup, the following will be added:
 
 - `/dags/<dagName>.py` (containing the interval and description you entered)
 - `start:<dagName>` script in `package.json` (the Airflow pod will call `yarn start:<dagName>`)
-- `deploy_dags` script in `.gitlab-ci.yml` (this will deploy any `*.py` file in `/dags` when pushing to `master`)
+- `deploy_dags` script in `.gitlab-ci.yml` (this will deploy any `*.py` files in `/dags` when pushing to `master`)
 
 ## Recommended Visual Studio Code settings
 
