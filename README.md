@@ -8,7 +8,7 @@
 yarn create meh-app <app-name>
 ```
 
-Examples:
+#### Examples
 
 - `yarn create meh-app my-app`
 - `yarn create meh-app folder/my-app` (or `./folder/my-app`, or `../folder/my-app`)
@@ -22,8 +22,9 @@ Examples:
 - [x] Formats `.graphql`, `.html`, `.json`, `.md`, `.(s)css`, and `.yml`
 - [x] Creates & clones a GitLab repository
 - [x] Initial commits on `master` and `develop`
-- [x] Automatic `.env.<stage>` deployment
+- [x] Automatic `.env.<stage>` secrets deployment
 - [x] Automatic Kubernetes deployment
+- [x] Automatic Airflow DAG(s) deployment
 
 ## Prerequisites
 
@@ -46,6 +47,14 @@ Examples:
 - On other branches: Applies your `.env.test`\* through `kubectl`
 
 _\*if file exists_
+
+## Airflow DAGs
+
+If you opted in for Airflow DAG(s) during setup, the following will be added:
+
+- `/dags/<dagName>.py` (containing the interval and description you entered)
+- `start:<dagName>` script in `package.json` (the Airflow pod will call `yarn start:<dagName>`)
+- `deploy_dags` script in `.gitlab-ci.yml` (this will deploy any `*.py` files in `/dags` when pushing to `master`)
 
 ## Recommended Visual Studio Code settings
 
@@ -91,5 +100,4 @@ We disable Prettier from formatting JS(X), TS(X), and Vue files, to prevent conf
 ## Roadmap
 
 - [ ] Undo previous steps on fail
-- [ ] Support integrated Airflow DAGs
 - [ ] Reduce amount of `devDependencies`
