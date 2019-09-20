@@ -2,20 +2,38 @@ const { ui } = require('inquirer');
 const chalk = require('chalk');
 const spawnPromise = require('../utils/spawnPromise');
 
-module.exports = async ({ framework, typescript, cwd }) => {
+const DEFAULT_DEPENDENCIES = [];
+const DEFAULT_DEV_DEPENDENCIES = [
+  'husky',
+  'tempy',
+  'gitlab',
+  'prettier',
+  'lint-staged',
+  'eslint-config-prettier',
+];
+
+module.exports = async ({ sentry, framework, typescript, cwd }) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Installing dependencies (this can take a minute)…'));
 
   try {
+    const dependencies = [...DEFAULT_DEPENDENCIES];
+
+    if (sentry) {
+      dependencies.push('@sentry/node');
+    }
+
+    if (dependencies.length) {
+      // Install dependencies
+      await spawnPromise('yarn', ['add', ...dependencies], { cwd });
+    }
+
     // Install devDependencies
     await spawnPromise(
       'yarn',
       [
         'add',
-        'husky',
-        'prettier',
-        'lint-staged',
-        'eslint-config-prettier',
+        ...DEFAULT_DEV_DEPENDENCIES,
         ...(typescript
           ? ['typescript', '@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
           : ['eslint-plugin-prettier']),
