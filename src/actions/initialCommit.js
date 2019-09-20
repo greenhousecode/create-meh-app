@@ -12,7 +12,7 @@ module.exports = async ({ cwd }) => {
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Creating initial commit failed'));
-    process.exit(1);
+    throw err;
   }
 
   bar.updateBottomBar('');

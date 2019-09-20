@@ -41,7 +41,7 @@ module.exports = async ({ framework, typescript, cwd }) => {
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Installing failed'));
-    process.exit(1);
+    throw err;
   }
 
   bar.updateBottomBar('');

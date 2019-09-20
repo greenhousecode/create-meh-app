@@ -11,7 +11,7 @@ module.exports = async input => {
   const appName = input.match(/[0-9a-z-]+$/)[0];
   let gitlabData;
 
-  console.log(chalk.gray(`Creating ${cwd}…`));
+  console.log(chalk.gray(`Creating ${chalk.bold(cwd)}…`));
 
   const answers = await prompt([
     {
@@ -60,7 +60,7 @@ module.exports = async input => {
     {
       name: 'name',
       type: 'input',
-      message: `What's the name of your app?`,
+      message: "What's the name of your app?",
       default: () =>
         appName.replace(/-/g, ' ').replace(/^[a-z]| [a-z]/g, match => match.toUpperCase()),
       filter,
@@ -104,6 +104,49 @@ module.exports = async input => {
       name: 'protocol',
       message: 'Clone repository using:',
       choices: ['SSH', 'HTTPS'],
+    },
+    {
+      name: 'dags',
+      default: false,
+      type: 'confirm',
+      message: 'Do you want to add Airflow DAG(s)?',
+    },
+    {
+      type: 'input',
+      default: 'job',
+      name: 'dagName',
+      when: ({ dags }) => dags,
+      message: "What's the name of your DAG? ([a-z0-9-])",
+      validate: dagName => {
+        if (!dagName) return 'Please provide a DAG name';
+        if (!/^[a-z0-9-]+$/.test(dagName)) return 'Only use [a-z0-9-] for your DAG name';
+        return true;
+      },
+    },
+    {
+      filter,
+      type: 'input',
+      name: 'dagDescription',
+      when: ({ dags }) => dags,
+      default: 'To make the world a better place',
+      message: 'Please provide one line describing your DAG:',
+      validate: dagDescription => !!dagDescription || 'Please provide a DAG description',
+    },
+    {
+      default: 3,
+      type: 'list',
+      name: 'dagInterval',
+      when: ({ dags }) => dags,
+      message: 'How often should this DAG run? (you can change this later)',
+      choices: [
+        { name: 'Every minute', value: '*/1 * * * *' },
+        { name: 'Every 5 minutes', value: '*/5 * * * *' },
+        { name: 'Every 15 minutes', value: '*/15 * * * *' },
+        { name: 'Every hour', value: '@hourly' },
+        { name: 'Every day', value: '@daily' },
+        { name: 'Every week', value: '@weekly' },
+        { name: 'Every month', value: '@monthly' },
+      ],
     },
   ]);
 
