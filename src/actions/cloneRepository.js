@@ -25,7 +25,7 @@ module.exports = async (
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Cloning failed'));
-    process.exit(1);
+    throw err;
   }
 
   bar.updateBottomBar('');

@@ -11,7 +11,7 @@ yarn create meh-app <app-name>
 #### Examples
 
 - `yarn create meh-app my-app`
-- `yarn create meh-app folder/my-app` (or `./folder/my-app`, or `../folder/my-app`)
+- `yarn create meh-app folder/my-app`
 - `yarn create meh-app /folder/my-app`
 
 ![Screenshot](docs/screenshot.png)
@@ -95,9 +95,8 @@ If you opted in for Airflow DAG(s) during setup, the following will be added:
 }
 ```
 
-We disable Prettier from formatting JS(X), TS(X), and Vue files, to prevent conflicts, because ESLint already formats these (using Prettier under the hood).
+We disable Prettier from handling JS(X), TS(X), and Vue files, because ESLint already formats these (using Prettier under the hood).
 
 ## Roadmap
 
-- [ ] Undo previous steps on fail
 - [ ] Reduce amount of `devDependencies`

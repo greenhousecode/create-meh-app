@@ -46,6 +46,8 @@
     "commander": "^3.0.1",
     "gitlab": "^11.1.2",
     "inquirer": "^7.0.0",
+    "promise.allsettled": "^1.0.1",
+    "rimraf": "^3.0.0",
     "simple-git": "^1.126.0"
   }
 }
