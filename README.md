@@ -95,7 +95,7 @@ If you opted in for Airflow DAG(s) during setup, the following will be added:
 }
 ```
 
-We disable Prettier from formatting JS(X), TS(X), and Vue files, to prevent conflicts, because ESLint already formats these (using Prettier under the hood).
+We disable Prettier from handling JS(X), TS(X), and Vue files, because ESLint already formats these (using Prettier under the hood).
 
 ## Roadmap
 
