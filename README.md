@@ -99,5 +99,4 @@ We disable Prettier from formatting JS(X), TS(X), and Vue files, to prevent conf
 
 ## Roadmap
 
-- [ ] Undo previous steps on fail
 - [ ] Reduce amount of `devDependencies`
