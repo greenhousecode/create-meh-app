@@ -11,7 +11,7 @@ module.exports = async ({ cwd }) => {
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Checking out develop branch failed'));
-    process.exit(1);
+    throw err;
   }
 
   bar.updateBottomBar('');

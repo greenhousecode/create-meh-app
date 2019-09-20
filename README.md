@@ -11,7 +11,7 @@ yarn create meh-app <app-name>
 #### Examples
 
 - `yarn create meh-app my-app`
-- `yarn create meh-app folder/my-app` (or `./folder/my-app`, or `../folder/my-app`)
+- `yarn create meh-app folder/my-app`
 - `yarn create meh-app /folder/my-app`
 
 ![Screenshot](docs/screenshot.png)

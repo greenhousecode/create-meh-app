@@ -3,17 +3,23 @@ const boxen = require('boxen');
 const chalk = require('chalk');
 const clear = require('clear');
 const app = require('commander');
+const { existsSync } = require('fs');
+require('promise.allsettled').shim();
 const installDependencies = require('./actions/installDependencies');
 const createDevelopBranch = require('./actions/createDevelopBranch');
 const cloneRepository = require('./actions/cloneRepository');
 const { version, description } = require('../package.json');
 const createProject = require('./actions/createProject');
 const initialCommit = require('./actions/initialCommit');
+const deleteProject = require('./actions/deleteProject');
 const askQuestions = require('./actions/askQuestions');
 const pushBranches = require('./actions/pushBranches');
+const deleteFolder = require('./actions/deleteFolder');
 const copyFiles = require('./actions/copyFiles');
 
 let input;
+let answers;
+let project;
 
 app
   .name('yarn create meh-app')
@@ -45,6 +51,9 @@ if (!input) {
   );
 
   process.exit(1);
+} else if (existsSync(input)) {
+  console.log(chalk.red(`The directory "${input}" already exists`));
+  process.exit(1);
 }
 
 clear();
@@ -60,8 +69,8 @@ console.log(
 
 (async () => {
   try {
-    const answers = await askQuestions(input);
-    const project = await createProject(answers);
+    answers = await askQuestions(input);
+    project = await createProject(answers);
     await cloneRepository(answers, project);
     copyFiles(answers);
     await installDependencies(answers);
@@ -73,5 +82,7 @@ console.log(
   } catch (err) {
     console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
     console.log(err.description || err);
+    await Promise.allSettled([deleteProject(answers, project), deleteFolder(answers)]);
+    process.exit(1);
   }
 })();

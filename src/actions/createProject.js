@@ -22,8 +22,7 @@ module.exports = async ({ namespace, token, appName, description }) => {
     return project;
   } catch (err) {
     bar.updateBottomBar('');
-    console.log(chalk.red(`✘ Creating GitLab project failed (${err.message}):`));
-    console.log(err.description);
-    return process.exit(1);
+    console.log(chalk.red('✘ Creating GitLab project failed'));
+    throw err;
   }
 };
