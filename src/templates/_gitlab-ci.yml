@@ -111,8 +111,7 @@ build:
   script:
     - source init-kubectl.sh
     - echo 1 > REPLICAS && echo '' > STAGE
-    - sh ./scripts/replace_values_yaml.sh values.template.yml
-    - {{sentryScript}}
+    - sh ./scripts/replace_values_yaml.sh values.template.yml{{sentryScript}}
     - helm upgrade --install $CI_PROJECT_NAME ./chart/
   environment:
     name: production
