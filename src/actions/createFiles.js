@@ -9,10 +9,27 @@ const {
   LINT_STAGED_GLOBS,
   ESLINT_EXTENDS,
   LINT_SCRIPTS,
+  CI_COMMANDS,
 } = require('../config.json');
 
 const templateDir = join(__dirname, '../templates');
 const optionalTemplateDir = join(__dirname, '../optionalTemplates');
+
+const updateProductionDeployment = answers => {
+  let script = STAGES_DEPLOY_SCRIPTS.prod.slice();
+
+  const padding = command => `\n    - ${command}`;
+
+  if (answers.sentry) {
+    const { sentrySlug } = answers;
+
+    const sentryScript = CI_COMMANDS.sentry.replace('{{sentrySlug}}', sentrySlug);
+
+    script = script.replace('{{sentryScript}}', padding(sentryScript));
+  }
+
+  return script;
+};
 
 module.exports = answers => {
   const bar = new ui.BottomBar();
@@ -31,7 +48,7 @@ module.exports = answers => {
     lintStagedGlob: LINT_STAGED_GLOBS[variant],
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
-    deployProduction: answers.stages.includes('prod') ? STAGES_DEPLOY_SCRIPTS.prod : '',
+    deployProduction: updateProductionDeployment(answers),
     deployDags: answers.dags ? STAGES_DEPLOY_SCRIPTS.dags : '',
     dagStartScript: answers.dags
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
