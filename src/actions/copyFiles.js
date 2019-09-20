@@ -36,7 +36,7 @@ const accStage = `acceptance_deploy:
     - develop\n\n`;
 
 const sentryScript = ({ sentrySlug }) =>
-  `sh ./scripts/sentry-upload-sourcemaps.sh ${sentrySlug} "$SENTRY_RELEASE_ID"`;
+  `\n    - sh ./scripts/sentry-upload-sourcemaps.sh ${sentrySlug} "$SENTRY_RELEASE_ID"`;
 
 const lintScripts = {
   None: 'eslint --ignore-path .gitignore .',
