@@ -20,7 +20,7 @@ module.exports = async ({ sentry, framework, typescript, cwd }) => {
     const dependencies = [...DEFAULT_DEPENDENCIES];
 
     if (sentry) {
-      dependencies.push('@sentry/node');
+      dependencies.push('@sentry/node', '@sentry/integrations');
     }
 
     if (dependencies.length) {
