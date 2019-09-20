@@ -12,9 +12,5 @@ containerResources:
   limits:
     memory: '256M'
     cpu: 100m
-<<<<<<< HEAD
-envSecretName: {{appName}}__STAGE__-secret-env
-=======
 envSecretName: {{slugName}}__STAGE__-secret-env
 sentry: {{useSentry}}
->>>>>>> added dependencies
