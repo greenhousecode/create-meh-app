@@ -1,9 +1,39 @@
 /* eslint-disable */
 const { file } = require('tempy');
-const { parse } = require('dotenv');
 const { Gitlab } = require('gitlab');
 const { spawn } = require('child_process');
 const { readFileSync, writeFileSync } = require('fs');
+
+const parseEnv = filePath =>
+  readFileSync(filePath)
+    .split(/\n/)
+    .reduce(
+      ({ env, multilineKey }, line) => {
+        const matches = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+
+        if (matches) {
+          const [, key, value = ''] = matches;
+
+          if (/^['"].*['"]$/.test(value)) {
+            env[key] = value.replace(/^['"]|['"]$/g, '');
+          } else if (!multilineKey && /^['"]/.test(value)) {
+            multilineKey = key;
+            env[key] = value.replace(/^['"]/g, '');
+          } else {
+            env[key] = value.trim();
+          }
+        } else if (multilineKey) {
+          env[multilineKey] += `\n${line.replace(/['"]$/g, '')}`;
+
+          if (/['"]$/.test(line)) {
+            multilineKey = false;
+          }
+        }
+
+        return { env, multilineKey };
+      },
+      { env: {}, multilineKey: false },
+    ).env;
 
 const getBranchName = () =>
   readFileSync(`${__dirname}/../.git/HEAD`, 'utf8').match(/ref: refs\/heads\/(.+)/)[1];
@@ -38,7 +68,7 @@ data: {}
   let secretsContents = getSecretsTemplate(stage);
 
   const gitlab = new Gitlab({
-    token: parse(readFileSync(`${__dirname}/../.env`)).GITLAB_PERSONAL_ACCESS_TOKEN,
+    token: parseEnv(`${__dirname}/../.env`).GITLAB_PERSONAL_ACCESS_TOKEN,
   });
 
   const { value: clusterConfig } = await gitlab.GroupVariables.show(
@@ -47,7 +77,7 @@ data: {}
   );
 
   try {
-    const env = parse(readFileSync(`${__dirname}/../.env.${stage}`));
+    const env = parseEnv(`${__dirname}/../.env.${stage}`);
 
     if (Object.keys(env).length) {
       secretsContents = secretsContents.replace(
@@ -58,9 +88,9 @@ data: {}
         ),
       );
     }
-  } catch (err) {} // eslint-disable-line no-empty
+  } catch (err) {}
 
-  writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf-8'));
+  writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
   writeFileSync(secretsPath, secretsContents);
 
   const job = spawn(`kubectl`, ['apply', '-f', secretsPath], {
