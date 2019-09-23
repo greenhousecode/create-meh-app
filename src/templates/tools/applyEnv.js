@@ -1,6 +1,6 @@
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
+const { get } = require('http');
 const { tmpdir } = require('os');
-const { Gitlab } = require('gitlab');
 const { join } = require('path');
 const { spawn } = require('child_process');
 const { readFileSync, writeFileSync, mkdtempSync } = require('fs');
@@ -69,15 +69,6 @@ data: {}
   const secretsPath = join(tmpDir, 'secrets.yml');
   let secretsContents = getSecretsTemplate(stage);
 
-  const gitlab = new Gitlab({
-    token: parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
-  });
-
-  const { value: clusterConfig } = await gitlab.GroupVariables.show(
-    '{{gitlabNamespaceId}}',
-    '{{clusterVariableKey}}',
-  );
-
   try {
     const env = parseEnv(join(__dirname, `../.env.${stage}`));
 
@@ -92,12 +83,33 @@ data: {}
     }
   } catch (err) {} // eslint-disable-line no-empty
 
-  writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
-  writeFileSync(secretsPath, secretsContents);
+  get(
+    {
+      url:
+        'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
+      headers: {
+        'private-token': parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
+      },
+    },
+    res => {
+      let body = '';
 
-  const job = spawn(`kubectl`, ['apply', '-f', secretsPath], {
-    env: { ...process.env, KUBECONFIG: clusterConfigPath },
-  });
+      res.on('data', chunk => {
+        body += chunk;
+      });
 
-  job.on('close', code => process.exit(code));
+      res.on('end', () => {
+        const { value: clusterConfig } = JSON.parse(body);
+
+        writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
+        writeFileSync(secretsPath, secretsContents);
+
+        const job = spawn(`kubectl`, ['apply', '-f', secretsPath], {
+          env: { ...process.env, KUBECONFIG: clusterConfigPath },
+        });
+
+        job.on('close', code => process.exit(code));
+      });
+    },
+  );
 })();
