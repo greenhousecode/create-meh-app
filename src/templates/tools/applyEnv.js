@@ -1,12 +1,12 @@
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
-const { get } = require('http');
+const { get } = require('https');
 const { tmpdir } = require('os');
 const { join } = require('path');
 const { spawn } = require('child_process');
 const { readFileSync, writeFileSync, mkdtempSync } = require('fs');
 
 const parseEnv = filePath =>
-  readFileSync(filePath)
+  readFileSync(filePath, 'utf8')
     .split(/\n/)
     .reduce(
       (acc, line) => {
@@ -64,7 +64,7 @@ data: {}
 (async () => {
   const branch = getBranchName();
   const stage = getStageByBranch(branch);
-  const tmpDir = mkdtempSync(join(tmpdir, 'meh-app-'));
+  const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
   const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
   const secretsPath = join(tmpDir, 'secrets.yml');
   let secretsContents = getSecretsTemplate(stage);
@@ -84,9 +84,8 @@ data: {}
   } catch (err) {} // eslint-disable-line no-empty
 
   get(
+    'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
     {
-      url:
-        'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
       headers: {
         'private-token': parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
       },
