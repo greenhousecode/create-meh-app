@@ -1,8 +1,8 @@
-const { get } = require('https');
-const { tmpdir } = require('os');
-const { join } = require('path');
-const { spawn } = require('child_process');
 const { readFileSync, writeFileSync, mkdtempSync } = require('fs');
+const { spawn } = require('child_process');
+const { get } = require('https');
+const { join } = require('path');
+const { tmpdir } = require('os');
 
 const parseEnv = filePath =>
   readFileSync(filePath, 'utf8')
