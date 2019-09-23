@@ -4,7 +4,7 @@ const chalk = require('chalk');
 
 module.exports = async ({ cwd }) => {
   const bar = new ui.BottomBar();
-  bar.updateBottomBar(chalk.gray('Pushing branches…'));
+  bar.updateBottomBar(chalk.gray('Pushing all branches…'));
 
   try {
     await git(cwd).push('origin', 'master');
@@ -16,5 +16,5 @@ module.exports = async ({ cwd }) => {
   }
 
   bar.updateBottomBar('');
-  console.log(chalk.green('✔ Pushed branches'));
+  console.log(chalk.green('✔ Pushed all branches'));
 };
