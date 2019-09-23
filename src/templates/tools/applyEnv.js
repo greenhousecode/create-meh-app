@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 const { file } = require('tempy');
 const { Gitlab } = require('gitlab');
 const { spawn } = require('child_process');
@@ -8,29 +8,29 @@ const parseEnv = filePath =>
   readFileSync(filePath)
     .split(/\n/)
     .reduce(
-      ({ env, multilineKey }, line) => {
+      (acc, line) => {
         const matches = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
         if (matches) {
           const [, key, value = ''] = matches;
 
           if (/^['"].*['"]$/.test(value)) {
-            env[key] = value.replace(/^['"]|['"]$/g, '');
-          } else if (!multilineKey && /^['"]/.test(value)) {
-            multilineKey = key;
-            env[key] = value.replace(/^['"]/g, '');
+            acc.env[key] = value.replace(/^['"]|['"]$/g, '');
+          } else if (!acc.multilineKey && /^['"]/.test(value)) {
+            acc.multilineKey = key;
+            acc.env[key] = value.replace(/^['"]/, '');
           } else {
-            env[key] = value.trim();
+            acc.env[key] = value.trim();
           }
-        } else if (multilineKey) {
-          env[multilineKey] += `\n${line.replace(/['"]$/g, '')}`;
+        } else if (acc.multilineKey) {
+          acc.env[acc.multilineKey] += `\n${line.replace(/['"]$/, '')}`;
 
           if (/['"]$/.test(line)) {
-            multilineKey = false;
+            acc.multilineKey = false;
           }
         }
 
-        return { env, multilineKey };
+        return acc;
       },
       { env: {}, multilineKey: false },
     ).env;
@@ -88,7 +88,7 @@ data: {}
         ),
       );
     }
-  } catch (err) {}
+  } catch (err) {} // eslint-disable-line no-empty
 
   writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
   writeFileSync(secretsPath, secretsContents);
