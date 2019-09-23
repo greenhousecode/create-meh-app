@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 const { get } = require('https');
 const { tmpdir } = require('os');
 const { join } = require('path');
