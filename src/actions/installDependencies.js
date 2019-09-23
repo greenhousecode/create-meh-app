@@ -13,7 +13,6 @@ module.exports = async ({ framework, typescript, cwd }) => {
       [
         'add',
         'husky',
-        'tempy',
         'gitlab',
         'prettier',
         'lint-staged',

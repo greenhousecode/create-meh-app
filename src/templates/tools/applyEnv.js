@@ -1,8 +1,9 @@
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
-const { file } = require('tempy');
+const { tmpdir } = require('os');
 const { Gitlab } = require('gitlab');
+const { join } = require('path');
 const { spawn } = require('child_process');
-const { readFileSync, writeFileSync } = require('fs');
+const { readFileSync, writeFileSync, mkdtempSync } = require('fs');
 
 const parseEnv = filePath =>
   readFileSync(filePath)
@@ -26,17 +27,17 @@ const parseEnv = filePath =>
           acc.env[acc.multilineKey] += `\n${line.replace(/['"]$/, '')}`;
 
           if (/['"]$/.test(line)) {
-            acc.multilineKey = false;
+            acc.multilineKey = null;
           }
         }
 
         return acc;
       },
-      { env: {}, multilineKey: false },
+      { env: {}, multilineKey: null },
     ).env;
 
 const getBranchName = () =>
-  readFileSync(`${__dirname}/../.git/HEAD`, 'utf8').match(/ref: refs\/heads\/(.+)/)[1];
+  readFileSync(join(__dirname, '../.git/HEAD'), 'utf8').match(/ref: refs\/heads\/(.+)/)[1];
 
 const getStageByBranch = branch => {
   switch (branch) {
@@ -63,12 +64,13 @@ data: {}
 (async () => {
   const branch = getBranchName();
   const stage = getStageByBranch(branch);
-  const clusterConfigPath = file({ extension: 'yml' });
-  const secretsPath = file({ extension: 'yml' });
+  const tmpDir = mkdtempSync(join(tmpdir, 'meh-app-'));
+  const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
+  const secretsPath = join(tmpDir, 'secrets.yml');
   let secretsContents = getSecretsTemplate(stage);
 
   const gitlab = new Gitlab({
-    token: parseEnv(`${__dirname}/../.env`).GITLAB_PERSONAL_ACCESS_TOKEN,
+    token: parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
   });
 
   const { value: clusterConfig } = await gitlab.GroupVariables.show(
@@ -77,7 +79,7 @@ data: {}
   );
 
   try {
-    const env = parseEnv(`${__dirname}/../.env.${stage}`);
+    const env = parseEnv(join(__dirname, `../.env.${stage}`));
 
     if (Object.keys(env).length) {
       secretsContents = secretsContents.replace(
