@@ -13,9 +13,6 @@ module.exports = async ({ framework, typescript, cwd }) => {
       [
         'add',
         'husky',
-        'tempy',
-        'dotenv',
-        'gitlab',
         'prettier',
         'lint-staged',
         'eslint-config-prettier',

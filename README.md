@@ -99,4 +99,4 @@ We disable Prettier from handling JS(X), TS(X), and Vue files, because ESLint al
 
 ## Roadmap
 
-- [ ] Reduce amount of `devDependencies`
+- [ ] Autopopulate `.env.*` files
