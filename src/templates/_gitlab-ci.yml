@@ -1,6 +1,5 @@
 stages:
   - testing
-  - versioning
   - prebuild
   - build
   - deploy
@@ -25,20 +24,6 @@ testing:
     - yarn format
     - yarn test
 
-versioning:
-  tags:
-    - kube-02.bmidevelopment
-  stage: versioning
-  image:
-    name: alpine/git
-    entrypoint: ['']
-  script:
-    - git rev-parse HEAD > VERSION
-  artifacts:
-    name: version
-    paths:
-      - VERSION
-
 prebuild:
   <<: *project_shared
   tags:
@@ -46,7 +31,6 @@ prebuild:
   stage: prebuild
   dependencies:
     - testing
-    - versioning
   script:
     - yarn build
   artifacts:
@@ -59,13 +43,12 @@ build:
   stage: build
   dependencies:
     - testing
-    - versioning
     - prebuild
   image:
     name: gcr.io/kaniko-project/executor:debug-v0.4.0
     entrypoint: ['']
   script:
-    - export IMAGE_TAG=$CI_REGISTRY_IMAGE:$(cat VERSION)
+    - export IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - mkdir -p /root/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /root/.docker/config.json
     - |
@@ -73,7 +56,7 @@ build:
                        --context $CI_PROJECT_DIR \
                        --dockerfile $CI_PROJECT_DIR/Dockerfile \
                        --destination $IMAGE_TAG \
-                       --build-arg VERSION="$(cat VERSION)" \
+                       --build-arg VERSION=$CI_COMMIT_SHA \
                        --build-arg PRIVATE_DEPS_USER="gitlab-ci-token" \
                        --build-arg PRIVATE_DEPS_TOKEN="$CI_JOB_TOKEN"
     - |
@@ -83,7 +66,7 @@ build:
                          --context $CI_PROJECT_DIR \
                          --dockerfile $CI_PROJECT_DIR/Dockerfile \
                          --destination "$CI_REGISTRY_IMAGE:latest" \
-                         --build-arg VERSION="$(cat VERSION)" \
+                         --build-arg VERSION="latest" \
                          --build-arg PRIVATE_DEPS_USER="gitlab-ci-token" \
                          --build-arg PRIVATE_DEPS_TOKEN="$CI_JOB_TOKEN"
       fi
@@ -92,11 +75,11 @@ build:
   tags:
     - kube-02.bmidevelopment
   dependencies:
-    - versioning
     - build
   stage: deploy
   image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:1.0.4
   before_script:
     - export K8S_CONFIG=$MEH_K8S_CLUSTER_CONFIG
+    - echo $CI_COMMIT_SHA > VERSION
     - cp -r /usr/helm/chart ./chart
     - cp -r /usr/helm/scripts ./scripts{{deployTesting}}{{deployAcceptance}}{{deployProduction}}{{deployDags}}
