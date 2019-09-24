@@ -102,7 +102,7 @@ data: {}
         writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
         writeFileSync(secretsPath, secretsContents);
 
-        const job = spawn(`kubectl`, ['apply', '-f', secretsPath], {
+        const job = spawn('kubectl', ['apply', '-f', secretsPath], {
           env: { ...process.env, KUBECONFIG: clusterConfigPath },
         });
 
