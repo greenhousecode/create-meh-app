@@ -14,25 +14,36 @@ const parseEnv = filePath =>
         if (matches) {
           const [, key, value = ''] = matches;
 
-          if (/^['"].*['"]$/.test(value)) {
+          if (/^'.*(?<!\\)'$|^".*(?<!\\)"$/.test(value)) {
+            // Quoted single line value
             acc.env[key] = value.replace(/^['"]|['"]$/g, '');
-          } else if (!acc.multilineKey && /^['"]/.test(value)) {
+          } else if (!acc.multilineKey && /^'/.test(value)) {
+            // Single-quoted multiline value
             acc.multilineKey = key;
-            acc.env[key] = value.replace(/^['"]/, '');
+            acc.delimiter = "'";
+            acc.env[key] = value.replace(/^'/, '');
+          } else if (!acc.multilineKey && /^"/.test(value)) {
+            // Double-quoted multiline value
+            acc.multilineKey = key;
+            acc.delimiter = '"';
+            acc.env[key] = value.replace(/^"/, '');
           } else {
+            // Single line value
             acc.env[key] = value.trim();
           }
         } else if (acc.multilineKey) {
-          acc.env[acc.multilineKey] += `\n${line.replace(/['"]$/, '')}`;
+          // End of quoted multiline value
+          const match = new RegExp(`(?<!\\\\)${acc.delimiter}$`);
+          acc.env[acc.multilineKey] += `\n${line.replace(match, '')}`;
 
-          if (/['"]$/.test(line)) {
+          if (match.test(line)) {
             acc.multilineKey = null;
           }
         }
 
         return acc;
       },
-      { env: {}, multilineKey: null },
+      { env: {}, multilineKey: null, delimiter: null },
     ).env;
 
 const getBranchName = () =>
