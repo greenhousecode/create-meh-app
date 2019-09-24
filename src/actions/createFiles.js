@@ -16,7 +16,7 @@ const optionalTemplateDir = join(__dirname, '../optionalTemplates');
 
 module.exports = answers => {
   const bar = new ui.BottomBar();
-  bar.updateBottomBar(chalk.gray('Copying files…'));
+  bar.updateBottomBar(chalk.gray('Creating files…'));
 
   const now = new Date();
   const { name, email } = answers.gitlabData;
@@ -67,5 +67,5 @@ module.exports = answers => {
   answers.stages.forEach(stage => writeFileSync(join(answers.cwd, `.env.${stage}`), ''));
 
   bar.updateBottomBar('');
-  console.log(chalk.green('✔ Copied files'));
+  console.log(chalk.green('✔ Created files'));
 };

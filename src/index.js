@@ -15,7 +15,7 @@ const deleteProject = require('./actions/deleteProject');
 const askQuestions = require('./actions/askQuestions');
 const pushBranches = require('./actions/pushBranches');
 const deleteFolder = require('./actions/deleteFolder');
-const copyFiles = require('./actions/copyFiles');
+const createFiles = require('./actions/createFiles');
 
 let input;
 let answers;
@@ -72,7 +72,7 @@ console.log(
     answers = await askQuestions(input);
     project = await createProject(answers);
     await cloneRepository(answers, project);
-    copyFiles(answers);
+    await createFiles(answers);
     await installDependencies(answers);
     await initialCommit(answers);
     await createDevelopBranch(answers);
