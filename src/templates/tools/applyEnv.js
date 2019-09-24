@@ -17,16 +17,11 @@ const parseEnv = filePath =>
           if (/^'.*(?<!\\)'$|^".*(?<!\\)"$/.test(value)) {
             // Quoted single line value
             acc.env[key] = value.replace(/^['"]|['"]$/g, '');
-          } else if (!acc.multilineKey && /^'/.test(value)) {
-            // Single-quoted multiline value
+          } else if (!acc.multilineKey && /^['"]/.test(value)) {
+            // Quoted multiline value
             acc.multilineKey = key;
-            acc.delimiter = "'";
-            acc.env[key] = value.replace(/^'/, '');
-          } else if (!acc.multilineKey && /^"/.test(value)) {
-            // Double-quoted multiline value
-            acc.multilineKey = key;
-            acc.delimiter = '"';
-            acc.env[key] = value.replace(/^"/, '');
+            [acc.delimiter] = value;
+            acc.env[key] = value.replace(/^['"]/, '');
           } else {
             // Single line value
             acc.env[key] = value.trim();
