@@ -21,8 +21,6 @@ const deleteFolder = require('./actions/deleteFolder');
 const createFiles = require('./actions/createFiles');
 
 let input;
-let answers;
-let project;
 
 app
   .name('yarn create meh-app')
@@ -71,10 +69,13 @@ console.log(
 );
 
 (async () => {
+  let answers;
+  let project;
+  let sentry;
   try {
     answers = await askQuestions(input);
     project = await createProject(answers);
-    const sentry = await createSentry(answers);
+    sentry = await createSentry(answers);
     answers = {
       ...answers,
       ...(await fetchSentryDSN()),
@@ -94,7 +95,7 @@ console.log(
     await Promise.allSettled([
       deleteProject(answers, project),
       deleteFolder(answers),
-      deleteSentry(answers),
+      deleteSentry(sentry),
     ]);
     process.exit(1);
   }
