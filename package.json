@@ -47,7 +47,6 @@
     "chalk": "^2.4.2",
     "clear": "^0.1.0",
     "commander": "^3.0.1",
-    "curl": "^0.1.4",
     "gitlab": "^11.1.2",
     "inquirer": "^7.0.0",
     "promise.allsettled": "^1.0.1",
