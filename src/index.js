@@ -21,8 +21,6 @@ const deleteFolder = require('./actions/deleteFolder');
 const copyFiles = require('./actions/copyFiles');
 
 let input;
-let answers;
-let project;
 
 app
   .name('yarn create meh-app')
@@ -71,12 +69,16 @@ console.log(
 );
 
 (async () => {
+  let answers;
+  let project;
+  let sentry;
   try {
     answers = await askQuestions(input);
     project = await createProject(answers);
+    sentry = await createSentry(answers);
     answers = {
       ...answers,
-      ...(await fetchSentryDSN(await createSentry(answers))),
+      ...(await fetchSentryDSN(sentry)),
     };
 
     await cloneRepository(answers, project);
@@ -93,7 +95,7 @@ console.log(
     await Promise.allSettled([
       deleteProject(answers, project),
       deleteFolder(answers),
-      deleteSentry(answers),
+      deleteSentry(sentry),
     ]);
     process.exit(1);
   }
