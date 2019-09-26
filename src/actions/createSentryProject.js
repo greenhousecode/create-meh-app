@@ -34,7 +34,7 @@ const pickAll = (keys, arr) =>
     return acc;
   }, {});
 
-module.exports = async ({ sentry, namespace, token, slugName: name }) => {
+module.exports = async ({ sentry, namespace, token, appName: name }) => {
   if (!sentry) {
     return null;
   }
@@ -57,7 +57,7 @@ module.exports = async ({ sentry, namespace, token, slugName: name }) => {
       throw new Error(`Missing 'SENTRY_AUTH_TOKEN' Gitlab variable for namespace ${namespace}`);
     }
 
-    const [response, data] = await curlPromise(
+    const [err, response, data] = await curlPromise(
       `${BASE_URL}/teams/${SENTRY_ORG}/meh/projects/`,
       'post',
       {
@@ -69,6 +69,10 @@ module.exports = async ({ sentry, namespace, token, slugName: name }) => {
         body: { name },
       },
     );
+
+    if (err) {
+      throw err;
+    }
 
     if ([200, 201, 202].indexOf(response.statusCode) === -1) {
       const { detail } = JSON.parse(response.body);
@@ -88,6 +92,6 @@ module.exports = async ({ sentry, namespace, token, slugName: name }) => {
     bar.updateBottomBar('');
     console.log(chalk.red(`✘ Creating Sentry project failed (${err.message}):`));
     console.log(err.description);
-    return process.exit(1);
+    throw err;
   }
 };

@@ -93,7 +93,7 @@ module.exports = async input => {
       type: 'confirm',
       name: 'sentry',
       message: 'Do you want to use Sentry for this project?',
-      default: false,
+      default: true,
     },
     {
       name: 'stages',
