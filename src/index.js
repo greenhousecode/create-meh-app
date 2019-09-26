@@ -12,6 +12,7 @@ const { version, description } = require('../package.json');
 const createProject = require('./actions/createProject');
 const createSentry = require('./actions/createSentryProject');
 const fetchSentryDSN = require('./actions/fetchSentryDSN');
+const deleteSentry = require('./actions/deleteSentryProject');
 const initialCommit = require('./actions/initialCommit');
 const deleteProject = require('./actions/deleteProject');
 const askQuestions = require('./actions/askQuestions');
@@ -73,7 +74,12 @@ console.log(
   try {
     answers = await askQuestions(input);
     project = await createProject(answers);
-    const sentry = await fetchSentryDSN(await createSentry(answers));
+    const sentry = await createSentry(answers);
+    answers = {
+      ...answers,
+      ...(await fetchSentryDSN()),
+    };
+
     await cloneRepository(answers, project);
     await createFiles({ ...answers, ...sentry });
     await installDependencies(answers);
@@ -85,7 +91,11 @@ console.log(
   } catch (err) {
     console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
     console.log(err.description || err);
-    await Promise.allSettled([deleteProject(answers, project), deleteFolder(answers)]);
+    await Promise.allSettled([
+      deleteProject(answers, project),
+      deleteFolder(answers),
+      deleteSentry(answers),
+    ]);
     process.exit(1);
   }
 })();

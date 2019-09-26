@@ -19,13 +19,17 @@ module.exports = async sentry => {
 
     const url = `${BASE_URL}/projects/${org}/${slug}/keys/`;
 
-    const [response, data] = await curlPromise(url, 'get', {
+    const [err, response, data] = await curlPromise(url, 'get', {
       options: {
         auth: {
           bearer: token,
         },
       },
     });
+
+    if (err) {
+      throw err;
+    }
 
     if ([200, 201, 202].indexOf(response.statusCode) === -1) {
       const { detail } = JSON.parse(response.body);
