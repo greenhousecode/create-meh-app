@@ -78,11 +78,11 @@ console.log(
     sentry = await createSentry(answers);
     answers = {
       ...answers,
-      ...(await fetchSentryDSN()),
+      ...(await fetchSentryDSN(sentry)),
     };
 
     await cloneRepository(answers, project);
-    await createFiles({ ...answers, ...sentry });
+    await createFiles(answers);
     await installDependencies(answers);
     await initialCommit(answers);
     await createDevelopBranch(answers);
