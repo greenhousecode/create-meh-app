@@ -16,19 +16,18 @@ const templateDir = join(__dirname, '../templates');
 const optionalTemplateDir = join(__dirname, '../optionalTemplates');
 
 const updateProductionDeployment = answers => {
-  let script = STAGES_DEPLOY_SCRIPTS.prod.slice();
+  const scriptCopy = STAGES_DEPLOY_SCRIPTS.prod.slice();
 
   const padding = command => `\n    - ${command}`;
 
+  let sentryScript = '';
   if (answers.sentry) {
     const { sentrySlug } = answers;
 
-    const sentryScript = CI_COMMANDS.sentry.replace('{{sentrySlug}}', sentrySlug);
-
-    script = script.replace('{{sentryScript}}', padding(sentryScript));
+    sentryScript = padding(CI_COMMANDS.sentry.replace('{{sentrySlug}}', sentrySlug));
   }
 
-  return script;
+  return scriptCopy.replace('{{sentryScript}}', sentryScript);
 };
 
 module.exports = answers => {
