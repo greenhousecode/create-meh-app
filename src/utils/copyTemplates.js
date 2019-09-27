@@ -8,16 +8,19 @@ const {
   lstatSync,
 } = require('fs');
 
-const copyTemplates = (source, target, callback = file => file) => {
+const copyTemplates = (source, target, callback = file => file, { excluded = [] } = {}) => {
   if (!existsSync(target)) {
     mkdirSync(target, { recursive: true });
   }
 
   readdirSync(source).forEach(fileName => {
     const filePath = join(source, fileName);
+    if (excluded.includes(filePath)) {
+      return;
+    }
 
     if (lstatSync(filePath).isDirectory()) {
-      copyTemplates(filePath, join(target, fileName), callback);
+      copyTemplates(filePath, join(target, fileName), callback, { excluded });
     } else {
       const { fileName: newFileName, fileContents: newFileContents } = callback({
         fileName,

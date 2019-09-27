@@ -64,11 +64,23 @@ module.exports = answers => {
   };
 
   // Copy over template files and replace macros
-  copyTemplates(templateDir, answers.cwd, file => ({
-    ...file,
-    fileName: file.fileName.replace(/^_/, '.'),
-    fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
-  }));
+  copyTemplates(
+    templateDir,
+    answers.cwd,
+    file => ({
+      ...file,
+      fileName: file.fileName.replace(/^_/, '.'),
+      fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
+    }),
+    {
+      excluded: (items => {
+        if (!answers.sentry) {
+          items.push(`${templateDir}/tools/sentry.js`);
+        }
+        return items;
+      })([]),
+    },
+  );
 
   // Optionally copy over DAG template and replace macros
   if (answers.dags) {
