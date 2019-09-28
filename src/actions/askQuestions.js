@@ -106,7 +106,7 @@ module.exports = async input => {
       choices: ['SSH', 'HTTPS'],
     },
     {
-      name: 'dags',
+      name: 'airflow',
       default: false,
       type: 'confirm',
       message: 'Do you want to add Airflow DAG(s)?',
@@ -115,7 +115,7 @@ module.exports = async input => {
       type: 'input',
       default: 'job',
       name: 'dagName',
-      when: ({ dags }) => dags,
+      when: ({ airflow }) => airflow,
       message: "What's the name of your DAG? ([a-z0-9-])",
       validate: dagName => {
         if (!dagName) return 'Please provide a DAG name';
@@ -127,7 +127,7 @@ module.exports = async input => {
       filter,
       type: 'input',
       name: 'dagDescription',
-      when: ({ dags }) => dags,
+      when: ({ airflow }) => airflow,
       default: 'To make the world a better place',
       message: 'Please provide one line describing your DAG:',
       validate: dagDescription => !!dagDescription || 'Please provide a DAG description',
@@ -136,7 +136,7 @@ module.exports = async input => {
       default: 3,
       type: 'list',
       name: 'dagInterval',
-      when: ({ dags }) => dags,
+      when: ({ airflow }) => airflow,
       message: 'How often should this DAG run? (you can change this later)',
       choices: [
         { name: 'Every minute', value: '*/1 * * * *' },

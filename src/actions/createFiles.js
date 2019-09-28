@@ -11,8 +11,8 @@ const {
   LINT_SCRIPTS,
 } = require('../config.json');
 
-const templateDir = join(__dirname, '../templates');
-const optionalTemplateDir = join(__dirname, '../optionalTemplates');
+const templateDir = join(__dirname, '../templates/default');
+const airflowTemplateDir = join(__dirname, '../templates/airflow');
 
 module.exports = answers => {
   const bar = new ui.BottomBar();
@@ -32,11 +32,11 @@ module.exports = answers => {
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
     deployProduction: answers.stages.includes('prod') ? STAGES_DEPLOY_SCRIPTS.prod : '',
-    deployDags: answers.dags ? STAGES_DEPLOY_SCRIPTS.dags : '',
-    dagStartScript: answers.dags
+    deployDags: answers.airflow ? STAGES_DEPLOY_SCRIPTS.dags : '',
+    dagStartScript: answers.airflow
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
-    airflowDoc: answers.dags
+    airflowDoc: answers.airflow
       ? '## Airflow DAG(s)\n\nAny DAG(s) present in `/dags` will be automatically deployed to Airflow by CI/CD, when pushing to `master`.\n\n'
       : '',
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
@@ -55,8 +55,8 @@ module.exports = answers => {
   }));
 
   // Optionally copy over DAG template and replace macros
-  if (answers.dags) {
-    copyTemplates(join(optionalTemplateDir, 'dags'), answers.cwd, file => ({
+  if (answers.airflow) {
+    copyTemplates(airflowTemplateDir, answers.cwd, file => ({
       ...file,
       fileName: `${answers.dagName}.py`,
       fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
