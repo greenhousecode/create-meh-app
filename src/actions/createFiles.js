@@ -3,6 +3,7 @@ const { ui } = require('inquirer');
 const { join } = require('path');
 const chalk = require('chalk');
 const copyTemplates = require('../utils/copyTemplates');
+
 const {
   STAGES_DEPLOY_SCRIPTS,
   GITLAB_NAMESPACES,

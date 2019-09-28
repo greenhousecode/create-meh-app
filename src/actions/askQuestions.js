@@ -27,7 +27,10 @@ module.exports = async input => {
       mask: '●',
       name: 'token',
       type: 'password',
-      message: 'Provide your GitLab personal access token:',
+      message: process.env.GITLAB_PERSONAL_ACCESS_TOKEN
+        ? `GITLAB_PERSONAL_ACCESS_TOKEN found and prefilled, hit ${chalk.cyan('<RETURN>')}`
+        : 'Provide your GitLab personal access token:',
+      default: process.env.GITLAB_PERSONAL_ACCESS_TOKEN,
       filter,
       when: ({ namespace }) => namespace === key,
       async validate(token) {
