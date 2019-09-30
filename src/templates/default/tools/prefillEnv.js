@@ -1,4 +1,4 @@
-const { writeFileSync, mkdtempSync } = require('fs');
+const { existsSync, writeFileSync, mkdtempSync } = require('fs');
 const { spawn } = require('child_process');
 const { tmpdir } = require('os');
 const { join } = require('path');
@@ -33,25 +33,37 @@ get(
       writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
 
       await Promise.all(
-        Object.keys(secrets).map(
-          key =>
-            new Promise((resolve, reject) => {
-              const job = spawn('kubectl', ['get', 'secret', secrets[key], '-o', 'json'], {
-                env: { ...process.env, KUBECONFIG: clusterConfigPath },
-              });
+        Object.keys(secrets).map(stage =>
+          new Promise((resolve, reject) => {
+            const job = spawn('kubectl', ['get', 'secret', secrets[stage], '-o', 'json'], {
+              env: { ...process.env, KUBECONFIG: clusterConfigPath },
+            });
 
-              let result = '';
+            let result = '';
 
-              job.stdout.on('data', data => {
-                result += data.toString();
-              });
+            job.stdout.on('data', data => {
+              result += data.toString();
+            });
 
-              job.on('close', code => {
-                const { data } = JSON.parse(result);
-                console.log('DATA', data);
-                return code === 0 ? resolve() : reject();
-              });
-            }),
+            job.on('close', code => (code === 0 ? resolve(result) : reject(code)));
+          })
+            .then(result => {
+              const { data } = JSON.parse(result);
+              const envFile = join(__dirname, `../.env.${stage}`);
+
+              if (!existsSync(envFile)) {
+                writeFileSync(
+                  envFile,
+                  Object.keys(data).reduce((acc, key) => {
+                    const value = Buffer.from(data[key], 'base64').toString('utf8');
+                    const line = `${key}=${/\n/.test(value) ? `"${value}"` : value}\n`;
+
+                    return acc + line;
+                  }, ''),
+                );
+              }
+            })
+            .catch(() => {}),
         ),
       );
     });
