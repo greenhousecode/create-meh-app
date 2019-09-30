@@ -22,7 +22,7 @@ yarn create meh-app <app-name>
 - [x] Formats `.graphql`, `.html`, `.json`, `.md`, `.(s)css`, and `.yml`
 - [x] Creates & clones a GitLab repository
 - [x] Initial commits on `master` and `develop`
-- [x] Automatic `.env.<stage>` secrets deployment
+- [x] Automatic two-way `.env.<stage>` secrets sync
 - [x] Automatic Kubernetes deployment
 - [x] Automatic Airflow DAG(s) deployment
 
@@ -31,6 +31,7 @@ yarn create meh-app <app-name>
 - [Yarn](https://yarnpkg.com/)
 - [Kubectl v1.11.5](https://storage.googleapis.com/kubernetes-release/release/v1.11.5/bin/darwin/amd64/kubectl)
 - GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) (`api` scoped)
+  _Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to `~/.bash_profile` and/or `~/.zshrc` to prefill `.env.<stage>` files on consecutive installs_
 
 ## Git hooks
 

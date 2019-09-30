@@ -7,6 +7,7 @@ const { get } = require('https');
 const token = process.env.GITLAB_PERSONAL_ACCESS_TOKEN;
 const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
+
 const secrets = {
   test: '{{appName}}-test-secret-env',
   acc: '{{appName}}-acc-secret-env',
