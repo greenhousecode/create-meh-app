@@ -1,11 +1,10 @@
 from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from utils.slack_fallback import on_failure_slack_callback
 from airflow.contrib.kubernetes.secret import Secret
 from datetime import datetime, timedelta
-from airflow import DAG, utils
+from airflow import DAG
 from re import search
 from os import path
-
-from utils.slack_fallback import on_failure_slack_callback
 
 # Don't change
 filename = path.splitext(path.basename(__file__))[0]
