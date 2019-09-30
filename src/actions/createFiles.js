@@ -58,6 +58,7 @@ module.exports = answers => {
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
+    useSentry: !!answers.sentry,
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
