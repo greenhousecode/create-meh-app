@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { existsSync, writeFileSync, mkdtempSync } = require('fs');
 const { spawn } = require('child_process');
 const { tmpdir } = require('os');
@@ -62,6 +63,10 @@ get(
                     return acc + line;
                   }, ''),
                 );
+
+                console.log(`${envFile} created and prefilled`);
+              } else {
+                console.log(`${envFile} already exists, not updating contents`);
               }
             })
             .catch(() => {}),
