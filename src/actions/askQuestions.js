@@ -109,6 +109,7 @@ module.exports = async input => {
       choices: [
         { name: 'TypeScript (only affects linting)', value: 'typescript' },
         { name: 'Airflow DAG(s)', value: 'airflow' },
+        { name: 'Redis database', value: 'redis' },
         { name: 'MongoDB database', value: 'mongodb' },
         { name: 'Pingdom monitoring', value: 'pingdom', checked: true },
       ],

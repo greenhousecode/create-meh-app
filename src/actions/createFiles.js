@@ -47,6 +47,8 @@ module.exports = answers => {
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
+    redis: answers.addons.includes('redis'),
+    mongodb: answers.addons.includes('mongodb'),
     pingdom: answers.addons.includes('pingdom'),
     year: now.getFullYear(),
     month: now.getMonth() + 1,
