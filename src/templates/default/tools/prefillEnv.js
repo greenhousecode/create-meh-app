@@ -8,6 +8,7 @@ const { get } = require('https');
 const token = process.env.GITLAB_PERSONAL_ACCESS_TOKEN;
 const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
+const localEnv = join(__dirname, '../.env');
 
 const secrets = {
   test: '{{appName}}-test-secret-env',
@@ -17,6 +18,14 @@ const secrets = {
 
 if (!token) {
   process.exit(0);
+}
+
+// Create .env
+if (!existsSync(localEnv)) {
+  writeFileSync(
+    localEnv,
+    `# Used locally by "yarn apply-env" for applying secrets through kubectl\nGITLAB_PERSONAL_ACCESS_TOKEN=${token}\n`,
+  );
 }
 
 get(
@@ -34,6 +43,7 @@ get(
 
       writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
 
+      // Create .env.<stage>
       await Promise.all(
         Object.keys(secrets).map(stage =>
           new Promise((resolve, reject) => {

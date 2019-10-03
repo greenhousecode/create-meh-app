@@ -98,7 +98,9 @@ data: {}
     'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
     {
       headers: {
-        'private-token': parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
+        'private-token':
+          process.env.GITLAB_PERSONAL_ACCESS_TOKEN ||
+          parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
       },
     },
     res => {

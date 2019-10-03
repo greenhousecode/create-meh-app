@@ -108,8 +108,8 @@ module.exports = async input => {
       message: 'Check any of the following you want to include:',
       choices: [
         { name: 'TypeScript (only affects linting)', value: 'typescript' },
-        { name: 'MongoDB database', value: 'mongodb' },
         { name: 'Airflow DAG(s)', value: 'airflow' },
+        { name: 'MongoDB database', value: 'mongodb' },
         { name: 'Pingdom monitoring', value: 'pingdom', checked: true },
       ],
     },
