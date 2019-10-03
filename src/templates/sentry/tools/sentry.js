@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable import/no-unresolved, import/no-unresolved */
 const { init } = require('@sentry/node');
 const { RewriteFrames } = require('@sentry/integrations');
 
@@ -10,9 +10,9 @@ if (process.env.SENTRY_DSN) {
       // required for sourcemaps!
       new RewriteFrames({
         root: process.cwd(),
-      })
+      }),
     ],
     // automatic from CI
     release: process.env.SENTRY_RELEASE_ID,
-  })
+  });
 }
