@@ -15,6 +15,7 @@ const {
 
 const templateDir = join(__dirname, '../templates/default');
 const airflowTemplateDir = join(__dirname, '../templates/airflow');
+const sentryTemplateDir = join(__dirname, '../templates/sentry');
 
 const updateProductionDeployment = answers => {
   const scriptCopy = STAGES_DEPLOY_SCRIPTS.prod.slice();
@@ -29,6 +30,32 @@ const updateProductionDeployment = answers => {
   }
 
   return scriptCopy.replace('{{sentryScript}}', sentryScript);
+};
+
+const prefillProdEnv = answers => [answers.sentry ? `SENTRY_DSN=${answers.sentryDSN}` : undefined];
+
+// eslint-disable-next-line no-unused-vars
+const prefillAccEnv = answers => [];
+
+// eslint-disable-next-line no-unused-vars
+const prefillTestEnv = answers => [];
+
+const prefillStagedEnv = (stage, answers) => {
+  let secrets = [];
+  switch (stage) {
+    case 'prod':
+      secrets = prefillProdEnv(answers);
+      break;
+    case 'acc':
+      secrets = prefillAccEnv(answers);
+      break;
+    case 'test':
+      secrets = prefillTestEnv(answers);
+      break;
+    default:
+      return '';
+  }
+  return secrets.filter(val => !!val).join('\n');
 };
 
 module.exports = answers => {
@@ -65,36 +92,33 @@ module.exports = answers => {
     day: now.getDate(),
   };
 
+  const overrideContents = (transformFileName = undefined) => file => ({
+    ...file,
+    fileName: transformFileName ? transformFileName(file.fileName) : file.fileName,
+    fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
+  });
+
   // Copy over template files and replace macros
   copyTemplates(
     templateDir,
     answers.cwd,
-    file => ({
-      ...file,
-      fileName: file.fileName.replace(/^_/, '.'),
-      fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
-    }),
-    {
-      excluded: (items => {
-        if (!answers.sentry) {
-          items.push(`${templateDir}/tools/sentry.js`);
-        }
-        return items;
-      })([]),
-    },
+    overrideContents(fileName => fileName.replace(/^_/, '.')),
   );
+
+  // Optionally copy over Sentry template and replace macros
+  if (answers.sentry) {
+    copyTemplates(sentryTemplateDir, answers.cwd, overrideContents());
+  }
 
   // Optionally copy over DAG template and replace macros
   if (answers.airflow) {
-    copyTemplates(airflowTemplateDir, answers.cwd, file => ({
-      ...file,
-      fileName: `${answers.dagName}.py`,
-      fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
-    }));
+    copyTemplates(airflowTemplateDir, answers.cwd, overrideContents(() => `${answers.dagName}.py`));
   }
 
   // Create .env.prod, and optionally .env.acc and .env.test
-  answers.stages.forEach(stage => writeFileSync(join(answers.cwd, `.env.${stage}`), ''));
+  answers.stages.forEach(stage =>
+    writeFileSync(join(answers.cwd, `.env.${stage}`), prefillStagedEnv(stage, answers)),
+  );
 
   bar.updateBottomBar('');
   console.log(chalk.green('✔ Created files'));

@@ -73,24 +73,20 @@ const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
     const curlOpts = [typeof body === 'object' ? JSON.stringify(body) : body, prefilledOptions];
 
     try {
-      requestOptions[method](
-        url,
-        ...((method !== 'post' && method !== 'put') || !body ? curlOpts.slice(1) : curlOpts),
-        (err, response, data) => {
-          if (err) {
-            throw typeof err === 'string' ? new Error(err) : err;
-          }
+      requestOptions[method](url, ...curlOpts, (err, response, data) => {
+        if (err) {
+          throw typeof err === 'string' ? new Error(err) : err;
+        }
 
-          let output = null;
-          try {
-            output = JSON.parse(data);
-          } catch (e) {
-            output = data;
-          }
+        let output = null;
+        try {
+          output = JSON.parse(data);
+        } catch (e) {
+          output = data;
+        }
 
-          return resolve([null, response, output]);
-        },
-      );
+        return resolve([null, response, output]);
+      });
     } catch (err) {
       return resolve([err]);
     }

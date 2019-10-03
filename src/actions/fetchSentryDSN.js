@@ -50,8 +50,7 @@ module.exports = async sentry => {
     };
   } catch (err) {
     bar.updateBottomBar('');
-    console.log(chalk.red(`✘ Fetching Sentry DSN failed (${err.message}):`));
-    console.log(err.description);
-    return process.exit(1);
+    console.log(chalk.red(`✘ Fetching Sentry DSN failed`));
+    throw err;
   }
 };

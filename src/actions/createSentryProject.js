@@ -90,8 +90,7 @@ module.exports = async ({ sentry, namespace, token, appName: name }) => {
     };
   } catch (err) {
     bar.updateBottomBar('');
-    console.log(chalk.red(`✘ Creating Sentry project failed (${err.message}):`));
-    console.log(err.description);
+    console.log(chalk.red(`✘ Creating Sentry project failed`));
     throw err;
   }
 };
