@@ -2,7 +2,7 @@ const { ui } = require('inquirer');
 const chalk = require('chalk');
 const spawnPromise = require('../utils/spawnPromise');
 
-module.exports = async ({ framework, typescript, cwd }) => {
+module.exports = async ({ framework, addons, cwd }) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Installing dependencies (this can take a minute)…'));
 
@@ -16,7 +16,7 @@ module.exports = async ({ framework, typescript, cwd }) => {
         'prettier',
         'lint-staged',
         'eslint-config-prettier',
-        ...(typescript
+        ...(addons.includes('typescript')
           ? ['typescript', '@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
           : ['eslint-plugin-prettier']),
         ...(framework === 'vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),

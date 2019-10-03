@@ -21,28 +21,33 @@ module.exports = answers => {
 
   const now = new Date();
   const { name, email } = answers.gitlabData;
-  const variant = answers.typescript ? `${answers.framework}Typescript` : answers.framework;
+  const variant = answers.addons.includes('typescript')
+    ? `${answers.framework}Typescript`
+    : answers.framework;
 
   const data = {
     ...answers,
     author: `${name} <${email}>`,
     lintScript: LINT_SCRIPTS[variant],
-    eslintParser: answers.typescript ? '"parser": "@typescript-eslint/parser",\n  ' : '',
+    eslintParser: answers.addons.includes('typescript')
+      ? '"parser": "@typescript-eslint/parser",\n  '
+      : '',
     eslintExtends: ESLINT_EXTENDS[variant],
     lintStagedGlob: LINT_STAGED_GLOBS[variant],
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
     deployProduction: answers.stages.includes('prod') ? STAGES_DEPLOY_SCRIPTS.prod : '',
-    deployDags: answers.airflow ? STAGES_DEPLOY_SCRIPTS.dags : '',
-    dagStartScript: answers.airflow
+    deployDags: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.dags : '',
+    dagStartScript: answers.addons.includes('airflow')
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
-    airflowDoc: answers.airflow
+    airflowDoc: answers.addons.includes('airflow')
       ? '## Airflow DAG(s)\n\nAny DAG(s) present in `/dags` will be automatically deployed to Airflow by CI/CD, when pushing to `master`.\n\n'
       : '',
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
+    pingdom: answers.addons.includes('pingdom'),
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
@@ -56,7 +61,7 @@ module.exports = answers => {
   }));
 
   // Optionally copy over DAG template and replace macros
-  if (answers.airflow) {
+  if (answers.addons.includes('airflow')) {
     copyTemplates(airflowTemplateDir, answers.cwd, file => ({
       ...file,
       fileName: `${answers.dagName}.py`,
