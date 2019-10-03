@@ -106,5 +106,4 @@ _\*if file exists_
 ## Roadmap
 
 - [ ] Optimize CI
-- [ ] Pingdom support
 - [ ] Separate DAGs for each deployment stage
