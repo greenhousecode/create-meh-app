@@ -23,6 +23,7 @@ yarn create meh-app <app-name>
 - [x] Automatic two-way `.env.<stage>` secrets sync
 - [x] Automatic Kubernetes deployment
 - [x] Automatic Airflow DAG(s) deployment
+- [x] Optional Pingdom monitoring
 
 ## Prerequisites
 
