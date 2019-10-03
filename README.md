@@ -106,5 +106,6 @@ _\*if file exists_
 
 ## Roadmap
 
+- [ ] MongoDB
 - [ ] Optimize CI
 - [ ] Separate DAGs for each deployment stage
