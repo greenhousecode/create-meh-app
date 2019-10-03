@@ -109,6 +109,12 @@ module.exports = async input => {
       choices: ['SSH', 'HTTPS'],
     },
     {
+      name: 'pingdom',
+      default: true,
+      type: 'confirm',
+      message: 'Do you want to add Pingdom?',
+    },
+    {
       name: 'airflow',
       default: false,
       type: 'confirm',
