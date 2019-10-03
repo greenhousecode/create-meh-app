@@ -2,15 +2,7 @@ const { ui } = require('inquirer');
 const chalk = require('chalk');
 const spawnPromise = require('../utils/spawnPromise');
 
-const DEFAULT_DEPENDENCIES = [];
-const DEFAULT_DEV_DEPENDENCIES = [
-  'husky',
-  'tempy',
-  'gitlab',
-  'prettier',
-  'lint-staged',
-  'eslint-config-prettier',
-];
+const { DEFAULT_DEPENDENCIES, DEFAULT_DEV_DEPENDENCIES } = require('../config.json');
 
 module.exports = async ({ sentry, framework, typescript, cwd }) => {
   const bar = new ui.BottomBar();
