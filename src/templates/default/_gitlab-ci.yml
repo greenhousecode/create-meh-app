@@ -12,7 +12,7 @@ stages:
     paths:
       - ~/.cache/yarn
   before_script:
-    - yarn
+    - yarn --ignore-scripts
 
 testing:
   <<: *project_shared

@@ -3,6 +3,7 @@ const { ui } = require('inquirer');
 const { join } = require('path');
 const chalk = require('chalk');
 const copyTemplates = require('../utils/copyTemplates');
+
 const {
   STAGES_DEPLOY_SCRIPTS,
   GITLAB_NAMESPACES,
@@ -12,8 +13,8 @@ const {
   CI_COMMANDS,
 } = require('../config.json');
 
-const templateDir = join(__dirname, '../templates');
-const optionalTemplateDir = join(__dirname, '../optionalTemplates');
+const templateDir = join(__dirname, '../templates/default');
+const airflowTemplateDir = join(__dirname, '../templates/airflow');
 
 const updateProductionDeployment = answers => {
   const scriptCopy = STAGES_DEPLOY_SCRIPTS.prod.slice();
@@ -49,10 +50,10 @@ module.exports = answers => {
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
     deployProduction: updateProductionDeployment(answers),
     deployDags: answers.dags ? STAGES_DEPLOY_SCRIPTS.dags : '',
-    dagStartScript: answers.dags
+    dagStartScript: answers.airflow
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
-    airflowDoc: answers.dags
+    airflowDoc: answers.airflow
       ? '## Airflow DAG(s)\n\nAny DAG(s) present in `/dags` will be automatically deployed to Airflow by CI/CD, when pushing to `master`.\n\n'
       : '',
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
@@ -84,8 +85,8 @@ module.exports = answers => {
   );
 
   // Optionally copy over DAG template and replace macros
-  if (answers.dags) {
-    copyTemplates(join(optionalTemplateDir, 'dags'), answers.cwd, file => ({
+  if (answers.airflow) {
+    copyTemplates(airflowTemplateDir, answers.cwd, file => ({
       ...file,
       fileName: `${answers.dagName}.py`,
       fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),

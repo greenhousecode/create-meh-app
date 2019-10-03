@@ -15,8 +15,8 @@ module.exports = async input => {
 
   const answers = await prompt([
     {
-      type: 'list',
       name: 'namespace',
+      type: 'list',
       message: 'Choose a GitLab namespace:',
       choices: Object.keys(GITLAB_NAMESPACES).map(key => ({
         name: GITLAB_NAMESPACES[key].name,
@@ -24,10 +24,13 @@ module.exports = async input => {
       })),
     },
     ...Object.keys(GITLAB_NAMESPACES).map(key => ({
-      mask: '●',
       name: 'token',
       type: 'password',
-      message: 'Provide your GitLab personal access token:',
+      message: process.env.GITLAB_PERSONAL_ACCESS_TOKEN
+        ? `GITLAB_PERSONAL_ACCESS_TOKEN found and prefilled, hit ${chalk.cyan('<RETURN>')}`
+        : 'Provide your GitLab personal access token:',
+      default: process.env.GITLAB_PERSONAL_ACCESS_TOKEN,
+      mask: '●',
       filter,
       when: ({ namespace }) => namespace === key,
       async validate(token) {
@@ -67,15 +70,15 @@ module.exports = async input => {
       validate: name => !!name || 'Please provide a name',
     },
     {
-      type: 'input',
       name: 'description',
+      type: 'input',
       message: 'Please provide one line describing your app:',
       default: 'To make the world a better place.',
       filter,
     },
     {
-      type: 'list',
       name: 'framework',
+      type: 'list',
       message: 'Which framework are you planning on using? (Only affects linting)',
       choices: [
         { name: 'None', value: 'none' },
@@ -84,8 +87,8 @@ module.exports = async input => {
       ],
     },
     {
-      type: 'confirm',
       name: 'typescript',
+      type: 'confirm',
       message: 'Will you be using TypeScript? (Only affects linting)',
       default: false,
     },
@@ -106,23 +109,29 @@ module.exports = async input => {
       ],
     },
     {
-      type: 'list',
       name: 'protocol',
+      type: 'list',
       message: 'Clone repository using:',
       choices: ['SSH', 'HTTPS'],
     },
     {
-      name: 'dags',
-      default: false,
+      name: 'pingdom',
       type: 'confirm',
-      message: 'Do you want to add Airflow DAG(s)?',
+      message: 'Do you want to add Pingdom monitoring?',
+      default: true,
     },
     {
-      type: 'input',
-      default: 'job',
+      name: 'airflow',
+      type: 'confirm',
+      message: 'Do you want to add Airflow DAG(s)?',
+      default: false,
+    },
+    {
       name: 'dagName',
-      when: ({ dags }) => dags,
+      type: 'input',
       message: "What's the name of your DAG? ([a-z0-9-])",
+      default: 'job',
+      when: ({ airflow }) => airflow,
       validate: dagName => {
         if (!dagName) return 'Please provide a DAG name';
         if (!/^[a-z0-9-]+$/.test(dagName)) return 'Only use [a-z0-9-] for your DAG name';
@@ -130,20 +139,20 @@ module.exports = async input => {
       },
     },
     {
-      filter,
-      type: 'input',
       name: 'dagDescription',
-      when: ({ dags }) => dags,
-      default: 'To make the world a better place',
+      type: 'input',
       message: 'Please provide one line describing your DAG:',
+      default: 'To make the world a better place',
+      filter,
+      when: ({ airflow }) => airflow,
       validate: dagDescription => !!dagDescription || 'Please provide a DAG description',
     },
     {
-      default: 3,
-      type: 'list',
       name: 'dagInterval',
-      when: ({ dags }) => dags,
+      type: 'list',
       message: 'How often should this DAG run? (you can change this later)',
+      default: 3,
+      when: ({ airflow }) => airflow,
       choices: [
         { name: 'Every minute', value: '*/1 * * * *' },
         { name: 'Every 5 minutes', value: '*/5 * * * *' },
