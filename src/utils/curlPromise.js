@@ -17,20 +17,7 @@ const merge = (...args) => {
   return mergeWith(args)({}, 0);
 };
 
-const curl = method => (url, options, callback) => {
-  if (!callback) {
-    callback = options;
-    options = {};
-  }
-
-  const newOptions = merge(options, { url }, { method });
-
-  delete newOptions.uri;
-
-  request(newOptions, callback);
-};
-
-const curlWithData = method => (url, body, options, callback) => {
+const curl = (method, withData) => (url, body, options, callback) => {
   if (!callback && typeof options === 'function') {
     callback = options;
     options = {};
@@ -44,16 +31,20 @@ const curlWithData = method => (url, body, options, callback) => {
     body,
   });
 
+  if (!withData) {
+    delete newOptions.body;
+  }
+
   delete newOptions.uri;
 
   request(newOptions, callback);
 };
 
 const requestOptions = {
-  get: curl('GET'),
-  post: curlWithData('POST'),
-  put: curlWithData('PUT'),
-  delete: curl('DELETE'),
+  get: curl('GET', false),
+  post: curl('POST', true),
+  put: curl('PUT', true),
+  delete: curl('DELETE', false),
 };
 
 /**
