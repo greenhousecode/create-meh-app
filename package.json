@@ -21,6 +21,9 @@
       "git add"
     ]
   },
+  "engines": {
+    "node": ">=10"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
