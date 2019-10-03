@@ -30,7 +30,8 @@ yarn create meh-app <app-name>
 - [Yarn](https://yarnpkg.com/)
 - [Kubectl v1.11.5](https://storage.googleapis.com/kubernetes-release/release/v1.11.5/bin/darwin/amd64/kubectl)
 - GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) (`api` scoped)
-  _Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` and/or `~/.zshrc` to automatically create and prefill `.env.<stage>` files on consecutive installs_
+
+_Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` and/or `~/.zshrc` to automatically create and prefill `.env.<stage>` files on consecutive installs_
 
 ## What it does
 
