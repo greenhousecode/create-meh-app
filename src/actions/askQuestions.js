@@ -83,16 +83,6 @@ module.exports = async input => {
       choices: ['SSH', 'HTTPS'],
     },
     {
-      name: 'stages',
-      type: 'checkbox',
-      message: 'Select the deployment stages (besides production) you wish to use:',
-      filter: choices => [...choices, 'prod'],
-      choices: [
-        { name: 'Testing', value: 'test', checked: true },
-        { name: 'Acceptance', value: 'acc', checked: true },
-      ],
-    },
-    {
       name: 'framework',
       type: 'list',
       message: 'Which framework are you planning on using? (Only affects linting)',
@@ -100,6 +90,16 @@ module.exports = async input => {
         { name: 'None', value: 'none' },
         { name: 'React', value: 'react' },
         { name: 'Vue', value: 'vue' },
+      ],
+    },
+    {
+      name: 'stages',
+      type: 'checkbox',
+      message: 'Select the deployment stages (besides production) you wish to use:',
+      filter: choices => [...choices, 'prod'],
+      choices: [
+        { name: 'Testing', value: 'test', checked: true },
+        { name: 'Acceptance', value: 'acc', checked: true },
       ],
     },
     {
