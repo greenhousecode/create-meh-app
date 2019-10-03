@@ -95,7 +95,7 @@ module.exports = async input => {
     {
       type: 'confirm',
       name: 'sentry',
-      message: 'Do you want to use Sentry for this project?',
+      message: 'Do you want to add Sentry to this project?',
       default: true,
     },
     {
