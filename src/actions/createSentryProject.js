@@ -34,8 +34,8 @@ const pickAll = (keys, arr) =>
     return acc;
   }, {});
 
-module.exports = async ({ sentry, namespace, token, appName: name }) => {
-  if (!sentry) {
+module.exports = async ({ addons, namespace, token, appName: name }) => {
+  if (!addons.includes('sentry')) {
     return null;
   }
 

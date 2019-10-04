@@ -9,6 +9,7 @@ const {
   GITLAB_NAMESPACES,
   LINT_STAGED_GLOBS,
   ESLINT_EXTENDS,
+  DOCUMENTATION,
   LINT_SCRIPTS,
   CI_COMMANDS,
 } = require('../config.json');
@@ -19,20 +20,20 @@ const sentryTemplateDir = join(__dirname, '../templates/sentry');
 
 const updateProductionDeployment = answers => {
   const scriptCopy = STAGES_DEPLOY_SCRIPTS.prod.slice();
-
   const padding = command => `\n    - ${command}`;
-
   let sentryScript = '';
-  if (answers.sentry) {
-    const { sentrySlug } = answers;
 
+  if (answers.addons.includes('sentry')) {
+    const { sentrySlug } = answers;
     sentryScript = padding(CI_COMMANDS.sentry.replace('{{sentrySlug}}', sentrySlug));
   }
 
   return scriptCopy.replace('{{sentryScript}}', sentryScript);
 };
 
-const prefillProdEnv = answers => [answers.sentry ? `SENTRY_DSN=${answers.sentryDSN}` : undefined];
+const prefillProdEnv = answers => [
+  answers.addons.includes('sentry') ? `SENTRY_DSN=${answers.sentryDSN}` : undefined,
+];
 
 // eslint-disable-next-line no-unused-vars
 const prefillAccEnv = answers => [];
@@ -42,6 +43,7 @@ const prefillTestEnv = answers => [];
 
 const prefillStagedEnv = (stage, answers) => {
   let secrets = [];
+
   switch (stage) {
     case 'prod':
       secrets = prefillProdEnv(answers);
@@ -55,6 +57,7 @@ const prefillStagedEnv = (stage, answers) => {
     default:
       return '';
   }
+
   return secrets.filter(val => !!val).join('\n');
 };
 
@@ -64,28 +67,34 @@ module.exports = answers => {
 
   const now = new Date();
   const { name, email } = answers.gitlabData;
-  const variant = answers.typescript ? `${answers.framework}Typescript` : answers.framework;
+  const variant = answers.addons.includes('typescript')
+    ? `${answers.framework}Typescript`
+    : answers.framework;
 
   const data = {
     ...answers,
     author: `${name} <${email}>`,
     lintScript: LINT_SCRIPTS[variant],
-    eslintParser: answers.typescript ? '"parser": "@typescript-eslint/parser",\n  ' : '',
+    eslintParser: answers.addons.includes('typescript') ? LINT_SCRIPTS.typescriptParser : '',
     eslintExtends: ESLINT_EXTENDS[variant],
     lintStagedGlob: LINT_STAGED_GLOBS[variant],
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
     deployProduction: updateProductionDeployment(answers),
-    deployDags: answers.airflow ? STAGES_DEPLOY_SCRIPTS.dags : '',
-    dagStartScript: answers.airflow
+    deployDags: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.dags : '',
+    dagStartScript: answers.addons.includes('airflow')
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
-    airflowDoc: answers.airflow
-      ? '## Airflow DAG(s)\n\nAny DAG(s) present in `/dags` will be automatically deployed to Airflow by CI/CD, when pushing to `master`.\n\n'
-      : '',
+    airflowDoc: answers.addons.includes('airflow') ? DOCUMENTATION.airflow : '',
+    redisDoc: answers.addons.includes('redis') ? DOCUMENTATION.redis : '',
+    mongodbDoc: answers.addons.includes('mongodb') ? DOCUMENTATION.mongodb : '',
+    gitlabDoc: DOCUMENTATION.gitlab,
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
+    redis: answers.addons.includes('redis'),
+    mongodb: answers.addons.includes('mongodb'),
+    pingdom: answers.addons.includes('pingdom'),
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
@@ -105,12 +114,12 @@ module.exports = answers => {
   );
 
   // Optionally copy over Sentry template and replace macros
-  if (answers.sentry) {
+  if (answers.addons.includes('sentry')) {
     copyTemplates(sentryTemplateDir, answers.cwd, overrideContents());
   }
 
   // Optionally copy over DAG template and replace macros
-  if (answers.airflow) {
+  if (answers.addons.includes('airflow')) {
     copyTemplates(airflowTemplateDir, answers.cwd, overrideContents(() => `${answers.dagName}.py`));
   }
 

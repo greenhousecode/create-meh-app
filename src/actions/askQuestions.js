@@ -77,6 +77,12 @@ module.exports = async input => {
       filter,
     },
     {
+      name: 'protocol',
+      type: 'list',
+      message: 'Clone repository using:',
+      choices: ['SSH', 'HTTPS'],
+    },
+    {
       name: 'framework',
       type: 'list',
       message: 'Which framework are you planning on using? (Only affects linting)',
@@ -85,18 +91,6 @@ module.exports = async input => {
         { name: 'React', value: 'react' },
         { name: 'Vue', value: 'vue' },
       ],
-    },
-    {
-      name: 'typescript',
-      type: 'confirm',
-      message: 'Will you be using TypeScript? (Only affects linting)',
-      default: false,
-    },
-    {
-      type: 'confirm',
-      name: 'sentry',
-      message: 'Do you want to add Sentry to this project?',
-      default: true,
     },
     {
       name: 'stages',
@@ -109,29 +103,24 @@ module.exports = async input => {
       ],
     },
     {
-      name: 'protocol',
-      type: 'list',
-      message: 'Clone repository using:',
-      choices: ['SSH', 'HTTPS'],
-    },
-    {
-      name: 'pingdom',
-      type: 'confirm',
-      message: 'Do you want to add Pingdom monitoring?',
-      default: true,
-    },
-    {
-      name: 'airflow',
-      type: 'confirm',
-      message: 'Do you want to add Airflow DAG(s)?',
-      default: false,
+      name: 'addons',
+      type: 'checkbox',
+      message: 'Check any of the following you want to include:',
+      choices: [
+        { name: 'TypeScript (only affects linting)', value: 'typescript' },
+        { name: 'Airflow DAG(s)', value: 'airflow' },
+        { name: 'Redis database', value: 'redis' },
+        { name: 'MongoDB database', value: 'mongodb' },
+        { name: 'Sentry logging', value: 'sentry', checked: true },
+        { name: 'Pingdom monitoring', value: 'pingdom', checked: true },
+      ],
     },
     {
       name: 'dagName',
       type: 'input',
       message: "What's the name of your DAG? ([a-z0-9-])",
       default: 'job',
-      when: ({ airflow }) => airflow,
+      when: ({ addons }) => addons.includes('airflow'),
       validate: dagName => {
         if (!dagName) return 'Please provide a DAG name';
         if (!/^[a-z0-9-]+$/.test(dagName)) return 'Only use [a-z0-9-] for your DAG name';
@@ -144,7 +133,7 @@ module.exports = async input => {
       message: 'Please provide one line describing your DAG:',
       default: 'To make the world a better place',
       filter,
-      when: ({ airflow }) => airflow,
+      when: ({ addons }) => addons.includes('airflow'),
       validate: dagDescription => !!dagDescription || 'Please provide a DAG description',
     },
     {
@@ -152,7 +141,7 @@ module.exports = async input => {
       type: 'list',
       message: 'How often should this DAG run? (you can change this later)',
       default: 3,
-      when: ({ airflow }) => airflow,
+      when: ({ addons }) => addons.includes('airflow'),
       choices: [
         { name: 'Every minute', value: '*/1 * * * *' },
         { name: 'Every 5 minutes', value: '*/5 * * * *' },

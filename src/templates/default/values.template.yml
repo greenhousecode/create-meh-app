@@ -3,6 +3,9 @@ email: meh@greenhousegroup.com
 version: __VERSION__
 dockerImage: registry.gitlab.com/{{gitlabNamespace}}/{{appName}}:__VERSION__
 webReplicas: __REPLICAS__
+dbs:
+  redis: {{redis}}
+  mongodb: {{mongodb}}
 ingress:
   createIngress: true
   pingdom: {{pingdom}}

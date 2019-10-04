@@ -22,7 +22,10 @@ yarn create meh-app <app-name>
 - [x] Initial commits on `master` and `develop`
 - [x] Automatic two-way `.env.<stage>` secrets sync
 - [x] Automatic Kubernetes deployment
-- [x] Automatic Airflow DAG(s) deployment
+- [x] Optional Airflow DAG(s) (with automatic deployment)
+- [x] Optional Redis database
+- [x] Optional MongoDB database
+- [x] Optional Sentry logging
 - [x] Optional Pingdom monitoring
 
 ## Prerequisites
