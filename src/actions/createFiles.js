@@ -9,6 +9,7 @@ const {
   GITLAB_NAMESPACES,
   LINT_STAGED_GLOBS,
   ESLINT_EXTENDS,
+  DOCUMENTATION,
   LINT_SCRIPTS,
 } = require('../config.json');
 
@@ -29,9 +30,7 @@ module.exports = answers => {
     ...answers,
     author: `${name} <${email}>`,
     lintScript: LINT_SCRIPTS[variant],
-    eslintParser: answers.addons.includes('typescript')
-      ? '"parser": "@typescript-eslint/parser",\n  '
-      : '',
+    eslintParser: answers.addons.includes('typescript') ? LINT_SCRIPTS.typescriptParser : '',
     eslintExtends: ESLINT_EXTENDS[variant],
     lintStagedGlob: LINT_STAGED_GLOBS[variant],
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
@@ -41,9 +40,10 @@ module.exports = answers => {
     dagStartScript: answers.addons.includes('airflow')
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
-    airflowDoc: answers.addons.includes('airflow')
-      ? '## Airflow DAG(s)\n\nAny DAG(s) present in `/dags` will be automatically deployed to Airflow by CI/CD, when pushing to `master`.\n\n'
-      : '',
+    airflowDoc: answers.addons.includes('airflow') ? DOCUMENTATION.airflow : '',
+    redisDoc: answers.addons.includes('redis') ? DOCUMENTATION.redis : '',
+    mongodbDoc: answers.addons.includes('mongodb') ? DOCUMENTATION.mongodb : '',
+    gitlabDoc: DOCUMENTATION.gitlab,
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
