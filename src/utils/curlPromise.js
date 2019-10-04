@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 const request = require('request');
 
 const noop = () => {};
@@ -17,15 +16,15 @@ const merge = (...args) => {
   return mergeWith(args)({}, 0);
 };
 
-const curl = (method, withData) => (url, body, options, callback) => {
-  if (!callback && typeof options === 'function') {
-    callback = options;
-    options = {};
+const curl = (method, withData) => (url, body, options, callback = noop) => {
+  let callbackCopy = callback;
+  let optionsCopy = options;
+  if (!callbackCopy && typeof optionsCopy === 'function') {
+    callbackCopy = options;
+    optionsCopy = {};
   }
 
-  callback = callback || noop;
-
-  const newOptions = merge(options, {
+  const newOptions = merge(optionsCopy, {
     method,
     url,
     body,
@@ -37,7 +36,7 @@ const curl = (method, withData) => (url, body, options, callback) => {
 
   delete newOptions.uri;
 
-  request(newOptions, callback);
+  request(newOptions, callbackCopy);
 };
 
 const requestOptions = {

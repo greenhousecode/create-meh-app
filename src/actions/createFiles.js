@@ -76,7 +76,7 @@ module.exports = answers => {
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
     deployProduction: updateProductionDeployment(answers),
-    deployDags: answers.dags ? STAGES_DEPLOY_SCRIPTS.dags : '',
+    deployDags: answers.airflow ? STAGES_DEPLOY_SCRIPTS.dags : '',
     dagStartScript: answers.airflow
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
@@ -86,7 +86,6 @@ module.exports = answers => {
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
-    useSentry: !!answers.sentry,
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
