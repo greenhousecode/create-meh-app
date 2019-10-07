@@ -111,3 +111,4 @@ _\*if file exists_
 
 - [ ] Optimize CI
 - [ ] Separate DAGs for each deployment stage
+- [ ] Fix ESLint setups with TypeScript
