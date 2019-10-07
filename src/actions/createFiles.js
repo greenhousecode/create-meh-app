@@ -32,7 +32,7 @@ const updateProductionDeployment = answers => {
 };
 
 const prefillProdEnv = answers => [
-  answers.addons.includes('sentry') ? `SENTRY_DSN=${answers.sentryDSN}` : undefined,
+  answers.addons.includes('sentry') ? `SENTRY_DSN=${answers.sentryDSN}\n` : undefined,
 ];
 
 // eslint-disable-next-line no-unused-vars
@@ -81,17 +81,19 @@ module.exports = answers => {
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
     deployProduction: updateProductionDeployment(answers),
-    deployDags: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.dags : '',
+    deployAirflow: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.airflow : '',
     dagStartScript: answers.addons.includes('airflow')
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
     airflowDoc: answers.addons.includes('airflow') ? DOCUMENTATION.airflow : '',
+    sentryDoc: answers.addons.includes('sentry') ? DOCUMENTATION.sentry : '',
     redisDoc: answers.addons.includes('redis') ? DOCUMENTATION.redis : '',
     mongodbDoc: answers.addons.includes('mongodb') ? DOCUMENTATION.mongodb : '',
     gitlabDoc: DOCUMENTATION.gitlab,
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
+    sentry: answers.addons.includes('sentry'),
     redis: answers.addons.includes('redis'),
     mongodb: answers.addons.includes('mongodb'),
     pingdom: answers.addons.includes('pingdom'),

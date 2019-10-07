@@ -5,7 +5,7 @@
 ## Install
 
 ```shell
-yarn
+GITLAB_PERSONAL_ACCESS_TOKEN=<token> yarn
 ```
 
 {{airflowDoc}}## Environment variables
@@ -17,4 +17,4 @@ If any of the following files exist, they will be deployed as secrets automatica
 - (other): `/.env.test`
 
 | Env | Key | Description |
-| --- | --- | ----------- |{{redisDoc}}{{mongodbDoc}}{{gitlabDoc}}
+| --- | --- | ----------- |{{sentryDoc}}{{redisDoc}}{{mongodbDoc}}{{gitlabDoc}}
