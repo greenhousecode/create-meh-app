@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { readFileSync, writeFileSync, mkdtempSync } = require('fs');
 const { spawn } = require('child_process');
 const { get } = require('https');

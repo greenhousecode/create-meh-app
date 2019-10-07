@@ -107,12 +107,16 @@ module.exports = async input => {
       type: 'checkbox',
       message: 'Check any of the following you want to include:',
       choices: [
-        { name: 'TypeScript (only affects linting)', value: 'typescript' },
         { name: 'Airflow DAG(s)', value: 'airflow' },
         { name: 'Redis database', value: 'redis' },
         { name: 'MongoDB database', value: 'mongodb' },
         { name: 'Sentry logging', value: 'sentry', checked: true },
         { name: 'Pingdom monitoring', value: 'pingdom', checked: true },
+        {
+          name: 'TypeScript (only affects linting)',
+          value: 'typescript',
+          disabled: chalk.gray('temporarily disabled'),
+        },
       ],
     },
     {
