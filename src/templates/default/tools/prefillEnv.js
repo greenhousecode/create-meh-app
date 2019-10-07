@@ -68,7 +68,7 @@ get(
                   envFile,
                   Object.keys(data).reduce((acc, key) => {
                     const value = Buffer.from(data[key], 'base64').toString('utf8');
-                    const line = `${key}=${/\n/.test(value) ? `"${value}"` : value}\n`;
+                    const line = `${key}=${/\n|\s/.test(value) ? `"${value}"` : value}\n`;
 
                     return acc + line;
                   }, ''),
