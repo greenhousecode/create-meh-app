@@ -25,7 +25,8 @@
     "react": "eslint --ext .js,.jsx --ignore-path .gitignore .",
     "reactTypescript": "eslint --ext .js,.ts,.jsx,.tsx --ignore-path .gitignore .",
     "vue": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "vueTypescript": "eslint --ext .js,.ts,.vue --ignore-path .gitignore ."
+    "vueTypescript": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
+    "typescriptParser": "\"parser\": \"@typescript-eslint/parser\",\n  "
   },
   "ESLINT_EXTENDS": {
     "none": "[\"airbnb-base\", \"plugin:prettier/recommended\"]",
@@ -35,10 +36,21 @@
     "vue": "[\"plugin:vue/recommended\", \"airbnb-base\", \"prettier/vue\", \"plugin:prettier/recommended\"]",
     "vueTypescript": "[\"plugin:vue/recommended\", \"airbnb-base\", \"plugin:@typescript-eslint/recommended\", \"prettier/vue\", \"prettier/@typescript-eslint\"]"
   },
+  "CI_COMMANDS": {
+    "sentry": "sh ./scripts/sentry-upload-sourcemaps.sh {{sentrySlug}} \"$CI_COMMIT_SHA\""
+  },
+  "DEFAULT_DEPENDENCIES": [],
+  "DEFAULT_DEV_DEPENDENCIES": ["husky", "prettier", "lint-staged", "eslint-config-prettier"],
+  "DOCUMENTATION": {
+    "airflow": "## Airflow DAG(s)\n\nAny DAG(s) present in `/dags` will be automatically deployed to Airflow by CI/CD, when pushing to `master`.\n\n",
+    "redis": "\nShared | REDIS_URI | Database connection string.",
+    "mongodb": "\nShared | MONGODB_URI | Database connection string.",
+    "gitlab": "\nLocal | GITLAB_PERSONAL_ACCESS_TOKEN | A GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) with `api` scope, used to deploy `.env.<stage>` files."
+  },
   "STAGES_DEPLOY_SCRIPTS": {
     "test": "\n\ndeploy_test:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '-test' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml\n    - helm upgrade --install \"$CI_PROJECT_NAME-test\" ./chart/\n  environment:\n    name: test\n  except:\n    refs:\n      - master",
     "acc": "\n\ndeploy_acceptance:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '-acc' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml\n    - helm upgrade --install \"$CI_PROJECT_NAME-acc\" ./chart/\n  environment:\n    name: acceptance\n  only:\n    refs:\n    - develop",
-    "prod": "\n\ndeploy_production:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml\n    - helm upgrade --install $CI_PROJECT_NAME ./chart/\n  environment:\n    name: production\n  only:\n    refs:\n      - master",
+    "prod": "\n\ndeploy_production:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml{{sentryScript}}\n    - helm upgrade --install $CI_PROJECT_NAME ./chart/\n  environment:\n    name: production\n  only:\n    refs:\n      - master",
     "dags": "\n\ndeploy_dags:\n  tags:\n    - kube-02.bmidevelopment\n  dependencies:\n    - build\n  stage: deploy\n  image: python:3\n  before_script:\n    - pip install awscli\n  script:\n    - \"sed -i \\\"s/__NAME__/$(cat package.json | grep name | head -1 | sed 's/name//' | sed 's/[\\\\\\\",: ]//g')/g\\\" dags/*.py\"\n    - \"sed -i \\\"s/__AUTHOR__/$(cat package.json | grep author | head -1 | sed 's/author//' | sed 's/[\\\\\\\",:]//g' | sed 's/^   //')/g\\\" dags/*.py\"\n    - 'sed -i \"s/__DOCKER_IMAGE__/$(cat values.template.yml | grep dockerImage: | head -1 | sed ''s/dockerImage://'' | sed ''s/ //g'' | sed ''s/\\//\\\\\\//g'')/g\" dags/*.py'\n    - 'sed -i \"s/__SECRETS__/$(cat values.template.yml | grep envSecretName: | head -1 | sed ''s/envSecretName://'' | sed ''s/ //g'' | sed ''s/__STAGE__//'')/g\" dags/*.py'\n    - sed -i \"s/__VERSION__/$(echo $CI_COMMIT_SHA)/g\" dags/*.py\n    - export PROJECT_PATH=$(echo $CI_PROJECT_NAME | tr -s '-' | tr '-' '_')\n    - aws s3 cp dags/ s3://meh-airflow-bucket/dags/dags/$PROJECT_PATH/ --recursive --include \"*.py\"\n  only:\n    refs:\n      - master"
   }
 }

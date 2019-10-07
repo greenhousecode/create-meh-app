@@ -1,8 +1,15 @@
+/* eslint-disable no-console */
 const { readFileSync, writeFileSync, mkdtempSync } = require('fs');
 const { spawn } = require('child_process');
 const { get } = require('https');
 const { join } = require('path');
 const { tmpdir } = require('os');
+
+const spawnPromise = (...args) =>
+  new Promise((resolve, reject) => {
+    const job = spawn(...args);
+    job.on('close', code => (code === 0 ? resolve() : reject()));
+  });
 
 const parseEnv = filePath =>
   readFileSync(filePath, 'utf8')
@@ -92,7 +99,9 @@ data: {}
     'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
     {
       headers: {
-        'private-token': parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
+        'private-token':
+          process.env.GITLAB_PERSONAL_ACCESS_TOKEN ||
+          parseEnv(join(__dirname, '../.env')).GITLAB_PERSONAL_ACCESS_TOKEN,
       },
     },
     res => {
@@ -102,17 +111,29 @@ data: {}
         body += chunk;
       });
 
-      res.on('end', () => {
-        const { value: clusterConfig } = JSON.parse(body);
+      res.on('end', async () => {
+        try {
+          const { value: clusterConfig } = JSON.parse(body);
 
-        writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
-        writeFileSync(secretsPath, secretsContents);
+          writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
+          writeFileSync(secretsPath, secretsContents);
 
-        const job = spawn('kubectl', ['apply', '-f', secretsPath], {
-          env: { ...process.env, KUBECONFIG: clusterConfigPath },
-        });
+          await spawnPromise('kubectl', ['apply', '-f', secretsPath], {
+            env: { ...process.env, KUBECONFIG: clusterConfigPath },
+          });
 
-        job.on('close', code => process.exit(code));
+          await spawnPromise(
+            'kubectl',
+            ['delete', 'pods', '-l', `app={{appName}}${stage !== 'prod' ? `-${stage}` : ''}-web`],
+            { env: { ...process.env, KUBECONFIG: clusterConfigPath } },
+          );
+
+          console.log('Secrets were applied successfully');
+          process.exit(0);
+        } catch ({ message }) {
+          console.log(message);
+          process.exit(1);
+        }
       });
     },
   );

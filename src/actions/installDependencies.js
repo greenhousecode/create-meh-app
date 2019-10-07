@@ -2,21 +2,31 @@ const { ui } = require('inquirer');
 const chalk = require('chalk');
 const spawnPromise = require('../utils/spawnPromise');
 
-module.exports = async ({ framework, typescript, cwd }) => {
+const { DEFAULT_DEPENDENCIES, DEFAULT_DEV_DEPENDENCIES } = require('../config.json');
+
+module.exports = async ({ framework, addons, cwd }) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Installing dependencies (this can take a minute)…'));
 
   try {
+    const dependencies = [...DEFAULT_DEPENDENCIES];
+
+    if (addons.includes('sentry')) {
+      dependencies.push('@sentry/node', '@sentry/integrations');
+    }
+
+    if (dependencies.length) {
+      // Install dependencies
+      await spawnPromise('yarn', ['add', ...dependencies], { cwd });
+    }
+
     // Install devDependencies
     await spawnPromise(
       'yarn',
       [
         'add',
-        'husky',
-        'prettier',
-        'lint-staged',
-        'eslint-config-prettier',
-        ...(typescript
+        ...DEFAULT_DEV_DEPENDENCIES,
+        ...(addons.includes('typescript')
           ? ['typescript', '@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
           : ['eslint-plugin-prettier']),
         ...(framework === 'vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),

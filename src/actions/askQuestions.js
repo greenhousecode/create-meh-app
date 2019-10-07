@@ -15,8 +15,8 @@ module.exports = async input => {
 
   const answers = await prompt([
     {
-      type: 'list',
       name: 'namespace',
+      type: 'list',
       message: 'Choose a GitLab namespace:',
       choices: Object.keys(GITLAB_NAMESPACES).map(key => ({
         name: GITLAB_NAMESPACES[key].name,
@@ -24,13 +24,13 @@ module.exports = async input => {
       })),
     },
     ...Object.keys(GITLAB_NAMESPACES).map(key => ({
-      mask: '●',
       name: 'token',
       type: 'password',
       message: process.env.GITLAB_PERSONAL_ACCESS_TOKEN
         ? `GITLAB_PERSONAL_ACCESS_TOKEN found and prefilled, hit ${chalk.cyan('<RETURN>')}`
         : 'Provide your GitLab personal access token:',
       default: process.env.GITLAB_PERSONAL_ACCESS_TOKEN,
+      mask: '●',
       filter,
       when: ({ namespace }) => namespace === key,
       async validate(token) {
@@ -70,27 +70,27 @@ module.exports = async input => {
       validate: name => !!name || 'Please provide a name',
     },
     {
-      type: 'input',
       name: 'description',
+      type: 'input',
       message: 'Please provide one line describing your app:',
       default: 'To make the world a better place.',
       filter,
     },
     {
+      name: 'protocol',
       type: 'list',
+      message: 'Clone repository using:',
+      choices: ['SSH', 'HTTPS'],
+    },
+    {
       name: 'framework',
+      type: 'list',
       message: 'Which framework are you planning on using? (Only affects linting)',
       choices: [
         { name: 'None', value: 'none' },
         { name: 'React', value: 'react' },
         { name: 'Vue', value: 'vue' },
       ],
-    },
-    {
-      type: 'confirm',
-      name: 'typescript',
-      message: 'Will you be using TypeScript? (Only affects linting)',
-      default: false,
     },
     {
       name: 'stages',
@@ -103,23 +103,28 @@ module.exports = async input => {
       ],
     },
     {
-      type: 'list',
-      name: 'protocol',
-      message: 'Clone repository using:',
-      choices: ['SSH', 'HTTPS'],
+      name: 'addons',
+      type: 'checkbox',
+      message: 'Check any of the following you want to include:',
+      choices: [
+        { name: 'Airflow DAG(s)', value: 'airflow' },
+        { name: 'Redis database', value: 'redis' },
+        { name: 'MongoDB database', value: 'mongodb' },
+        { name: 'Sentry logging', value: 'sentry', checked: true },
+        { name: 'Pingdom monitoring', value: 'pingdom', checked: true },
+        {
+          name: 'TypeScript (only affects linting)',
+          value: 'typescript',
+          disabled: chalk.gray('temporarily disabled'),
+        },
+      ],
     },
     {
-      name: 'airflow',
-      default: false,
-      type: 'confirm',
-      message: 'Do you want to add Airflow DAG(s)?',
-    },
-    {
-      type: 'input',
-      default: 'job',
       name: 'dagName',
-      when: ({ airflow }) => airflow,
+      type: 'input',
       message: "What's the name of your DAG? ([a-z0-9-])",
+      default: 'job',
+      when: ({ addons }) => addons.includes('airflow'),
       validate: dagName => {
         if (!dagName) return 'Please provide a DAG name';
         if (!/^[a-z0-9-]+$/.test(dagName)) return 'Only use [a-z0-9-] for your DAG name';
@@ -127,20 +132,20 @@ module.exports = async input => {
       },
     },
     {
-      filter,
-      type: 'input',
       name: 'dagDescription',
-      when: ({ airflow }) => airflow,
-      default: 'To make the world a better place',
+      type: 'input',
       message: 'Please provide one line describing your DAG:',
+      default: 'To make the world a better place',
+      filter,
+      when: ({ addons }) => addons.includes('airflow'),
       validate: dagDescription => !!dagDescription || 'Please provide a DAG description',
     },
     {
-      default: 3,
-      type: 'list',
       name: 'dagInterval',
-      when: ({ airflow }) => airflow,
+      type: 'list',
       message: 'How often should this DAG run? (you can change this later)',
+      default: 3,
+      when: ({ addons }) => addons.includes('airflow'),
       choices: [
         { name: 'Every minute', value: '*/1 * * * *' },
         { name: 'Every 5 minutes', value: '*/5 * * * *' },
