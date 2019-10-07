@@ -32,7 +32,7 @@ const updateProductionDeployment = answers => {
 };
 
 const prefillProdEnv = answers => [
-  answers.addons.includes('sentry') ? `SENTRY_DSN=${answers.sentryDSN}\n` : undefined,
+  answers.addons.includes('sentry') ? `SENTRY_DSN=${answers.sentryDSN}` : undefined,
 ];
 
 // eslint-disable-next-line no-unused-vars
@@ -58,7 +58,9 @@ const prefillStagedEnv = (stage, answers) => {
       return '';
   }
 
-  return secrets.filter(val => !!val).join('\n');
+  secrets = secrets.filter(val => val);
+
+  return secrets.length ? `${secrets.join('\n')}\n` : '';
 };
 
 module.exports = answers => {
