@@ -58,7 +58,9 @@ const prefillStagedEnv = (stage, answers) => {
       return '';
   }
 
-  return secrets.filter(val => !!val).join('\n');
+  secrets = secrets.filter(val => val);
+
+  return secrets.length ? `${secrets.join('\n')}\n` : '';
 };
 
 module.exports = answers => {
@@ -81,17 +83,19 @@ module.exports = answers => {
     deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
     deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
     deployProduction: updateProductionDeployment(answers),
-    deployDags: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.dags : '',
+    deployAirflow: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.airflow : '',
     dagStartScript: answers.addons.includes('airflow')
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
     airflowDoc: answers.addons.includes('airflow') ? DOCUMENTATION.airflow : '',
+    sentryDoc: answers.addons.includes('sentry') ? DOCUMENTATION.sentry : '',
     redisDoc: answers.addons.includes('redis') ? DOCUMENTATION.redis : '',
     mongodbDoc: answers.addons.includes('mongodb') ? DOCUMENTATION.mongodb : '',
     gitlabDoc: DOCUMENTATION.gitlab,
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
+    sentry: answers.addons.includes('sentry'),
     redis: answers.addons.includes('redis'),
     mongodb: answers.addons.includes('mongodb'),
     pingdom: answers.addons.includes('pingdom'),

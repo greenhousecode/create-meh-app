@@ -2,14 +2,10 @@
 FROM node:10-alpine
 WORKDIR /usr/src/app
 
-# Install
-COPY package.json yarn.lock ./
-RUN yarn --production --ignore-scripts
+# Setup
 COPY . .
-# Or preferably, move build folder only:
-#COPY ./build ./build
 
-# Serve
+# Run
 USER node
 EXPOSE 3000
 CMD ["yarn", "start"]
