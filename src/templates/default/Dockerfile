@@ -3,7 +3,10 @@ FROM node:10-alpine
 WORKDIR /usr/src/app
 
 # Setup
-COPY . .
+COPY package.json yarn.lock ./
+COPY tools/sentry.js tools/
+COPY build build
+RUN yarn --production --ignore-scripts
 
 # Run
 USER node
