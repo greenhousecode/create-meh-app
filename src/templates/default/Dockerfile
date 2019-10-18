@@ -1,14 +1,18 @@
-# Remove -alpine when using advanced system features, like VPN
-FROM node:10-alpine
+# Build
+FROM node:12-alpine
+WORKDIR /tmp
+COPY . .
+RUN yarn
+RUN yarn build
+
+# Install
+FROM node:12-alpine
 WORKDIR /usr/src/app
-
-# Setup
 COPY package.json yarn.lock ./
-COPY tools/sentry.js tools/
-COPY build build
-RUN yarn --production --ignore-scripts
+COPY --from=0 /tmp/build build
+RUN yarn --production
 
-# Run
+# Serve
 USER node
 EXPOSE 3000
 CMD ["yarn", "start"]
