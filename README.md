@@ -46,9 +46,9 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
 - `start:<dagName>` script in `package.json` (the Airflow pod will call `yarn start:<dagName>`)
 - `deploy_dags` stage in `.gitlab-ci.yml`. This will automatically deploy any `*.py` files present in `/dags` (when pushing to `master`)
 
-### `postinstall` npm hook
+### `yarn prefill-env`
 
-When installing pre-existing projects generated with Create MEH App, it'll try to read out `process.env.GITLAB_PERSONAL_ACCESS_TOKEN`. If it succeeds, it'll authenticate through `kubectl` and retrieve any project-related secrets. These secrets will then be converted to `.env.<stage>` files and placed in your project root folder.
+This will try to read out `process.env.GITLAB_PERSONAL_ACCESS_TOKEN`. If it succeeds, it'll authenticate through `kubectl` and retrieve any project-related secrets. These secrets will then be converted to `.env.<stage>` files and placed in your project root folder.
 
 Any changed `.env.<stage>` files will be applied back though `kubectl` whenever you push to their corresponding git branches (see [pre-push git hook](#pre-push-git-hook) below).
 
