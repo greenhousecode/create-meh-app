@@ -1,18 +1,17 @@
 stages:
   - testing
-  - prebuild
-  - build
-  - deploy
+  - building
+  - deploying
 
 .project_shared: &project_shared
   image:
-    name: node:10-alpine
+    name: node:12-alpine
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - ~/.cache/yarn
   before_script:
-    - yarn --ignore-scripts
+    - yarn
 
 testing:
   <<: *project_shared
@@ -24,26 +23,12 @@ testing:
     - yarn format
     - yarn test
 
-prebuild:
-  <<: *project_shared
+building:
   tags:
     - kube-02.bmidevelopment
-  stage: prebuild
+  stage: building
   dependencies:
     - testing
-  script:
-    - yarn build
-  artifacts:
-    paths:
-      - build
-
-build:
-  tags:
-    - kube-02.bmidevelopment
-  stage: build
-  dependencies:
-    - testing
-    - prebuild
   image:
     name: gcr.io/kaniko-project/executor:debug-v0.4.0
     entrypoint: ['']
@@ -75,8 +60,8 @@ build:
   tags:
     - kube-02.bmidevelopment
   dependencies:
-    - build
-  stage: deploy
+    - building
+  stage: deploying
   image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:2.0
   before_script:
     - export K8S_CONFIG=$MEH_K8S_CLUSTER_CONFIG
