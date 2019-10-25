@@ -51,7 +51,7 @@ building:
                          --context $CI_PROJECT_DIR \
                          --dockerfile $CI_PROJECT_DIR/Dockerfile \
                          --destination "$CI_REGISTRY_IMAGE:latest" \
-                         --build-arg VERSION="latest" \
+                         --build-arg VERSION=$CI_COMMIT_SHA \
                          --build-arg PRIVATE_DEPS_USER="gitlab-ci-token" \
                          --build-arg PRIVATE_DEPS_TOKEN="$CI_JOB_TOKEN"
       fi
