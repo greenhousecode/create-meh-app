@@ -98,7 +98,7 @@ module.exports = answers => {
     sentry: `${answers.addons.includes('sentry')}`,
     redis: `${answers.addons.includes('redis')}`,
     mongodb: `${answers.addons.includes('mongodb')}`,
-    pingdom: `${answers.addons.includes('pingdom')}`,
+    pingdom: answers.addons.includes('pingdom') ? '' : '\n  pingdom: false',
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
