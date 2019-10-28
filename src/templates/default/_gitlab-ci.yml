@@ -33,25 +33,25 @@ building:
     name: gcr.io/kaniko-project/executor:debug-v0.4.0
     entrypoint: ['']
   script:
-    - export IMAGE_TAG=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+    - export IMAGE_TAG="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
     - mkdir -p /root/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /root/.docker/config.json
     - |
       /kaniko/executor --cache \
-                       --context $CI_PROJECT_DIR \
-                       --dockerfile $CI_PROJECT_DIR/Dockerfile \
-                       --destination $IMAGE_TAG \
-                       --build-arg VERSION=$CI_COMMIT_SHA \
+                       --context "$CI_PROJECT_DIR" \
+                       --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
+                       --destination "$IMAGE_TAG" \
+                       --build-arg VERSION="$CI_COMMIT_SHA" \
                        --build-arg PRIVATE_DEPS_USER="gitlab-ci-token" \
                        --build-arg PRIVATE_DEPS_TOKEN="$CI_JOB_TOKEN"
     - |
       if [ "$CI_COMMIT_REF_NAME" = "master" ];
       then
         /kaniko/executor --cache \
-                         --context $CI_PROJECT_DIR \
-                         --dockerfile $CI_PROJECT_DIR/Dockerfile \
+                         --context "$CI_PROJECT_DIR" \
+                         --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
                          --destination "$CI_REGISTRY_IMAGE:latest" \
-                         --build-arg VERSION="latest" \
+                         --build-arg VERSION="$CI_COMMIT_SHA" \
                          --build-arg PRIVATE_DEPS_USER="gitlab-ci-token" \
                          --build-arg PRIVATE_DEPS_TOKEN="$CI_JOB_TOKEN"
       fi
@@ -64,7 +64,7 @@ building:
   stage: deploying
   image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:2.0
   before_script:
-    - export K8S_CONFIG=$MEH_K8S_CLUSTER_CONFIG
-    - echo $CI_COMMIT_SHA > VERSION
+    - export K8S_CONFIG="$MEH_K8S_CLUSTER_CONFIG"
+    - echo "$CI_COMMIT_SHA" > VERSION
     - cp -r /usr/helm/chart ./chart
     - cp -r /usr/helm/scripts ./scripts{{deployTesting}}{{deployAcceptance}}{{deployProduction}}{{deployAirflow}}
