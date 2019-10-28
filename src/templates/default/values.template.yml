@@ -7,8 +7,7 @@ dbs:
   redis: {{redis}}
   mongodb: {{mongodb}}
 ingress:
-  createIngress: true
-  pingdom: {{pingdom}}
+  createIngress: true{{pingdom}}
   tls: true
   annotations:
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
