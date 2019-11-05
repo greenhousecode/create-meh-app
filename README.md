@@ -1,6 +1,6 @@
 # Create MEH App
 
-> Quickly scaffolds a new MEH project by setting up linting, formatting and automatic deployment.
+> Quickly scaffolds a new MEH project by setting up linting, formatting, automatic deployment, and two-way environment secrets syncing.
 
 ## Usage
 
