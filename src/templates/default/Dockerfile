@@ -10,8 +10,8 @@ RUN yarn build --cache-bust=$VERSION
 FROM node:12-alpine
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
-COPY --from=0 /tmp/app/build build
 RUN yarn --production
+COPY --from=0 /tmp/app/build build
 
 # Serve
 USER node
