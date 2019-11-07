@@ -17,14 +17,15 @@ const secrets = {
 };
 
 if (!token) {
-  process.exit(0);
+  console.log('Please provide a GITLAB_PERSONAL_ACCESS_TOKEN environment variable');
+  process.exit(1);
 }
 
-// Create .env
+// Create /.env
 if (!existsSync(localEnv)) {
   writeFileSync(
     localEnv,
-    `# Used locally by "yarn apply-env" for applying secrets through kubectl\nGITLAB_PERSONAL_ACCESS_TOKEN=${token}\n`,
+    `# Used locally by "yarn set-env" and "yarn get-env" for getting and setting secrets through kubectl\nGITLAB_PERSONAL_ACCESS_TOKEN=${token}\n`,
   );
 }
 
@@ -79,6 +80,7 @@ get(
                 console.log(`${envFile} already exists, not updating contents`);
               }
             })
+            // Allow for fails since not all stages are required
             .catch(() => {}),
         ),
       );

@@ -8,8 +8,8 @@
     "test": "echo 'No test specified' && exit 0",
     "build": "echo 'No build specified' && exit 0",
     "{{dagStartScript}}start": "echo 'No start specified' && exit 0",
-    "prefill-env": "node tools/prefillEnv",
-    "apply-env": "node tools/applyEnv"
+    "get-env": "node tools/getEnv",
+    "set-env": "node tools/setEnv"
   },
   "lint-staged": {
     "{{lintStagedGlob}}": [
@@ -24,7 +24,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn test && yarn apply-env"
+      "pre-push": "yarn test"
     }
   },
   "author": "{{author}}"

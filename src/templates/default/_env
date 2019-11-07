@@ -1,2 +1,2 @@
-# Used locally by "yarn apply-env" for applying secrets through kubectl
+# Used locally by "yarn set-env" and "yarn get-env" for getting and setting secrets through kubectl
 GITLAB_PERSONAL_ACCESS_TOKEN={{token}}
