@@ -30,7 +30,7 @@ building:
   dependencies:
     - testing
   image:
-    name: gcr.io/kaniko-project/executor:debug-v0.4.0
+    name: gcr.io/kaniko-project/executor:debug-v0.13.0
     entrypoint: ['']
   script:
     - export IMAGE_TAG="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
