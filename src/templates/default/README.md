@@ -16,11 +16,11 @@ GITLAB_PERSONAL_ACCESS_TOKEN=<token> yarn
 ### Publish `.env.*` files as secrets
 
 ```shell
-yarn set-env
+yarn upload-env
 ```
 
 ### Create and prefill `.env.*` files with remote secret values
 
 ```shell
-yarn get-env
+yarn download-env
 ```

@@ -21,7 +21,7 @@ yarn create meh-app <app-name>
 - [x] Creates and clones a new GitLab project and repository
 - [x] Initial commits on `master` and `develop`
 - [x] Automatic Kubernetes deployment through GitLab
-- [x] Two-way `.env.<stage>` secrets sync through `yarn get-env` and `yarn set-env`
+- [x] Two-way `.env.<stage>` secrets sync through `yarn upload-env` and `yarn download-env`
 - [x] Optional Airflow DAG(s) (automatic deployment through GitLab)
 - [x] Optional Redis database
 - [x] Optional MongoDB database
@@ -34,21 +34,21 @@ yarn create meh-app <app-name>
 - [Kubectl v1.12.0](https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/darwin/amd64/kubectl)
 - GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) (`api`-scoped)
 
-_Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` (and/or `~/.zshrc`) so you can use `yarn get-env` and `yarn set-env` without configuration._
+_Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` (and/or `~/.zshrc`) so you can use `yarn download-env` and `yarn upload-env` without configuration._
 
 ## What it does
 
-### `yarn set-env`
+### `yarn upload-env`
 
-Converts any local `/.env.<stage>` files to secrets, and applies them remotely through `kubectl`.
+Converts any local `/.env.<stage>` files to secrets, and applies them remotely through `kubectl`. Also restarts any pods to pick up new secrets.
 
 _(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable)_
 
-### `yarn get-env`
+### `yarn download-env`
 
-Converts any remote project secrets to dotenv files, and stores them locally as `/.env.<stage>`.
+Converts any remote project secrets to local dotenv files, and stores them as `/.env.<stage>`.
 
-_(does not overwrite pre-existing dotenv files, and requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable)_
+_(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable, and does not overwrite pre-existing dotenv files)_
 
 ### `pre-commit` git hook
 
@@ -111,5 +111,6 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
 ## Roadmap
 
 - [ ] Optimize/simplify CI and values configuration
+- [ ] DAG-only setup
 - [ ] Separate DAGs for each deployment stage
 - [ ] Fix ESLint setups with TypeScript

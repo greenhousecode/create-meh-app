@@ -83,7 +83,7 @@ console.log(
 
     await cloneRepository(answers, project);
     await createFiles(answers);
-    // await setEnv(answers);
+    // await uploadEnv(answers);
     await installDependencies(answers);
     await initialCommit(answers);
     await createDevelopBranch(answers);

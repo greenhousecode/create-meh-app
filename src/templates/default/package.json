@@ -8,8 +8,8 @@
     "test": "echo 'No test specified' && exit 0",
     "build": "echo 'No build specified' && exit 0",
     "{{dagStartScript}}start": "echo 'No start specified' && exit 0",
-    "get-env": "node tools/getEnv",
-    "set-env": "node tools/setEnv"
+    "download-env": "node tools/downloadEnv",
+    "upload-env": "node tools/uploadEnv"
   },
   "lint-staged": {
     "{{lintStagedGlob}}": [
