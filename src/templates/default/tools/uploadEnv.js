@@ -5,12 +5,12 @@ const { get } = require('https');
 const { join } = require('path');
 const { tmpdir } = require('os');
 
-const token = process.env.GITLAB_PERSONAL_ACCESS_TOKEN;
+const { GITLAB_PERSONAL_ACCESS_TOKEN } = process.env;
 const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
 const secretsPath = join(tmpDir, 'secrets.yml');
 
-if (!token) {
+if (!GITLAB_PERSONAL_ACCESS_TOKEN) {
   console.log('Please provide a GITLAB_PERSONAL_ACCESS_TOKEN environment variable');
   process.exit(1);
 }
@@ -25,7 +25,7 @@ const getClusterConfig = () =>
   new Promise((resolve, reject) => {
     get(
       'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
-      { headers: { 'private-token': token } },
+      { headers: { 'private-token': GITLAB_PERSONAL_ACCESS_TOKEN } },
       res => {
         let body = '';
 
@@ -44,7 +44,13 @@ const getClusterConfig = () =>
 const spawnPromise = (...args) =>
   new Promise((resolve, reject) => {
     const job = spawn(...args);
-    job.on('close', code => (code === 0 ? resolve() : reject()));
+    let result = '';
+
+    job.stdout.on('data', data => {
+      result += data.toString();
+    });
+
+    job.on('close', code => (code === 0 ? resolve(result) : reject(code)));
   });
 
 const parseEnv = filePath =>
@@ -87,7 +93,7 @@ const parseEnv = filePath =>
 const getSecretsTemplate = stage => `apiVersion: v1
 kind: Secret
 metadata:
-  name: {{appName}}${stage !== 'prod' ? `-${stage}` : ''}-secret-env
+  name: ${secrets[stage]}
   namespace: bmidevelopment
 type: Opaque
 data: {}
@@ -99,9 +105,8 @@ data: {}
 
   await Promise.all(
     Object.keys(secrets).map(async stage => {
-      let secretsContents = getSecretsTemplate(stage);
-
       try {
+        let secretsContents = getSecretsTemplate(stage);
         const env = parseEnv(join(__dirname, `../.env.${stage}`));
 
         if (Object.keys(env).length) {
@@ -113,24 +118,27 @@ data: {}
             ),
           );
         }
+
+        writeFileSync(secretsPath, secretsContents);
+
+        // Apply new secrets
+        await spawnPromise('kubectl', ['apply', '-f', secretsPath], {
+          env: { ...process.env, KUBECONFIG: clusterConfigPath },
+        });
+
+        // Restart pods to pick up new secrets
+        await spawnPromise(
+          'kubectl',
+          ['delete', 'pods', '-l', `app={{appName}}${stage !== 'prod' ? `-${stage}` : ''}-web`],
+          { env: { ...process.env, KUBECONFIG: clusterConfigPath } },
+        );
+
+        console.log(
+          `Environment secrets from .env.${stage} were applied successfully; any web pods have been restarted.`,
+        );
       } catch (err) {} // eslint-disable-line no-empty
-
-      writeFileSync(secretsPath, secretsContents);
-
-      // Apply new secrets
-      await spawnPromise('kubectl', ['apply', '-f', secretsPath], {
-        env: { ...process.env, KUBECONFIG: clusterConfigPath },
-      });
-
-      // Restart pods to pick up new secrets
-      await spawnPromise(
-        'kubectl',
-        ['delete', 'pods', '-l', `app={{appName}}${stage !== 'prod' ? `-${stage}` : ''}-web`],
-        { env: { ...process.env, KUBECONFIG: clusterConfigPath } },
-      );
     }),
   );
 
-  console.log('Environment secrets were applied successfully; any web pods have been restarted');
   process.exit(0);
 })();
