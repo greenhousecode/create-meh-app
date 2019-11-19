@@ -1,7 +1,7 @@
 {
   "name": "create-meh-app",
   "version": "1.6.0",
-  "description": "Quickly scaffolds a new MEH project by setting up linting, formatting, automatic deployment, and a two-way environment secrets syncing.",
+  "description": "Quickly scaffolds a new Node.js project by setting up linting, formatting, automatic deployment, and two-way environment secrets syncing.",
   "bin": "src/index.js",
   "files": [
     "src"
