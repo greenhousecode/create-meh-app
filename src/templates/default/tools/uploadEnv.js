@@ -8,7 +8,6 @@ const { tmpdir } = require('os');
 const { GITLAB_PERSONAL_ACCESS_TOKEN } = process.env;
 const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
-const secretsPath = join(tmpDir, 'secrets.yml');
 
 if (!GITLAB_PERSONAL_ACCESS_TOKEN) {
   console.log('Please provide a GITLAB_PERSONAL_ACCESS_TOKEN environment variable');
@@ -108,6 +107,7 @@ data: {}
       try {
         let secretsContents = getSecretsTemplate(stage);
         const env = parseEnv(join(__dirname, `../.env.${stage}`));
+        const secretsPath = join(tmpDir, `secrets-${stage}.yml`);
 
         if (Object.keys(env).length) {
           secretsContents = secretsContents.replace(
