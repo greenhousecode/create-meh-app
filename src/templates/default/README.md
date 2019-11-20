@@ -5,7 +5,7 @@
 ## Install
 
 ```shell
-GITLAB_PERSONAL_ACCESS_TOKEN=<token> yarn
+yarn
 ```
 
 {{airflowDoc}}## Environment variables
@@ -19,8 +19,12 @@ GITLAB_PERSONAL_ACCESS_TOKEN=<token> yarn
 yarn upload-env
 ```
 
+Add the `--restart` flag to restart any web pods afterwards (to pick up your new secrets).
+
 ### Create and prefill `.env.*` files with remote secret values
 
 ```shell
 yarn download-env
 ```
+
+Add the `--overwrite` flag to overwrite any pre-existing `.env.<stage>` files.

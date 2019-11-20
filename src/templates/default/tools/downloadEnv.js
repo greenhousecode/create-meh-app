@@ -69,7 +69,7 @@ const spawnPromise = (...args) =>
         const { data } = JSON.parse(result);
         const envFile = join(__dirname, `../.env.${stage}`);
 
-        if (!existsSync(envFile)) {
+        if (!existsSync(envFile) || process.argv.includes('--overwrite')) {
           writeFileSync(
             envFile,
             Object.keys(data).reduce((acc, key) => {
@@ -80,9 +80,9 @@ const spawnPromise = (...args) =>
             }, ''),
           );
 
-          console.log(`.env.${stage} created and prefilled.`);
+          console.log(`.env.${stage} created.`);
         } else {
-          console.log(`.env.${stage} already exists, not updating contents.`);
+          console.log(`.env.${stage} already exists, add the --overwrite flag to overwrite.`);
         }
       } catch (err) {} // eslint-disable-line no-empty
     }),

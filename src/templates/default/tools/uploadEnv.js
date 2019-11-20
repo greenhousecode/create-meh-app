@@ -126,16 +126,18 @@ data: {}
           env: { ...process.env, KUBECONFIG: clusterConfigPath },
         });
 
-        // Restart pods to pick up new secrets
-        await spawnPromise(
-          'kubectl',
-          ['delete', 'pods', '-l', `app={{appName}}${stage !== 'prod' ? `-${stage}` : ''}-web`],
-          { env: { ...process.env, KUBECONFIG: clusterConfigPath } },
-        );
+        console.log(`Environment secrets from .env.${stage} were applied successfully.`);
 
-        console.log(
-          `Environment secrets from .env.${stage} were applied successfully; any web pods have been restarted.`,
-        );
+        if (process.argv.includes('--restart')) {
+          // Restart web pods to pick up new secrets
+          await spawnPromise(
+            'kubectl',
+            ['delete', 'pods', '-l', `app=anna${stage !== 'prod' ? `-${stage}` : ''}-web`],
+            { env: { ...process.env, KUBECONFIG: clusterConfigPath } },
+          );
+
+          console.log(`"${stage}" web pods have been restarted.`);
+        }
       } catch (err) {} // eslint-disable-line no-empty
     }),
   );

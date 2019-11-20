@@ -1,2 +1,0 @@
-# Used locally by "yarn upload-env" and "yarn download-env" for getting and setting secrets through kubectl
-GITLAB_PERSONAL_ACCESS_TOKEN={{token}}

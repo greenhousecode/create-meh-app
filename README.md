@@ -36,17 +36,17 @@ yarn create meh-app <app-name>
 
 _Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` (and/or `~/.zshrc`) so you can use `yarn download-env` and `yarn upload-env` without configuration._
 
-## What it does
+## Functionality
 
 ### `yarn upload-env`
 
-Converts any local `/.env.<stage>` files to secrets, and applies them remotely through `kubectl`. Also restarts any pods to pick up new secrets.
+Converts any local `.env.<stage>` files to secrets, and applies them remotely through `kubectl`. Add the `--restart` flag to restart any web pods afterwards (to pick up your new secrets).
 
 _(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable)_
 
 ### `yarn download-env`
 
-Converts any remote project secrets to local dotenv files, and stores them as `/.env.<stage>`.
+Converts any remote project secrets to local dotenv files, and stores them as `.env.<stage>`. Add the `--overwrite` flag to overwrite any pre-existing `.env.<stage>` files.
 
 _(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable, and does not overwrite pre-existing dotenv files)_
 
@@ -64,7 +64,7 @@ _(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable, and does not 
 If you opted in for Airflow DAG(s) during setup, the following will be added to your project:
 
 - `/airflow/<dagName>.py` (containing the interval and description you entered)
-- `start:<dagName>` script in `package.json` (the Airflow pod will call `yarn start:<dagName>`)
+- `"start:<dagName>"` script in `package.json` (the Airflow pod will run `yarn start:<dagName>`)
 - Automatic deployment of any `/airflow/*.py` files, when pushing to `master`
 
 ## Recommended Visual Studio Code settings
