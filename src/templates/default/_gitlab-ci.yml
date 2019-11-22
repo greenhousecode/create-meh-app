@@ -34,7 +34,7 @@ building:
     entrypoint: ['']
   script:
     - export IMAGE_TAG="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
-    - mkdir -p /kaniko/.docker
+    - export DOCKER_CONFIG="/kaniko/.docker"
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - |
       /kaniko/executor --cache \
