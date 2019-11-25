@@ -5,7 +5,7 @@
 ## Install
 
 ```shell
-GITLAB_PERSONAL_ACCESS_TOKEN=<token> yarn
+yarn
 ```
 
 {{airflowDoc}}## Environment variables
@@ -13,16 +13,18 @@ GITLAB_PERSONAL_ACCESS_TOKEN=<token> yarn
 | Env | Key | Description |
 | --- | --- | ----------- |{{sentryDoc}}{{redisDoc}}{{mongodbDoc}}{{gitlabDoc}}
 
-### Publish `.env.*` files
-
-If any of the following files exist, they will be deployed as secrets automatically, when pushing to the following branches:
-
-- `master`: `/.env.prod`
-- `develop`: `/.env.acc`
-- (other): `/.env.test`
-
-### Create and prefill `.env.*` files with pre-existing secrets
+### Publish `.env.*` files as secrets
 
 ```shell
-yarn prefill-env
+yarn upload-env
 ```
+
+Add the `--restart` flag to restart any web pods afterwards (to pick up your new secrets).
+
+### Create and prefill `.env.*` files with remote secret values
+
+```shell
+yarn download-env
+```
+
+Add the `--overwrite` flag to overwrite any pre-existing `.env.<stage>` files.

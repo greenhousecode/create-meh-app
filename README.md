@@ -1,6 +1,6 @@
 # Create MEH App
 
-> Quickly scaffolds a new MEH project by setting up linting, formatting and automatic deployment.
+> Quickly scaffolds a new Node.js project by setting up linting, formatting, automatic deployment, and two-way environment secrets syncing.
 
 ## Usage
 
@@ -16,13 +16,13 @@ yarn create meh-app <app-name>
 
 ## Features
 
-- [x] Lints & formats `.js(x)`, `.ts(x)`, and `.vue`
-- [x] Formats `.graphql`, `.html`, `.json`, `.md`, `.(s)css`, and `.yml`
-- [x] Creates & clones a GitLab repository
+- [x] Lints & formats `.js(x)`, `.ts(x)`, and `.vue` files
+- [x] Formats `.graphql`, `.html`, `.json`, `.md`, `.(s)css`, and `.yml` files
+- [x] Creates and clones a new GitLab project and repository
 - [x] Initial commits on `master` and `develop`
-- [x] Automatic two-way `.env.<stage>` secrets sync
-- [x] Automatic Kubernetes deployment
-- [x] Optional Airflow DAG(s) (with automatic deployment)
+- [x] Automatic Kubernetes deployment through GitLab
+- [x] Two-way `.env.<stage>` secrets sync through `yarn upload-env` and `yarn download-env`
+- [x] Optional Airflow DAG(s) (automatic deployment through GitLab)
 - [x] Optional Redis database
 - [x] Optional MongoDB database
 - [x] Optional Sentry logging
@@ -32,25 +32,23 @@ yarn create meh-app <app-name>
 
 - [Yarn](https://yarnpkg.com/)
 - [Kubectl v1.12.0](https://storage.googleapis.com/kubernetes-release/release/v1.12.0/bin/darwin/amd64/kubectl)
-- GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) (`api` scoped)
+- GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) (`api`-scoped)
 
-_Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` and/or `~/.zshrc` to automatically create and prefill `.env.<stage>` files on consecutive installs_
+_Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` (and/or `~/.zshrc`) so you can use `yarn download-env` and `yarn upload-env` without configuration._
 
-## What it does
+## Functionality
 
-### Airflow DAGs
+### `yarn upload-env`
 
-If you opted in for Airflow DAG(s) during setup, the following will be added to your project:
+Converts any local `.env.<stage>` files to secrets, and applies them remotely through `kubectl`. Add the `--restart` flag to restart any web pods afterwards (to pick up your new secrets).
 
-- `/dags/<dagName>.py` (containing the interval and description you entered)
-- `start:<dagName>` script in `package.json` (the Airflow pod will call `yarn start:<dagName>`)
-- `deploy_dags` stage in `.gitlab-ci.yml`. This will automatically deploy any `*.py` files present in `/dags` (when pushing to `master`)
+_(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable)_
 
-### `yarn prefill-env`
+### `yarn download-env`
 
-This will try to read out `process.env.GITLAB_PERSONAL_ACCESS_TOKEN`. If it succeeds, it'll authenticate through `kubectl` and retrieve any project-related secrets. These secrets will then be converted to `.env.<stage>` files and placed in your project root folder.
+Converts any remote project secrets to local dotenv files, and stores them as `.env.<stage>`. Add the `--overwrite` flag to overwrite any pre-existing `.env.<stage>` files.
 
-Any changed `.env.<stage>` files will be applied back though `kubectl` whenever you push to their corresponding git branches (see [pre-push git hook](#pre-push-git-hook) below).
+_(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable, and does not overwrite pre-existing dotenv files)_
 
 ### `pre-commit` git hook
 
@@ -60,11 +58,14 @@ Any changed `.env.<stage>` files will be applied back though `kubectl` whenever 
 ### `pre-push` git hook
 
 - Runs `yarn test`
-- When on `master` branch: Applies your `.env.prod`\* through `kubectl`
-- When on `develop` branch: Applies your `.env.acc`\* through `kubectl`
-- On other branches: Applies your `.env.test`\* through `kubectl`
 
-_\*if file exists_
+### Airflow DAGs
+
+If you opted in for Airflow DAG(s) during setup, the following will be added to your project:
+
+- `/airflow/<dagName>.py` (containing the interval and description you entered)
+- `"start:<dagName>"` script in `package.json` (the Airflow pod will run `yarn start:<dagName>`)
+- Automatic deployment of any `/airflow/*.py` files, when pushing to `master`
 
 ## Recommended Visual Studio Code settings
 
@@ -109,6 +110,7 @@ _\*if file exists_
 
 ## Roadmap
 
-- [ ] Optimize CI
+- [ ] Optimize/simplify CI and values configuration
+- [ ] DAG-only setup
 - [ ] Separate DAGs for each deployment stage
 - [ ] Fix ESLint setups with TypeScript

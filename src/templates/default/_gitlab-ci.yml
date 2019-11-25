@@ -30,12 +30,12 @@ building:
   dependencies:
     - testing
   image:
-    name: gcr.io/kaniko-project/executor:debug-v0.4.0
+    name: gcr.io/kaniko-project/executor:debug-v0.13.0
     entrypoint: ['']
   script:
     - export IMAGE_TAG="$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
-    - mkdir -p /root/.docker
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /root/.docker/config.json
+    - export DOCKER_CONFIG="/kaniko/.docker"
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - |
       /kaniko/executor --cache \
                        --context "$CI_PROJECT_DIR" \
