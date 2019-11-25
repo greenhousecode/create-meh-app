@@ -6,10 +6,10 @@
     "lint": "{{lintScript}}",
     "format": "prettier --ignore-path .gitignore --check '**/*.{css,graphql,html,json,md,scss,yml}'",
     "test": "echo 'No test specified' && exit 0",
-    "build": "echo 'No build specified' && exit 0",
+    "build": "echo 'No build specified' && mkdir build && exit 0",
     "{{dagStartScript}}start": "echo 'No start specified' && exit 0",
-    "prefill-env": "node tools/prefillEnv",
-    "apply-env": "node tools/applyEnv"
+    "download-env": "node tools/downloadEnv",
+    "upload-env": "node tools/uploadEnv"
   },
   "lint-staged": {
     "{{lintStagedGlob}}": [
@@ -24,7 +24,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn test && yarn apply-env"
+      "pre-push": "yarn test"
     }
   },
   "author": "{{author}}"

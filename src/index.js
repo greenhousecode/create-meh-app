@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+const { existsSync } = require('fs');
+const app = require('commander');
 const boxen = require('boxen');
 const chalk = require('chalk');
 const clear = require('clear');
-const app = require('commander');
-const { existsSync } = require('fs');
 require('promise.allsettled').shim();
 const installDependencies = require('./actions/installDependencies');
 const createDevelopBranch = require('./actions/createDevelopBranch');
@@ -15,6 +15,7 @@ const fetchSentryDSN = require('./actions/fetchSentryDSN');
 const createProject = require('./actions/createProject');
 const initialCommit = require('./actions/initialCommit');
 const deleteProject = require('./actions/deleteProject');
+const createSecrets = require('./actions/createSecrets');
 const askQuestions = require('./actions/askQuestions');
 const pushBranches = require('./actions/pushBranches');
 const deleteFolder = require('./actions/deleteFolder');
@@ -72,17 +73,15 @@ console.log(
   let answers;
   let project;
   let sentry;
+
   try {
     answers = await askQuestions(input);
     project = await createProject(answers);
     sentry = await createSentry(answers);
-    answers = {
-      ...answers,
-      ...(await fetchSentryDSN(sentry)),
-    };
-
+    answers = { ...answers, ...(await fetchSentryDSN(sentry)) };
     await cloneRepository(answers, project);
     await createFiles(answers);
+    await createSecrets(answers);
     await installDependencies(answers);
     await initialCommit(answers);
     await createDevelopBranch(answers);
@@ -92,11 +91,13 @@ console.log(
   } catch (err) {
     console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
     console.log(err.description || err);
+
     await Promise.allSettled([
       deleteProject(answers, project),
       deleteFolder(answers),
       deleteSentry(sentry),
     ]);
+
     process.exit(1);
   }
 })();
