@@ -9,6 +9,8 @@ const curlPromise = require('../utils/curlPromise');
 
 const BASE_URL = 'https://sentry.io/api/0';
 
+const ALERT_TAGS = ['user', 'logger', 'feature', 'release', 'url'];
+
 const pick = (property, { key = '', value }) => (key === property ? value : null);
 
 const pickAll = (keys, arr) =>
@@ -93,9 +95,10 @@ module.exports = async ({ addons, namespace, token, appName: name }) => {
           channel: '#dev_hotline',
           channel_id: 'C07QB2P0C',
           id: 'sentry.integrations.slack.notify_action.SlackNotifyServiceAction',
-          name:
-            'Send a notification to the Greenhouse Slack workspace to #dev_hotline and show tags [user, logger, feature, release, url] in notification',
-          tags: 'user,logger,feature,release,url',
+          name: `Send a notification to the Greenhouse Slack workspace to #dev_hotline and show tags [${ALERT_TAGS.join(
+            ', ',
+          )}] in notification`,
+          tags: ALERT_TAGS.join(','),
           workspace: 16727,
         },
       ],
