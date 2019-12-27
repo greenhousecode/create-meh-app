@@ -128,7 +128,7 @@ data: {}
 
         console.log(`Environment secrets from .env.${stage} were applied successfully.`);
 
-        if (process.argv.includes('--restart')) {
+        if (process.argv.includes('--restart') && '{{projectType}}' === 'web') {
           // Restart web pods to pick up new secrets
           await spawnPromise(
             'kubectl',
