@@ -6,6 +6,10 @@ const { GITLAB_NAMESPACES } = require('../config.json');
 
 const filter = input => input.trim().replace(/\s+/g, ' ');
 
+const DEFAULTS = {
+  framework: 'none',
+};
+
 module.exports = async input => {
   const cwd = input.match(/^\//) ? input : join(process.cwd(), input);
   const appName = input.match(/[0-9a-z-]+$/)[0];
@@ -175,5 +179,5 @@ module.exports = async input => {
     },
   ]);
 
-  return { ...answers, gitlabData, appName, cwd };
+  return { ...DEFAULTS, ...answers, gitlabData, appName, cwd };
 };

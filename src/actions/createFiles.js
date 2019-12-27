@@ -73,6 +73,8 @@ module.exports = answers => {
     ? `${answers.framework}Typescript`
     : answers.framework;
 
+  const isWeb = answers.projectType === 'web';
+
   const data = {
     ...answers,
     author: `${name} <${email}>`,
@@ -80,9 +82,9 @@ module.exports = answers => {
     eslintParser: answers.addons.includes('typescript') ? LINT_SCRIPTS.typescriptParser : '',
     eslintExtends: ESLINT_EXTENDS[variant],
     lintStagedGlob: LINT_STAGED_GLOBS[variant],
-    deployTesting: answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
-    deployAcceptance: answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
-    deployProduction: updateProductionDeployment(answers),
+    deployTesting: isWeb && answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
+    deployAcceptance: isWeb && answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
+    deployProduction: isWeb ? updateProductionDeployment(answers) : '',
     deployAirflow: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.airflow : '',
     dagStartScript: answers.addons.includes('airflow')
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
