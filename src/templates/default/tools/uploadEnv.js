@@ -132,7 +132,7 @@ data: {}
           // Restart web pods to pick up new secrets
           await spawnPromise(
             'kubectl',
-            ['delete', 'pods', '-l', `app=anna${stage !== 'prod' ? `-${stage}` : ''}-web`],
+            ['delete', 'pods', '-l', `app={{appName}}${stage !== 'prod' ? `-${stage}` : ''}-web`],
             { env: { ...process.env, KUBECONFIG: clusterConfigPath } },
           );
 
