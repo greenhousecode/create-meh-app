@@ -83,9 +83,16 @@ module.exports = async input => {
       choices: ['SSH', 'HTTPS'],
     },
     {
+      name: 'projectType',
+      type: 'list',
+      message: 'What type of project are you planning on creating?',
+      choices: [{ name: 'Web app', value: 'web' }, { name: 'App', value: 'app' }],
+    },
+    {
       name: 'framework',
       type: 'list',
       message: 'Which framework are you planning on using? (Only affects linting)',
+      when: ({ projectType }) => projectType === 'web',
       choices: [
         { name: 'None', value: 'none' },
         { name: 'React', value: 'react' },
@@ -106,18 +113,28 @@ module.exports = async input => {
       name: 'addons',
       type: 'checkbox',
       message: 'Check any of the following you want to include:',
-      choices: [
-        { name: 'Airflow DAG(s)', value: 'airflow' },
-        { name: 'Redis database', value: 'redis' },
-        { name: 'MongoDB database', value: 'mongodb' },
-        { name: 'Sentry logging', value: 'sentry', checked: true },
-        { name: 'Pingdom monitoring', value: 'pingdom', checked: true },
-        {
-          name: 'TypeScript (only affects linting)',
-          value: 'typescript',
-          disabled: chalk.gray('temporarily disabled'),
-        },
-      ],
+      choices: ({ projectType }) => {
+        const isWeb = projectType === 'web';
+        return [
+          { name: 'Airflow DAG(s)', value: 'airflow', checked: !isWeb },
+          { name: 'Redis database', value: 'redis' },
+          { name: 'MongoDB database', value: 'mongodb' },
+          { name: 'Sentry logging', value: 'sentry', checked: true },
+          {
+            name: 'Pingdom monitoring',
+            value: 'pingdom',
+            checked: isWeb,
+            disabled: !isWeb
+              ? chalk.gray(`Not support for project type ${projectType}`)
+              : undefined,
+          },
+          {
+            name: 'TypeScript (only affects linting)',
+            value: 'typescript',
+            disabled: chalk.gray('temporarily disabled'),
+          },
+        ];
+      },
     },
     {
       name: 'dagName',
