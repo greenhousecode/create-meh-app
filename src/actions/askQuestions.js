@@ -8,6 +8,7 @@ const filter = input => input.trim().replace(/\s+/g, ' ');
 
 const DEFAULTS = {
   framework: 'none',
+  stages: ['prod'],
 };
 
 module.exports = async input => {
@@ -107,6 +108,7 @@ module.exports = async input => {
       name: 'stages',
       type: 'checkbox',
       message: 'Select the deployment stages (besides production) you wish to use:',
+      when: ({ projectType }) => projectType === 'web',
       filter: choices => [...choices, 'prod'],
       choices: [
         { name: 'Testing', value: 'test', checked: true },
