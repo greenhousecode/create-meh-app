@@ -13,7 +13,7 @@ yarn
 | Env | Key | Description |
 | --- | --- | ----------- |{{sentryDoc}}{{redisDoc}}{{mongodbDoc}}{{gitlabDoc}}
 
-### Publish `.env.*` files as secrets
+### Publish local `.env.*` files as remote secrets
 
 ```shell
 yarn upload-env
@@ -21,7 +21,7 @@ yarn upload-env
 
 Add the `--restart` flag to restart any web pods afterwards (to pick up your new secrets).
 
-### Create and prefill `.env.*` files with remote secret values
+### Create local `.env.*` files from remote secrets
 
 ```shell
 yarn download-env
