@@ -39,6 +39,7 @@ k = KubernetesPodOperator(
     image_pull_policy='Always',
     namespace='bmidevelopment',
     image='__DOCKER_IMAGE__',
+    do_xcom_push=False,
     in_cluster=True,
     task_id=dag_id,
     cmds=['yarn'],
