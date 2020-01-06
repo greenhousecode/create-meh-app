@@ -91,7 +91,10 @@ module.exports = async input => {
       name: 'projectType',
       type: 'list',
       message: 'What type of project are you planning on creating?',
-      choices: [{ name: 'Web app', value: 'web' }, { name: 'App', value: 'app' }],
+      choices: [
+        { name: 'Web app', value: 'web' },
+        { name: 'App (e.g. scheduled task)', value: 'app' },
+      ],
     },
     {
       name: 'framework',
