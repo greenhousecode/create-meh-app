@@ -77,6 +77,7 @@ module.exports = answers => {
 
   const data = {
     ...answers,
+    isWeb: `${isWeb}`,
     author: `${name} <${email}>`,
     lintScript: LINT_SCRIPTS[variant],
     eslintParser: answers.addons.includes('typescript') ? LINT_SCRIPTS.typescriptParser : '',
