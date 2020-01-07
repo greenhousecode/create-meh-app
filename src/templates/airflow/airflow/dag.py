@@ -1,5 +1,5 @@
-from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
 from utils.slack_fallback import on_failure_slack_callback
+from airflow.operators import GHKubernetesPodOperator
 from airflow.contrib.kubernetes.secret import Secret
 from datetime import datetime, timedelta
 from airflow import DAG
@@ -31,15 +31,11 @@ dag = DAG(
     dag_id=dag_id,
 )
 
-k = KubernetesPodOperator(
+k = GHKubernetesPodOperator(
     secrets=[Secret('env', None, '__SECRETS__')],
     labels={'runtime': 'airflow', 'dag': dag_id},
     arguments=['start:' + filename],
-    is_delete_operator_pod=True,
-    image_pull_policy='Always',
-    namespace='bmidevelopment',
     image='__DOCKER_IMAGE__',
-    in_cluster=True,
     task_id=dag_id,
     cmds=['yarn'],
     name=dag_id,
