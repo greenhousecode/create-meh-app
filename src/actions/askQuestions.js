@@ -115,7 +115,7 @@ module.exports = async input => {
       filter: choices => [...choices, 'prod'],
       choices: [
         { name: 'Testing', value: 'test', checked: true },
-        { name: 'Acceptance', value: 'acc', checked: true },
+        { name: 'Acceptance', value: 'acc' },
       ],
     },
     {
