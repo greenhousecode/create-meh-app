@@ -40,7 +40,7 @@
     "sentry": "sh ./scripts/sentry-upload-sourcemaps.sh {{sentrySlug}} \"$CI_COMMIT_SHA\""
   },
   "DEFAULT_DEPENDENCIES": [],
-  "DEFAULT_DEV_DEPENDENCIES": ["husky", "prettier", "lint-staged", "eslint-config-prettier"],
+  "DEFAULT_DEV_DEPENDENCIES": ["husky", "prettier", "lint-staged@9", "eslint-config-prettier"],
   "DOCUMENTATION": {
     "airflow": "## Airflow DAG(s)\n\nAny DAG(s) present in `/airflow` will be automatically deployed to Airflow by CI/CD, when pushing to `master`.\n\n",
     "sentry": "\nProduction | SENTRY_DSN | Sentry SDK client connection string.",
