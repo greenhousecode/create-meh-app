@@ -127,7 +127,11 @@ module.exports = answers => {
 
   // Optionally copy over DAG template and replace macros
   if (answers.addons.includes('airflow')) {
-    copyTemplates(airflowTemplateDir, answers.cwd, overrideContents(() => `${answers.dagName}.py`));
+    copyTemplates(
+      airflowTemplateDir,
+      answers.cwd,
+      overrideContents(() => `${answers.dagName}.py`),
+    );
   }
 
   // Create .env.prod, and optionally .env.acc and .env.test
