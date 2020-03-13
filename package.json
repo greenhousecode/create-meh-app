@@ -1,6 +1,6 @@
 {
   "name": "create-meh-app",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "Quickly scaffolds a new Node.js project by setting up linting, formatting, automatic deployment, and two-way environment secrets syncing.",
   "bin": "src/index.js",
   "files": [
@@ -35,23 +35,23 @@
   "devDependencies": {
     "eslint": "6.1.0",
     "eslint-config-airbnb-base": "14.0.0",
-    "eslint-config-prettier": "^6.3.0",
+    "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.1",
-    "husky": "^3.0.5",
-    "lint-staged": "^9.4.0",
-    "prettier": "^1.18.2"
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
+    "prettier": "^1.19.1"
   },
   "dependencies": {
-    "boxen": "^4.1.0",
-    "chalk": "^2.4.2",
+    "boxen": "^4.2.0",
+    "chalk": "^3.0.0",
     "clear": "^0.1.0",
-    "commander": "^3.0.1",
-    "gitlab": "^11.1.2",
-    "inquirer": "^7.0.0",
-    "promise.allsettled": "^1.0.1",
-    "request": "^2.88.0",
-    "rimraf": "^3.0.0",
-    "simple-git": "^1.126.0"
+    "commander": "^4.1.1",
+    "gitlab": "^14.2.2",
+    "inquirer": "^7.1.0",
+    "promise.allsettled": "^1.0.2",
+    "request": "^2.88.2",
+    "rimraf": "^3.0.2",
+    "simple-git": "^1.132.0"
   }
 }

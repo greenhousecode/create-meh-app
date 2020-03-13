@@ -5,6 +5,7 @@ const boxen = require('boxen');
 const chalk = require('chalk');
 const clear = require('clear');
 require('promise.allsettled').shim();
+
 const installDependencies = require('./actions/installDependencies');
 const createDevelopBranch = require('./actions/createDevelopBranch');
 const createSentry = require('./actions/createSentryProject');
