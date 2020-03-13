@@ -62,7 +62,7 @@ building:
   dependencies:
     - building
   stage: deploying
-  image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:2.0
+  image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:2.2
   before_script:
     - export K8S_CONFIG="$MEH_K8S_CLUSTER_CONFIG"
     - echo "$CI_COMMIT_SHA" > VERSION
