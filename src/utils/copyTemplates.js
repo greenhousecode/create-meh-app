@@ -8,12 +8,12 @@ const {
   lstatSync,
 } = require('fs');
 
-const copyTemplates = (source, target, callback = file => file, { excluded = [] } = {}) => {
+const copyTemplates = (source, target, callback = (file) => file, { excluded = [] } = {}) => {
   if (!existsSync(target)) {
     mkdirSync(target, { recursive: true });
   }
 
-  readdirSync(source).forEach(fileName => {
+  readdirSync(source).forEach((fileName) => {
     const filePath = join(source, fileName);
     if (excluded.includes(filePath)) {
       return;

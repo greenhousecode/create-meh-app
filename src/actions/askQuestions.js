@@ -4,14 +4,14 @@ const { join } = require('path');
 const chalk = require('chalk');
 const { GITLAB_NAMESPACES } = require('../config.json');
 
-const filter = input => input.trim().replace(/\s+/g, ' ');
+const filter = (input) => input.trim().replace(/\s+/g, ' ');
 
 const DEFAULTS = {
   framework: 'none',
   stages: ['prod'],
 };
 
-module.exports = async input => {
+module.exports = async (input) => {
   const cwd = input.match(/^\//) ? input : join(process.cwd(), input);
   const appName = input.match(/[0-9a-z-]+$/)[0];
   let gitlabData;
@@ -23,12 +23,12 @@ module.exports = async input => {
       name: 'namespace',
       type: 'list',
       message: 'Choose a GitLab namespace:',
-      choices: Object.keys(GITLAB_NAMESPACES).map(key => ({
+      choices: Object.keys(GITLAB_NAMESPACES).map((key) => ({
         name: GITLAB_NAMESPACES[key].name,
         value: key,
       })),
     },
-    ...Object.keys(GITLAB_NAMESPACES).map(key => ({
+    ...Object.keys(GITLAB_NAMESPACES).map((key) => ({
       name: 'token',
       type: 'password',
       message: process.env.GITLAB_PERSONAL_ACCESS_TOKEN
@@ -70,9 +70,9 @@ module.exports = async input => {
       type: 'input',
       message: "What's the name of your app?",
       default: () =>
-        appName.replace(/-/g, ' ').replace(/^[a-z]| [a-z]/g, match => match.toUpperCase()),
+        appName.replace(/-/g, ' ').replace(/^[a-z]| [a-z]/g, (match) => match.toUpperCase()),
       filter,
-      validate: name => !!name || 'Please provide a name',
+      validate: (name) => !!name || 'Please provide a name',
     },
     {
       name: 'description',
@@ -112,7 +112,7 @@ module.exports = async input => {
       type: 'checkbox',
       message: 'Select the deployment stages (besides production) you wish to use:',
       when: ({ projectType }) => projectType === 'web',
-      filter: choices => [...choices, 'prod'],
+      filter: (choices) => [...choices, 'prod'],
       choices: [
         { name: 'Testing', value: 'test', checked: true },
         { name: 'Acceptance', value: 'acc' },
@@ -151,7 +151,7 @@ module.exports = async input => {
       message: "What's the name of your DAG? ([a-z0-9-])",
       default: 'job',
       when: ({ addons }) => addons.includes('airflow'),
-      validate: dagName => {
+      validate: (dagName) => {
         if (!dagName) return 'Please provide a DAG name';
         if (!/^[a-z0-9-]+$/.test(dagName)) return 'Only use [a-z0-9-] for your DAG name';
         return true;
@@ -164,7 +164,7 @@ module.exports = async input => {
       default: 'To make the world a better place',
       filter,
       when: ({ addons }) => addons.includes('airflow'),
-      validate: dagDescription => !!dagDescription || 'Please provide a DAG description',
+      validate: (dagDescription) => !!dagDescription || 'Please provide a DAG description',
     },
     {
       name: 'dagInterval',
