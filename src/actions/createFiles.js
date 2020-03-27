@@ -18,9 +18,9 @@ const templateDir = join(__dirname, '../templates/default');
 const airflowTemplateDir = join(__dirname, '../templates/airflow');
 const sentryTemplateDir = join(__dirname, '../templates/sentry');
 
-const updateProductionDeployment = answers => {
+const updateProductionDeployment = (answers) => {
   const scriptCopy = STAGES_DEPLOY_SCRIPTS.prod.slice();
-  const padding = command => `\n    - ${command}`;
+  const padding = (command) => `\n    - ${command}`;
   let sentryScript = '';
 
   if (answers.addons.includes('sentry')) {
@@ -31,15 +31,15 @@ const updateProductionDeployment = answers => {
   return scriptCopy.replace('{{sentryScript}}', sentryScript);
 };
 
-const prefillProdEnv = answers => [
+const prefillProdEnv = (answers) => [
   answers.addons.includes('sentry') ? `SENTRY_DSN=${answers.sentryDSN}` : undefined,
 ];
 
 // eslint-disable-next-line no-unused-vars
-const prefillAccEnv = answers => [];
+const prefillAccEnv = (answers) => [];
 
 // eslint-disable-next-line no-unused-vars
-const prefillTestEnv = answers => [];
+const prefillTestEnv = (answers) => [];
 
 const prefillStagedEnv = (stage, answers) => {
   let secrets = [];
@@ -58,12 +58,12 @@ const prefillStagedEnv = (stage, answers) => {
       return '';
   }
 
-  secrets = secrets.filter(val => val);
+  secrets = secrets.filter((val) => val);
 
   return secrets.length ? `${secrets.join('\n')}\n` : '';
 };
 
-module.exports = answers => {
+module.exports = (answers) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Creating files…'));
 
@@ -107,7 +107,7 @@ module.exports = answers => {
     day: now.getDate(),
   };
 
-  const overrideContents = (transformFileName = undefined) => file => ({
+  const overrideContents = (transformFileName = undefined) => (file) => ({
     ...file,
     fileName: transformFileName ? transformFileName(file.fileName) : file.fileName,
     fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
@@ -117,7 +117,7 @@ module.exports = answers => {
   copyTemplates(
     templateDir,
     answers.cwd,
-    overrideContents(fileName => fileName.replace(/^_/, '.')),
+    overrideContents((fileName) => fileName.replace(/^_/, '.')),
   );
 
   // Optionally copy over Sentry template and replace macros
@@ -135,7 +135,7 @@ module.exports = answers => {
   }
 
   // Create .env.prod, and optionally .env.acc and .env.test
-  answers.stages.forEach(stage =>
+  answers.stages.forEach((stage) =>
     writeFileSync(join(answers.cwd, `.env.${stage}`), prefillStagedEnv(stage, answers)),
   );
 

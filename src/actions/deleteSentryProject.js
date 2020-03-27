@@ -3,7 +3,7 @@ const curlPromise = require('../utils/curlPromise');
 
 const BASE_URL = 'https://sentry.io/api/0';
 
-module.exports = async sentry => {
+module.exports = async (sentry) => {
   if (!sentry) {
     return;
   }

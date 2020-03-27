@@ -25,10 +25,10 @@ const getClusterConfig = () =>
     get(
       'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
       { headers: { 'private-token': GITLAB_PERSONAL_ACCESS_TOKEN } },
-      res => {
+      (res) => {
         let body = '';
 
-        res.on('data', chunk => {
+        res.on('data', (chunk) => {
           body += chunk;
         });
 
@@ -45,14 +45,14 @@ const spawnPromise = (...args) =>
     const job = spawn(...args);
     let result = '';
 
-    job.stdout.on('data', data => {
+    job.stdout.on('data', (data) => {
       result += data.toString();
     });
 
-    job.on('close', code => (code === 0 ? resolve(result) : reject(code)));
+    job.on('close', (code) => (code === 0 ? resolve(result) : reject(code)));
   });
 
-const parseEnv = filePath =>
+const parseEnv = (filePath) =>
   readFileSync(filePath, 'utf8')
     .split(/\n/)
     .reduce(
@@ -89,7 +89,7 @@ const parseEnv = filePath =>
       { env: {}, multilineKey: null, delimiter: null },
     ).env;
 
-const getSecretsTemplate = stage => `apiVersion: v1
+const getSecretsTemplate = (stage) => `apiVersion: v1
 kind: Secret
 metadata:
   name: ${secrets[stage]}
@@ -103,7 +103,7 @@ data: {}
   writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
 
   await Promise.all(
-    Object.keys(secrets).map(async stage => {
+    Object.keys(secrets).map(async (stage) => {
       try {
         let secretsContents = getSecretsTemplate(stage);
         const env = parseEnv(join(__dirname, `../.env.${stage}`));

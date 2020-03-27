@@ -3,7 +3,7 @@ const request = require('request');
 const noop = () => {};
 
 const merge = (...args) => {
-  const mergeWith = items =>
+  const mergeWith = (items) =>
     function next(input, index) {
       const obj = items[index];
       if (!obj || typeof obj !== 'object') {
@@ -56,7 +56,7 @@ const requestOptions = {
  */
 const curlPromise = (url, method, { body, options = {}, json = true } = {}) =>
   // eslint-disable-next-line consistent-return
-  new Promise(resolve => {
+  new Promise((resolve) => {
     const prefilledOptions = Object.assign(
       options,
       json
