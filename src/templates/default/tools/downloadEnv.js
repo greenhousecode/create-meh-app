@@ -25,10 +25,10 @@ const getClusterConfig = () =>
     get(
       'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
       { headers: { 'private-token': GITLAB_PERSONAL_ACCESS_TOKEN } },
-      res => {
+      (res) => {
         let body = '';
 
-        res.on('data', chunk => {
+        res.on('data', (chunk) => {
           body += chunk;
         });
 
@@ -45,11 +45,11 @@ const spawnPromise = (...args) =>
     const job = spawn(...args);
     let result = '';
 
-    job.stdout.on('data', data => {
+    job.stdout.on('data', (data) => {
       result += data.toString();
     });
 
-    job.on('close', code => (code === 0 ? resolve(result) : reject(code)));
+    job.on('close', (code) => (code === 0 ? resolve(result) : reject(code)));
   });
 
 (async () => {
@@ -58,7 +58,7 @@ const spawnPromise = (...args) =>
 
   // Create .env.<stage> files
   await Promise.all(
-    Object.keys(secrets).map(async stage => {
+    Object.keys(secrets).map(async (stage) => {
       try {
         const result = await spawnPromise(
           'kubectl',

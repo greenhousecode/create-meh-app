@@ -30,7 +30,7 @@ app
   .description(description)
   .usage('<app-name>')
   .arguments('<app-name>')
-  .action(appName => {
+  .action((appName) => {
     input = appName;
   })
   .parse(process.argv);
