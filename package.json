@@ -1,6 +1,6 @@
 {
   "name": "create-meh-app",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Quickly scaffolds a new Node.js project by setting up linting, formatting, automatic deployment, and two-way environment secrets syncing.",
   "bin": "src/index.js",
   "files": [
@@ -39,12 +39,12 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
-    "lint-staged": "^10.0.9",
+    "lint-staged": "^10.1.1",
     "prettier": "^2.0.2"
   },
   "dependencies": {
     "boxen": "^4.2.0",
-    "chalk": "^3.0.0",
+    "chalk": "^4.0.0",
     "clear": "^0.1.0",
     "commander": "^5.0.0",
     "gitlab": "^14.2.2",
