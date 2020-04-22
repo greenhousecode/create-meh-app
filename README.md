@@ -26,7 +26,7 @@ yarn create meh-app <app-name>
 - [x] Optional Redis database
 - [x] Optional MongoDB database
 - [x] Optional Sentry logging
-- [x] Optional Pingdom monitoring
+- [x] Optional Uptime Robot monitoring
 
 ## Prerequisites
 
