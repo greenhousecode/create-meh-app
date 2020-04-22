@@ -82,13 +82,7 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
     "source.fixAll": true
   },
   "editor.formatOnSave": true,
-  "prettier.disableLanguages": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue"
-  ]
+  "prettier.disableLanguages": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }
 ```
 
