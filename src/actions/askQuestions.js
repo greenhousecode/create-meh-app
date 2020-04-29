@@ -130,8 +130,8 @@ module.exports = async (input) => {
           { name: 'MongoDB database', value: 'mongodb' },
           { name: 'Sentry logging', value: 'sentry', checked: true },
           {
-            name: 'Pingdom monitoring',
-            value: 'pingdom',
+            name: 'Uptime Robot monitoring',
+            value: 'uptimeRobot',
             checked: isWeb,
             disabled: !isWeb
               ? chalk.gray(`Not support for project type ${projectType}`)
