@@ -83,7 +83,7 @@ module.exports = (answers) => {
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
     redis: `${answers.addons.includes('redis')}`,
     mongodb: `${answers.addons.includes('mongodb')}`,
-    pingdom: answers.addons.includes('pingdom') ? '' : '\n  pingdom: false',
+    uptimeRobot: answers.addons.includes('uptimeRobot') ? '' : '\n  pingdom: false',
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
