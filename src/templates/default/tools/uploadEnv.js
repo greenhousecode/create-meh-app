@@ -5,6 +5,8 @@ const { get } = require('https');
 const { join } = require('path');
 const { tmpdir } = require('os');
 
+const { name: appName } = require('../package.json');
+
 const { GITLAB_PERSONAL_ACCESS_TOKEN } = process.env;
 const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
@@ -15,9 +17,9 @@ if (!GITLAB_PERSONAL_ACCESS_TOKEN) {
 }
 
 const secrets = {
-  test: '{{appName}}-test-secret-env',
-  acc: '{{appName}}-acc-secret-env',
-  prod: '{{appName}}-secret-env',
+  test: `${appName}-test-secret-env`,
+  acc: `${appName}-acc-secret-env`,
+  prod: `${appName}-secret-env`,
 };
 
 const getClusterConfig = () =>
@@ -129,11 +131,11 @@ data: {}
         console.log(`Environment secrets from .env.${stage} were applied successfully.`);
 
         // eslint-disable-next-line no-self-compare
-        if (process.argv.includes('--restart') && '{{projectType}}' === 'web') {
+        if (process.argv.includes('--force') && '{{projectType}}' === 'web') {
           // Restart web pods to pick up new secrets
           await spawnPromise(
             'kubectl',
-            ['delete', 'pods', '-l', `app={{appName}}${stage !== 'prod' ? `-${stage}` : ''}-web`],
+            ['delete', 'pods', '-l', `app=${appName}${stage !== 'prod' ? `-${stage}` : ''}-web`],
             { env: { ...process.env, KUBECONFIG: clusterConfigPath } },
           );
 

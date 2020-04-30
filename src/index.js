@@ -8,11 +8,8 @@ require('promise.allsettled').shim();
 
 const installDependencies = require('./actions/installDependencies');
 const createDevelopBranch = require('./actions/createDevelopBranch');
-const createSentry = require('./actions/createSentryProject');
-const deleteSentry = require('./actions/deleteSentryProject');
 const cloneRepository = require('./actions/cloneRepository');
 const { version, description } = require('../package.json');
-const fetchSentryDSN = require('./actions/fetchSentryDSN');
 const createProject = require('./actions/createProject');
 const initialCommit = require('./actions/initialCommit');
 const deleteProject = require('./actions/deleteProject');
@@ -73,13 +70,10 @@ console.log(
 (async () => {
   let answers;
   let project;
-  let sentry;
 
   try {
     answers = await askQuestions(input);
     project = await createProject(answers);
-    sentry = await createSentry(answers);
-    answers = { ...answers, ...(await fetchSentryDSN(sentry)) };
     await cloneRepository(answers, project);
     await createFiles(answers);
     await createSecrets(answers);
@@ -92,13 +86,7 @@ console.log(
   } catch (err) {
     console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
     console.log(err.description || err);
-
-    await Promise.allSettled([
-      deleteProject(answers, project),
-      deleteFolder(answers),
-      deleteSentry(sentry),
-    ]);
-
+    await Promise.allSettled([deleteProject(answers, project), deleteFolder(answers)]);
     process.exit(1);
   }
 })();

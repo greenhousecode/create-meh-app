@@ -128,7 +128,6 @@ module.exports = async (input) => {
           { name: 'Airflow DAG(s)', value: 'airflow', checked: !isWeb },
           { name: 'Redis database', value: 'redis' },
           { name: 'MongoDB database', value: 'mongodb' },
-          { name: 'Sentry logging', value: 'sentry', checked: true },
           {
             name: 'Uptime Robot monitoring',
             value: 'uptimeRobot',

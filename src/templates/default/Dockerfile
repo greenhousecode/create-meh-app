@@ -13,7 +13,7 @@ COPY package.json yarn.lock ./
 COPY --from=0 /tmp/app/build build
 RUN yarn --production
 
-# Serve
+# Run
 USER node
 EXPOSE 3000
 CMD ["yarn", "start"]
