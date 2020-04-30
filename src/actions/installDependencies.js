@@ -11,10 +11,6 @@ module.exports = async ({ framework, addons, cwd }) => {
   try {
     const dependencies = [...DEFAULT_DEPENDENCIES];
 
-    if (addons.includes('sentry')) {
-      dependencies.push('@sentry/node', '@sentry/integrations');
-    }
-
     if (dependencies.length) {
       // Install dependencies
       await spawnPromise('yarn', ['add', ...dependencies], { cwd });

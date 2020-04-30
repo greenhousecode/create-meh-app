@@ -5,6 +5,8 @@ const { get } = require('https');
 const { join } = require('path');
 const { tmpdir } = require('os');
 
+const { name: appName } = require('../package.json');
+
 const { GITLAB_PERSONAL_ACCESS_TOKEN } = process.env;
 const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
@@ -15,9 +17,9 @@ if (!GITLAB_PERSONAL_ACCESS_TOKEN) {
 }
 
 const secrets = {
-  test: '{{appName}}-test-secret-env',
-  acc: '{{appName}}-acc-secret-env',
-  prod: '{{appName}}-secret-env',
+  test: `${appName}-test-secret-env`,
+  acc: `${appName}-acc-secret-env`,
+  prod: `${appName}-secret-env`,
 };
 
 const getClusterConfig = () =>
@@ -69,7 +71,7 @@ const spawnPromise = (...args) =>
         const { data } = JSON.parse(result);
         const envFile = join(__dirname, `../.env.${stage}`);
 
-        if (!existsSync(envFile) || process.argv.includes('--overwrite')) {
+        if (!existsSync(envFile) || process.argv.includes('--force')) {
           writeFileSync(
             envFile,
             Object.keys(data).reduce((acc, key) => {
@@ -82,7 +84,7 @@ const spawnPromise = (...args) =>
 
           console.log(`.env.${stage} created.`);
         } else {
-          console.log(`.env.${stage} already exists, add the --overwrite flag to overwrite.`);
+          console.log(`.env.${stage} already exists, add the --force flag to overwrite.`);
         }
       } catch (err) {} // eslint-disable-line no-empty
     }),

@@ -25,7 +25,6 @@ yarn create meh-app <app-name>
 - [x] Optional Airflow DAG(s) (automatic deployment through GitLab)
 - [x] Optional Redis database
 - [x] Optional MongoDB database
-- [x] Optional Sentry logging
 - [x] Optional Uptime Robot monitoring
 
 ## Prerequisites
@@ -86,7 +85,7 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
 }
 ```
 
-> **Note:** We use `prettier.disableLanguages` to disable Prettier from handling JS(X), TS(X), and Vue files, because ESLint already formats these (using Prettier under the hood).
+> **Note:** We use `prettier.disableLanguages` to disable Prettier from handling JS(X) and TS(X) files, because ESLint already formats these (using Prettier under the hood).
 
 ## Roadmap
 
