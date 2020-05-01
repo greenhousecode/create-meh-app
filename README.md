@@ -76,15 +76,18 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
 
 ### `settings.json`
 
+> To open these settings, press: ⌘-Shift-P → "Preferences: Open Settings (JSON)"
+
 ```json
 {
   "editor.codeActionsOnSave": { "source.fixAll": true },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "prettier.disableLanguages": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
 }
 ```
 
-> To open these settings, press: ⌘-Shift-P → "Preferences: Open Settings (JSON)"
+> **Note:** We use `prettier.disableLanguages` to disable Prettier from handling JS(X) and TS(X) files, because ESLint already formats these (using Prettier under the hood).
 
 ## Roadmap
 
