@@ -20,11 +20,9 @@ Creates local `.env.<stage>` files from remote Kubernetes secrets.
 
 Publishes local `.env.<stage>` files to remote Kubernetes secrets.
 
-> `<stage>` can be any of: "test", "acc", "prod".
+> `<stage>` can be any of: "test", "acc" or "prod".
 
 > Add the `--force` flag to restart any web pods afterwards (to pick up your published secrets).
-
-> Always encapsulate multiline values in double quotes "".
 
 {{airflowDoc}}## Environment variables
 
