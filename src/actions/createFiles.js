@@ -77,7 +77,6 @@ module.exports = (answers) => {
     airflowDoc: answers.addons.includes('airflow') ? DOCUMENTATION.airflow : '',
     redisDoc: answers.addons.includes('redis') ? DOCUMENTATION.redis : '',
     mongodbDoc: answers.addons.includes('mongodb') ? DOCUMENTATION.mongodb : '',
-    gitlabDoc: DOCUMENTATION.gitlab,
     gitlabNamespace: GITLAB_NAMESPACES[answers.namespace].name,
     gitlabNamespaceId: GITLAB_NAMESPACES[answers.namespace].id,
     clusterVariableKey: GITLAB_NAMESPACES[answers.namespace].clusterVariableKey,
