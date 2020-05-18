@@ -1,16 +1,18 @@
+# Setup
+FROM node:12-alpine AS image
+WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
+
 # Build
-FROM node:12-alpine
+FROM image AS build
 ARG VERSION
-WORKDIR /tmp/app
 COPY . .
 RUN yarn
 RUN yarn build --cache-bust=$VERSION
 
 # Install
-FROM node:12-alpine
-WORKDIR /usr/src/app
-COPY package.json yarn.lock ./
-COPY --from=0 /tmp/app/build build
+FROM image AS install
+COPY --from=build /usr/src/app/build build
 RUN yarn --production
 
 # Run
