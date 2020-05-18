@@ -3,7 +3,7 @@ stages:
   - building
   - deploying
 
-.project_shared: &project_shared
+testing:
   image:
     name: node:12-alpine
   cache:
@@ -11,10 +11,7 @@ stages:
     paths:
       - ~/.cache/yarn
   before_script:
-    - yarn
-
-testing:
-  <<: *project_shared
+    - yarn --frozen-lockfile
   tags:
     - kube-02.bmidevelopment
   stage: testing
