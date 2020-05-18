@@ -12,7 +12,7 @@ const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
 
 if (!GITLAB_PERSONAL_ACCESS_TOKEN) {
-  console.log('Please provide a GITLAB_PERSONAL_ACCESS_TOKEN environment variable');
+  console.error('Please provide a GITLAB_PERSONAL_ACCESS_TOKEN environment variable');
   process.exit(1);
 }
 
