@@ -11,7 +11,7 @@ RUN yarn
 RUN yarn build --cache-bust=$VERSION
 
 # Install
-FROM image AS install
+FROM image AS app
 COPY --from=build /usr/src/app/build build
 RUN yarn --production
 
