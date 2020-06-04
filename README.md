@@ -34,21 +34,21 @@ yarn create meh-app /root-folder/my-app
 - [Kubectl v1.14.9](https://storage.googleapis.com/kubernetes-release/release/v1.14.9/bin/darwin/amd64/kubectl)
 - GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) ("api"-scoped)
 
-_Recommended: Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` (and/or `~/.zshrc`) so you can use `yarn download-env` and `yarn upload-env` without configuration._
+> **Recommended:** Add `export GITLAB_PERSONAL_ACCESS_TOKEN=<token>` to your `~/.bash_profile` (and/or `~/.zshrc`) so you can use `yarn download-env` and `yarn upload-env` without configuration.
 
 ## Functionality
 
 ### `yarn upload-env`
 
-Converts any local `.env.<stage>` files to secrets, and applies them remotely through `kubectl`. Add the `--restart` flag to restart any web pods afterwards (to pick up your new secrets).
+Converts any local `.env.<stage>` files to secrets, and applies them remotely through `kubectl`. Add the `--force` flag to restart any web pods afterwards (to pick up your new secrets).
 
-_(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable)_
+> Requires a `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable.
 
 ### `yarn download-env`
 
-Converts any remote project secrets to local dotenv files, and stores them as `.env.<stage>`. Add the `--overwrite` flag to overwrite any pre-existing `.env.<stage>` files.
+Converts any remote project secrets to local dotenv files, and stores them as `.env.<stage>`. Add the `--restart` flag to overwrite any pre-existing `.env.<stage>` files.
 
-_(requires `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable, and does not overwrite pre-existing dotenv files)_
+> Requires a `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable.
 
 ### `pre-commit` git hook
 
