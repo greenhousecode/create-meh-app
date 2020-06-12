@@ -4,7 +4,7 @@ const spawnPromise = require('../utils/spawnPromise');
 
 const { DEFAULT_DEPENDENCIES, DEFAULT_DEV_DEPENDENCIES } = require('../config.json');
 
-module.exports = async ({ framework, addons, cwd }) => {
+module.exports = async ({ framework, cwd }) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Installing dependencies (this can take a minute)…'));
 
@@ -22,9 +22,6 @@ module.exports = async ({ framework, addons, cwd }) => {
       [
         'add',
         ...DEFAULT_DEV_DEPENDENCIES,
-        ...(addons.includes('typescript')
-          ? ['typescript', '@typescript-eslint/parser', '@typescript-eslint/eslint-plugin']
-          : ['eslint-plugin-prettier']),
         ...(framework === 'vue' ? ['eslint-plugin-vue', '--dev'] : ['--dev']),
       ],
       { cwd },

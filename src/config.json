@@ -13,31 +13,27 @@
   },
   "LINT_STAGED_GLOBS": {
     "none": "*.js",
-    "noneTypescript": "*.{js,ts}",
     "react": "*.{js,jsx}",
-    "reactTypescript": "*.{js,jsx,ts,tsx}",
-    "vue": "*.{js,vue}",
-    "vueTypescript": "*.{js,ts,vue}"
+    "vue": "*.{js,vue}"
   },
   "LINT_SCRIPTS": {
     "none": "eslint --ignore-path .gitignore .",
-    "noneTypescript": "eslint --ext .js,.ts --ignore-path .gitignore .",
     "react": "eslint --ext .js,.jsx --ignore-path .gitignore .",
-    "reactTypescript": "eslint --ext .js,.ts,.jsx,.tsx --ignore-path .gitignore .",
-    "vue": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "vueTypescript": "eslint --ext .js,.ts,.vue --ignore-path .gitignore .",
-    "typescriptParser": "\"parser\": \"@typescript-eslint/parser\",\n  "
+    "vue": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "ESLINT_EXTENDS": {
     "none": "[\"airbnb-base\", \"plugin:prettier/recommended\"]",
-    "noneTypescript": "[\"airbnb-base\", \"plugin:@typescript-eslint/recommended\", \"prettier\", \"prettier/@typescript-eslint\"]",
     "react": "[\"airbnb\", \"plugin:prettier/recommended\"]",
-    "reactTypescript": "[\"airbnb\", \"plugin:@typescript-eslint/recommended\", \"prettier\", \"prettier/@typescript-eslint\"]",
-    "vue": "[\"plugin:vue/recommended\", \"airbnb-base\", \"prettier/vue\", \"plugin:prettier/recommended\"]",
-    "vueTypescript": "[\"plugin:vue/recommended\", \"airbnb-base\", \"plugin:@typescript-eslint/recommended\", \"prettier/vue\", \"prettier/@typescript-eslint\"]"
+    "vue": "[\"plugin:vue/recommended\", \"airbnb-base\", \"prettier/vue\", \"plugin:prettier/recommended\"]"
   },
   "DEFAULT_DEPENDENCIES": [],
-  "DEFAULT_DEV_DEPENDENCIES": ["husky", "prettier", "lint-staged@9", "eslint-config-prettier"],
+  "DEFAULT_DEV_DEPENDENCIES": [
+    "husky",
+    "prettier",
+    "lint-staged@9",
+    "eslint-config-prettier",
+    "eslint-plugin-prettier"
+  ],
   "DOCUMENTATION": {
     "airflow": "## Airflow DAG(s)\n\nAny DAG(s) present in `/airflow` will be automatically deployed to Airflow by CI/CD, when pushed to the `master` branch.\n\n",
     "redis": "\nShared | REDIS_URI | Database connection string.",
