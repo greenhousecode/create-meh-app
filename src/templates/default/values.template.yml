@@ -9,8 +9,6 @@ dbs:
 ingress:
   createIngress: {{isWeb}}{{uptimeRobot}}
   tls: {{isWeb}}
-  annotations:
-    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 containerResources:
   limits:
     memory: 256M
