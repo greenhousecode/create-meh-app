@@ -30,7 +30,7 @@
   "DEFAULT_DEV_DEPENDENCIES": [
     "husky",
     "prettier",
-    "lint-staged@9",
+    "lint-staged",
     "eslint-config-prettier",
     "eslint-plugin-prettier"
   ],
