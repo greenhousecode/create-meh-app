@@ -89,6 +89,4 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
 
 ## Roadmap
 
-- [ ] Fix ESLint setups with TypeScript
 - [ ] DAG OTAP
-- [ ] Optimize/simplify CI and values configuration
