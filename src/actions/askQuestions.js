@@ -136,11 +136,6 @@ module.exports = async (input) => {
               ? chalk.gray(`Not support for project type ${projectType}`)
               : undefined,
           },
-          {
-            name: 'TypeScript (only affects linting)',
-            value: 'typescript',
-            disabled: chalk.gray('temporarily disabled'),
-          },
         ];
       },
     },

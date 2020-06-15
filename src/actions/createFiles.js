@@ -53,10 +53,7 @@ module.exports = (answers) => {
 
   const now = new Date();
   const { name, email } = answers.gitlabData;
-  const variant = answers.addons.includes('typescript')
-    ? `${answers.framework}Typescript`
-    : answers.framework;
-
+  const variant = answers.framework;
   const isWeb = answers.projectType === 'web';
 
   const data = {
@@ -64,7 +61,6 @@ module.exports = (answers) => {
     isWeb: `${isWeb}`,
     author: `${name} <${email}>`,
     lintScript: LINT_SCRIPTS[variant],
-    eslintParser: answers.addons.includes('typescript') ? LINT_SCRIPTS.typescriptParser : '',
     eslintExtends: ESLINT_EXTENDS[variant],
     lintStagedGlob: LINT_STAGED_GLOBS[variant],
     deployTesting: isWeb && answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
