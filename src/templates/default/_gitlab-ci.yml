@@ -60,9 +60,9 @@ building:
     - building
   stage: deploying
   image: registry.gitlab.com/greenhousegroup/meh/images/k8s-helm:2
-	retry:
-		max: 1
-		when: script_failure
+  retry:
+    max: 1
+    when: script_failure
   before_script:
     - export K8S_CONFIG="$MEH_K8S_CLUSTER_CONFIG"
     - echo "$CI_COMMIT_SHA" > VERSION
