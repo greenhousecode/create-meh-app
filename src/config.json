@@ -36,9 +36,8 @@
   ],
   "DOCUMENTATION": {
     "airflow": "## Airflow DAG(s)\n\nAny DAG(s) present in `/airflow` will be automatically deployed to Airflow by CI/CD, when pushed to the `master` branch.\n\n",
-    "redis": "\nShared | REDIS_URI | Database connection string.",
-    "mongodb": "\nShared | MONGODB_URI | Database connection string.",
-    "gitlab": "\nLocal | GITLAB_PERSONAL_ACCESS_TOKEN | A GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) with `api` scope, used by `yarn download-env` and `yarn upload-env`."
+    "redis": "\nRead-only | REDIS_URI | Database connection string.",
+    "mongodb": "\nRead-only | MONGODB_URI | Database connection string."
   },
   "STAGES_DEPLOY_SCRIPTS": {
     "test": "\n\ndeploying_test:\n  <<: *deploy_config\n  when: on_success\n  script:\n    - source init-kubectl.sh\n    - echo 1 > REPLICAS && echo '-test' > STAGE\n    - sh ./scripts/replace_values_yaml.sh values.template.yml\n    - helm upgrade --install \"$CI_PROJECT_NAME-test\" ./chart/\n  environment:\n    name: test\n  except:\n    refs:\n      - master",
