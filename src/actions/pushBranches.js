@@ -8,7 +8,7 @@ module.exports = async ({ cwd }) => {
 
   try {
     await git(cwd).push('origin', 'master');
-    await git(cwd).push('origin', 'develop');
+    await git(cwd).push('origin', 'develop', { '-u': null });
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Pushing branches failed'));

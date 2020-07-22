@@ -6,15 +6,11 @@ const { DEFAULT_DEPENDENCIES, DEFAULT_DEV_DEPENDENCIES } = require('../config.js
 
 module.exports = async ({ framework, cwd }) => {
   const bar = new ui.BottomBar();
-  bar.updateBottomBar(chalk.gray('Installing dependencies (this can take a minute)…'));
+  bar.updateBottomBar(chalk.gray('Installing dependencies… (this can take a minute)'));
 
   try {
-    const dependencies = [...DEFAULT_DEPENDENCIES];
-
-    if (dependencies.length) {
-      // Install dependencies
-      await spawnPromise('yarn', ['add', ...dependencies], { cwd });
-    }
+    // Install dependencies
+    await spawnPromise('yarn', ['add', ...DEFAULT_DEPENDENCIES], { cwd });
 
     // Install devDependencies
     await spawnPromise(
