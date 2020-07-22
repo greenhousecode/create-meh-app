@@ -1,4 +1,4 @@
-const { Gitlab } = require('gitlab');
+const { Gitlab } = require('@gitbeaker/node');
 
 module.exports = (answers, project) => {
   if (answers && project) {

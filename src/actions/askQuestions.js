@@ -1,5 +1,5 @@
+const { Gitlab } = require('@gitbeaker/node');
 const { prompt } = require('inquirer');
-const { Gitlab } = require('gitlab');
 const { join } = require('path');
 const chalk = require('chalk');
 const { GITLAB_NAMESPACES } = require('../config.json');
