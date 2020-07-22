@@ -1,6 +1,6 @@
 {
   "name": "create-meh-app",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "description": "Quickly scaffolds a new Node.js project by setting up linting, formatting, automatic deployment, and two-way environment secrets syncing.",
   "bin": "src/index.js",
   "files": [
@@ -33,25 +33,25 @@
   "repository": "github:greenhousecode/create-meh-app",
   "author": "Rick Stevens <rick.stevens@greenhousegroup.com> (http://www.greenhousegroup.com/)",
   "devDependencies": {
-    "eslint": "6.8.0",
-    "eslint-config-airbnb-base": "14.1.0",
+    "eslint": "7.2.0",
+    "eslint-config-airbnb-base": "14.2.0",
     "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.20.1",
-    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
-    "lint-staged": "^10.1.7",
+    "lint-staged": "^10.2.11",
     "prettier": "^2.0.5"
   },
   "dependencies": {
+    "@gitbeaker/node": "^23.4.2",
     "boxen": "^4.2.0",
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "clear": "^0.1.0",
-    "commander": "^5.0.0",
-    "gitlab": "^14.2.2",
-    "inquirer": "^7.1.0",
+    "commander": "^6.0.0",
+    "inquirer": "^7.3.2",
     "promise.allsettled": "^1.0.2",
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
-    "simple-git": "^1.132.0"
+    "simple-git": "^2.14.0"
   }
 }
