@@ -26,7 +26,7 @@
     "react": "[\"airbnb\", \"plugin:prettier/recommended\"]",
     "vue": "[\"plugin:vue/recommended\", \"airbnb-base\", \"prettier/vue\", \"plugin:prettier/recommended\"]"
   },
-  "DEFAULT_DEPENDENCIES": [],
+  "DEFAULT_DEPENDENCIES": ["meh-logging"],
   "DEFAULT_DEV_DEPENDENCIES": [
     "husky",
     "prettier",
