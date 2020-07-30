@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const { existsSync, writeFileSync, mkdtempSync } = require('fs');
+const { existsSync, readFileSync, writeFileSync, mkdtempSync } = require('fs');
 const { spawn } = require('child_process');
 const { get } = require('https');
 const { join } = require('path');
@@ -7,14 +7,10 @@ const { tmpdir } = require('os');
 
 const { name: appName } = require('../package.json');
 
-const { GITLAB_PERSONAL_ACCESS_TOKEN } = process.env;
+const { GITLAB_PERSONAL_ACCESS_TOKEN, KUBECONFIG } = process.env;
+const DEFAULT_KUBECONFIG = KUBECONFIG.split`:`.pop();
 const tmpDir = mkdtempSync(join(tmpdir(), 'meh-app-'));
 const clusterConfigPath = join(tmpDir, 'clusterConfig.yml');
-
-if (!GITLAB_PERSONAL_ACCESS_TOKEN) {
-  console.error('Please provide a GITLAB_PERSONAL_ACCESS_TOKEN environment variable');
-  process.exit(1);
-}
 
 const secrets = {
   test: `${appName}-test-secret-env`,
@@ -24,40 +20,55 @@ const secrets = {
 
 const getClusterConfig = () =>
   new Promise((resolve, reject) => {
-    get(
-      'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
-      { headers: { 'private-token': GITLAB_PERSONAL_ACCESS_TOKEN } },
-      (res) => {
-        let body = '';
+    const kubeConfig = readFileSync(DEFAULT_KUBECONFIG);
+    if (kubeConfig) {
+      return resolve(kubeConfig);
+    }
+    if (GITLAB_PERSONAL_ACCESS_TOKEN) {
+      return get(
+        'https://gitlab.com/api/v4/groups/{{gitlabNamespaceId}}/variables/{{clusterVariableKey}}',
+        { headers: { 'private-token': GITLAB_PERSONAL_ACCESS_TOKEN } },
+        (res) => {
+          let body = '';
 
-        res.on('data', (chunk) => {
-          body += chunk;
-        });
+          res.on('data', (chunk) => {
+            body += chunk;
+          });
 
-        res.on('end', async () => {
-          const { value: clusterConfig } = JSON.parse(body);
-          resolve(clusterConfig);
-        });
-      },
-    ).on('error', reject);
+          res.on('end', async () => {
+            const { value: clusterConfig } = JSON.parse(body);
+            return resolve(clusterConfig);
+          });
+        },
+      ).on('error', reject);
+    }
+    return reject(
+      new Error(
+        'No Kubernetes config found. Either set up a configuration in ~/.kube/config or provide a GITLAB_PERSONAL_ACCESS_TOKEN environment variable.',
+      ),
+    );
   });
 
 const spawnPromise = (...args) =>
   new Promise((resolve, reject) => {
     const job = spawn(...args);
     let result = '';
+    let error = '';
 
     job.stdout.on('data', (data) => {
       result += data.toString();
     });
 
-    job.on('close', (code) => (code === 0 ? resolve(result) : reject(code)));
+    job.stderr.on('data', (data) => {
+      error += data.toString();
+    });
+
+    job.on('close', (code) => (code === 0 && !error ? resolve(result) : reject(error)));
   });
 
 (async () => {
   const clusterConfig = await getClusterConfig();
   writeFileSync(clusterConfigPath, Buffer.from(clusterConfig, 'base64').toString('utf8'));
-
   // Create .env.<stage> files
   await Promise.all(
     Object.keys(secrets).map(async (stage) => {
@@ -86,7 +97,15 @@ const spawnPromise = (...args) =>
         } else {
           console.log(`.env.${stage} already exists, add the --force flag to overwrite.`);
         }
-      } catch (err) {} // eslint-disable-line no-empty
+      } catch (err) {
+        console.error(`An error occurred while downloading your env. Here's the message:\n ${err}`);
+
+        if (err.includes('Enter token')) {
+          console.info(
+            `This is probably due to a missing kubectl session. Try running 'kubectl get pods', enter your MFA token and try again.`,
+          );
+        }
+      }
     }),
   );
 
