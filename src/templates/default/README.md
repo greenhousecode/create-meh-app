@@ -12,19 +12,17 @@ yarn
 
 #### `yarn download-env`
 
-Creates local `.env.<stage>` files from remote Kubernetes secrets.
+Creates local `.env.<test|acc|prod>` files from remote Kubernetes secrets.
 
-> Add the `--force` flag to overwrite any pre-existing local `.env.<stage>` files.
+> Add the `--force` flag to overwrite any pre-existing local `.env.<test|acc|prod>` files.
 
 #### `yarn upload-env`
 
-Publishes local `.env.<stage>` files to remote Kubernetes secrets.
-
-> `<stage>` can be any of: "test", "acc" or "prod".
+Publishes local `.env.<test|acc|prod>` files to remote Kubernetes secrets.
 
 > Add the `--force` flag to restart any web pods afterwards (to pick up your published secrets).
 
 {{airflowDoc}}## Environment variables
 
-| Env | Key | Description |
-| --- | --- | ----------- |{{redisDoc}}{{mongodbDoc}}
+| Environment | Key | Description |
+| ----------- | --- | ----------- |{{redisDoc}}{{mongodbDoc}}
