@@ -1,6 +1,6 @@
 # Create MEH App
 
-> Quickly scaffolds a new Node.js project by setting up linting, formatting, automatic deployment, two-way environment secrets syncing, and more.
+> Quickly scaffold a new Node.js project by creating a GitLab repository, setting up linting/formatting, automatic Kubernetes deployment, local dotenv ⇄ Kubernetes secrets syncing, and more.
 
 ## Usage
 
@@ -12,7 +12,7 @@ Examples:
 
 ```shell
 yarn create meh-app my-app
-yarn create meh-app folder/my-app
+yarn create meh-app relative-folder/my-app
 yarn create meh-app /root-folder/my-app
 ```
 
@@ -30,6 +30,7 @@ yarn create meh-app /root-folder/my-app
 
 ## Prerequisites
 
+- [Node.js](https://nodejs.org/) >=12 (LTS)
 - [Yarn](https://yarnpkg.com/)
 - [Kubectl v1.14.9](https://storage.googleapis.com/kubernetes-release/release/v1.14.9/bin/darwin/amd64/kubectl)
 - GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) ("api"-scoped)
@@ -91,4 +92,5 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
 
 ## Roadmap
 
+- [ ] Dotenv ⇄ secrets sync without a cluster key
 - [ ] DAG OTAP

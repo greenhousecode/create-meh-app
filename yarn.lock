@@ -25,33 +25,31 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@gitbeaker/core@^23.4.2":
-  version "23.4.2"
-  resolved "https://registry.yarnpkg.com/@gitbeaker/core/-/core-23.4.2.tgz#25fe1cf00dff7786b78fcf66be0ad3622dd018af"
-  integrity sha512-NDmuoU8n07tNTd8LF9mR4BEOxZAqSjitMi9UEvTKfwTz42nCcS5T6EBYo73QS4qxbk4jxZaLfgk5kBHSzX13SQ==
+"@gitbeaker/core@^23.5.0":
+  version "23.5.0"
+  resolved "https://registry.yarnpkg.com/@gitbeaker/core/-/core-23.5.0.tgz#e0be44eecd0d7bf5418c161997c36d45b0c1ba81"
+  integrity sha512-5geLk7SxAttABBJZxfuSp72lSYWRyRId583vGCpKB6ISkoDhP+vJxdE6ypmtOJPV4CaSRZhluAGAZd968pi9ng==
   dependencies:
-    "@gitbeaker/requester-utils" "^23.4.2"
+    "@gitbeaker/requester-utils" "^23.5.0"
     form-data "^3.0.0"
     li "^1.3.0"
     xcase "^2.0.1"
 
-"@gitbeaker/node@^23.4.2":
-  version "23.4.2"
-  resolved "https://registry.yarnpkg.com/@gitbeaker/node/-/node-23.4.2.tgz#e3779117ea1f1882616b3aeebf2338956acf62d5"
-  integrity sha512-qtFhjYufghEFNw0ZUmLuswGcYKGRszM5B5D8oz9C+ZFKKAAopUmOd5X7t1MycpLl9W4lgvolG8S8gEz/dqeIQg==
+"@gitbeaker/node@^23.5.0":
+  version "23.5.0"
+  resolved "https://registry.yarnpkg.com/@gitbeaker/node/-/node-23.5.0.tgz#0243be78aad148e7d6b5d79b7acc340748b5fa94"
+  integrity sha512-GEyhcrF1Lm8YmsmwntfzuhXnq00TrG14wNZP2Hg+DGgexG25eBbbcyFXuFZlBFSaGMQlsc8aPeuEyfyGmgpwnw==
   dependencies:
-    "@gitbeaker/core" "^23.4.2"
-    "@gitbeaker/requester-utils" "^23.4.2"
-    form-data "^3.0.0"
+    "@gitbeaker/core" "^23.5.0"
+    "@gitbeaker/requester-utils" "^23.5.0"
     got "^11.1.4"
     xcase "^2.0.1"
 
-"@gitbeaker/requester-utils@^23.4.2":
-  version "23.4.2"
-  resolved "https://registry.yarnpkg.com/@gitbeaker/requester-utils/-/requester-utils-23.4.2.tgz#cc1243b2f2f5b84355ae0419e1e2661a11a03620"
-  integrity sha512-5HxAX+JAqd/u8F4mBAgXKqwBBEv7ecJzpO+Ertj1BVOiTfXKGnhUu9kjUfEoBs6kEb4A2Sfeg896U/fSRqyQ9w==
+"@gitbeaker/requester-utils@^23.5.0":
+  version "23.5.0"
+  resolved "https://registry.yarnpkg.com/@gitbeaker/requester-utils/-/requester-utils-23.5.0.tgz#e6f5d0216cb978be95e6bf40adf606f23d426f14"
+  integrity sha512-MdmInOO4unkApvtbv6PnIpDYXosgZgClSOqbxF5S4aJRCZVTJ6oPjMoNP8luhyT9xQeknpKxn9Iv8psEh7IC1Q==
   dependencies:
-    form-data "^3.0.0"
     query-string "^6.12.1"
     xcase "^2.0.1"
 
@@ -1276,10 +1274,10 @@ inquirer@^7.0.0:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
-inquirer@^7.3.2:
-  version "7.3.2"
-  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.3.2.tgz#25245d2e32dc9f33dbe26eeaada231daa66e9c7c"
-  integrity sha512-DF4osh1FM6l0RJc5YWYhSDB6TawiBRlbV9Cox8MWlidU218Tb7fm3lQTULyUJDfJ0tjbzl0W4q651mrCCEM55w==
+inquirer@^7.3.3:
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.3.3.tgz#04d176b2af04afc157a83fd7c100e98ee0aad003"
+  integrity sha512-JG3eIAj5V9CwcGvuOmoo6LB9kbAYT8HXffUl6memuszlwDC/qvFAJw49XJ5NROSFNPxp3iQg1GqkFhaY/CR0IA==
   dependencies:
     ansi-escapes "^4.2.1"
     chalk "^4.1.0"
@@ -1287,7 +1285,7 @@ inquirer@^7.3.2:
     cli-width "^3.0.0"
     external-editor "^3.0.3"
     figures "^3.0.0"
-    lodash "^4.17.16"
+    lodash "^4.17.19"
     mute-stream "0.0.8"
     run-async "^2.4.0"
     rxjs "^6.6.0"
@@ -1601,7 +1599,7 @@ lodash@^4.17.14, lodash@^4.17.15:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
 
-lodash@^4.17.16:
+lodash@^4.17.19:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
@@ -2215,10 +2213,10 @@ signal-exit@^3.0.2:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
   integrity sha1-tf3AjxKH6hF4Yo5BXiUTK3NkbG0=
 
-simple-git@^2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-2.14.0.tgz#0dcd455451b9ad63542bf3f0599a01d57764d2e4"
-  integrity sha512-uhZUUrgw+5TlF6WYxGCbsnsdKeA8eu6UY48ynWk5/X5m/B2L5n/1eyc0e2G2hP6LFAIRGYnO3CCzgWng7OkOhg==
+simple-git@^2.17.0:
+  version "2.17.0"
+  resolved "https://registry.yarnpkg.com/simple-git/-/simple-git-2.17.0.tgz#541205913734018d32d051af847ad9fec2f95901"
+  integrity sha512-l2F16fJvHWSx+E1C8WduwpNDfqf+JDD8nsEaD5szUZlbz5Y6paSnR4wlGxIa6Mr6I4kl3F9QmTaPIQjSxlcafA==
   dependencies:
     "@kwsites/file-exists" "^1.1.1"
     "@kwsites/promise-deferred" "^1.1.1"
