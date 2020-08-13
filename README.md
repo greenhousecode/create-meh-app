@@ -41,13 +41,13 @@ yarn create meh-app /root-folder/my-app
 
 ### `yarn upload-env`
 
-Converts any local `.env.<test|acc|prod>` files to secrets, and applies them remotely through `kubectl`. Add the `--force` flag to restart any web pods afterwards (to pick up your new secrets).
+Converts any local `.env.<test|acc|prod>` files to secrets, and applies them remotely through `kubectl`. Add the `--restart` or `-r` flag to restart any web pods afterwards (to pick up your new secrets).
 
 > Requires a `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable.
 
 ### `yarn download-env`
 
-Converts any remote project secrets to local dotenv files, and stores them as `.env.<test|acc|prod>`. Add the `--restart` flag to overwrite any pre-existing `.env.<test|acc|prod>` files.
+Converts any remote project secrets to local dotenv files, and stores them as `.env.<test|acc|prod>`. Add the `--force` or `-f` flag to overwrite any pre-existing `.env.<test|acc|prod>` files.
 
 > Requires a `GITLAB_PERSONAL_ACCESS_TOKEN` as environment variable.
 
