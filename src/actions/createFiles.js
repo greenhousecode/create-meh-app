@@ -16,37 +16,6 @@ const {
 const templateDir = join(__dirname, '../templates/default');
 const airflowTemplateDir = join(__dirname, '../templates/airflow');
 
-// eslint-disable-next-line no-unused-vars
-const prefillProdEnv = (answers) => [];
-
-// eslint-disable-next-line no-unused-vars
-const prefillAccEnv = (answers) => [];
-
-// eslint-disable-next-line no-unused-vars
-const prefillTestEnv = (answers) => [];
-
-const prefillStagedEnv = (stage, answers) => {
-  let secrets = [];
-
-  switch (stage) {
-    case 'prod':
-      secrets = prefillProdEnv(answers);
-      break;
-    case 'acc':
-      secrets = prefillAccEnv(answers);
-      break;
-    case 'test':
-      secrets = prefillTestEnv(answers);
-      break;
-    default:
-      return '';
-  }
-
-  secrets = secrets.filter((val) => val);
-
-  return secrets.length ? `${secrets.join('\n')}\n` : '';
-};
-
 module.exports = (answers) => {
   const bar = new ui.BottomBar();
   bar.updateBottomBar(chalk.gray('Creating files…'));
@@ -107,9 +76,7 @@ module.exports = (answers) => {
   }
 
   // Create .env.prod, and optionally .env.acc and .env.test
-  answers.stages.forEach((stage) =>
-    writeFileSync(join(answers.cwd, `.env.${stage}`), prefillStagedEnv(stage, answers)),
-  );
+  answers.stages.forEach((stage) => writeFileSync(join(answers.cwd, `.env.${stage}`), ''));
 
   bar.updateBottomBar('');
   console.log(chalk.green('✔ Created files'));

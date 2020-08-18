@@ -84,7 +84,12 @@ If you opted in for Airflow DAG(s) during setup, the following will be added to 
   "editor.codeActionsOnSave": { "source.fixAll": true },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "prettier.disableLanguages": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+  "editor.tabSize": 2,
+  "eslint.options": { "ignorePath": ".gitignore" },
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "prettier.disableLanguages": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "prettier.ignorePath": ".gitignore"
 }
 ```
 
