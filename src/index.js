@@ -13,7 +13,6 @@ const { version, description } = require('../package.json');
 const createProject = require('./actions/createProject');
 const initialCommit = require('./actions/initialCommit');
 const deleteProject = require('./actions/deleteProject');
-const createSecrets = require('./actions/createSecrets');
 const askQuestions = require('./actions/askQuestions');
 const pushBranches = require('./actions/pushBranches');
 const deleteFolder = require('./actions/deleteFolder');
@@ -76,7 +75,6 @@ console.log(
     project = await createProject(answers);
     await cloneRepository(answers, project);
     await createFiles(answers);
-    await createSecrets(answers);
     await installDependencies(answers);
     await initialCommit(answers);
     await createDevelopBranch(answers);
