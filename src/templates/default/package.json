@@ -9,7 +9,7 @@
     "build": "echo 'No build specified' && mkdir build && exit 0",
     "{{dagStartScript}}start": "echo 'No start specified'",
     "download-env": "GITLAB_GROUP={{gitlabNamespace}} tools/envhelper download -p {{appName}}",
-    "upload-env": "GITLAB_GROUP={{gitlabNamespace}} tools/envhelper download -p {{appName}}"
+    "upload-env": "GITLAB_GROUP={{gitlabNamespace}} tools/envhelper upload -p {{appName}}"
   },
   "lint-staged": {
     "{{lintStagedGlob}}": [
