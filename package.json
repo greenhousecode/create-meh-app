@@ -1,6 +1,6 @@
 {
   "name": "create-meh-app",
-  "version": "1.11.3",
+  "version": "1.11.4",
   "description": "Quickly scaffold a new Node.js project by creating a GitLab repository, setting up linting/formatting, automatic Kubernetes deployment, local dotenv ⇄ Kubernetes secrets syncing, and more.",
   "bin": "src/index.js",
   "files": [
