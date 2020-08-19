@@ -1,7 +1,7 @@
 {
   "name": "create-meh-app",
   "version": "1.11.2",
-  "description": "Quickly scaffolds a new Node.js project by setting up linting, formatting, automatic deployment, and two-way environment secrets syncing.",
+  "description": "Quickly scaffold a new Node.js project by creating a GitLab repository, setting up linting/formatting, automatic Kubernetes deployment, local dotenv ⇄ Kubernetes secrets syncing, and more.",
   "bin": "src/index.js",
   "files": [
     "src"
@@ -50,7 +50,6 @@
     "commander": "^6.0.0",
     "inquirer": "^7.3.3",
     "promise.allsettled": "^1.0.2",
-    "request": "^2.88.2",
     "rimraf": "^3.0.2",
     "simple-git": "^2.17.0"
   }
