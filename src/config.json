@@ -17,9 +17,9 @@
     "vue": "*.{js,vue}"
   },
   "LINT_SCRIPTS": {
-    "none": "eslint --ignore-path .gitignore .",
-    "react": "eslint --ext .js,.jsx --ignore-path .gitignore .",
-    "vue": "eslint --ext .js,.vue --ignore-path .gitignore ."
+    "none": "eslint --ignore-path .gitignore --no-error-on-unmatched-pattern .",
+    "react": "eslint --ext .js,.jsx --ignore-path .gitignore --no-error-on-unmatched-pattern .",
+    "vue": "eslint --ext .js,.vue --ignore-path .gitignore --no-error-on-unmatched-pattern ."
   },
   "ESLINT_EXTENDS": {
     "none": "[\"airbnb-base\", \"plugin:prettier/recommended\"]",
@@ -35,7 +35,7 @@
     "eslint-plugin-prettier"
   ],
   "DOCUMENTATION": {
-    "airflow": "## Airflow DAG(s)\n\nAny DAG(s) present in `/airflow` will be automatically deployed to Airflow by CI/CD, when pushed to the `master` branch.\n\n",
+    "airflow": "## Airflow DAG(s)\n\nAny `/airflow/*.py` files will be automatically deployed to Airflow by CI/CD, when pushed to the `master` branch.\n\n",
     "redis": "\nRead-only | REDIS_URI | Database connection string.",
     "mongodb": "\nRead-only | MONGODB_URI | Database connection string."
   },
