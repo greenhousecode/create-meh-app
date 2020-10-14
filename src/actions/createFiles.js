@@ -2,10 +2,11 @@ const { writeFileSync } = require('fs');
 const { ui } = require('inquirer');
 const { join } = require('path');
 const chalk = require('chalk');
+const yaml = require('yaml');
+
 const copyTemplates = require('../utils/copyTemplates');
 
 const {
-  STAGES_DEPLOY_SCRIPTS,
   GITLAB_NAMESPACES,
   LINT_STAGED_GLOBS,
   ESLINT_EXTENDS,
@@ -24,6 +25,30 @@ module.exports = (answers) => {
   const { name, email } = answers.gitlabData;
   const variant = answers.framework;
   const isWeb = answers.projectType === 'web';
+  const gitlabCi = { include: [], variables: {} };
+  const defaultInclude = { project: 'GreenhouseGroup/meh/pipeline-configurations', ref: 'master' };
+
+  if (isWeb) {
+    if (answers.addons.includes('airflow'))
+      gitlabCi.include.push({
+        ...defaultInclude,
+        file: '/templates/deployment-dag.yaml',
+      });
+
+    gitlabCi.include.push({
+      ...defaultInclude,
+      file: '/defaults/default-node-webapp-gitlab-ci.yaml',
+    });
+  } else {
+    gitlabCi.include.push({
+      ...defaultInclude,
+      file: '/defaults/default-dag-gitlab-ci.yaml',
+    });
+  }
+
+  if (!answers.stages.includes('test')) gitlabCi.variables.CREATE_TEST_ENV = 'false';
+  if (answers.stages.includes('acc')) gitlabCi.variables.CREATE_ACCEPTANCE_ENV = 'true';
+  if (answers.addons.includes('airflow')) gitlabCi.variables.DAG_FILE_PATH = 'airflow/*.py';
 
   const data = {
     ...answers,
@@ -32,10 +57,7 @@ module.exports = (answers) => {
     lintScript: LINT_SCRIPTS[variant],
     eslintExtends: ESLINT_EXTENDS[variant],
     lintStagedGlob: LINT_STAGED_GLOBS[variant],
-    deployTesting: isWeb && answers.stages.includes('test') ? STAGES_DEPLOY_SCRIPTS.test : '',
-    deployAcceptance: isWeb && answers.stages.includes('acc') ? STAGES_DEPLOY_SCRIPTS.acc : '',
-    deployProduction: isWeb ? STAGES_DEPLOY_SCRIPTS.prod : '',
-    deployAirflow: answers.addons.includes('airflow') ? STAGES_DEPLOY_SCRIPTS.airflow : '',
+    gitlabCi: `\n${yaml.stringify(gitlabCi)}`,
     dagStartScript: answers.addons.includes('airflow')
       ? `start:${answers.dagName}": "echo 'No start:${answers.dagName} specified' && exit 0",\n    "`
       : '',
