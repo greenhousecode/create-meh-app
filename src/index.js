@@ -84,8 +84,8 @@ console.log(
     console.log(chalk.bold.green('\nAll finished!'));
     process.exit(0);
   } catch (err) {
-    console.log(chalk.red(`\nSomething went wrong (${err.message}):`));
-    console.log(err.description || err);
+    console.log(chalk.red(`\nSomething went wrong${err ? ` (${err.message}):` : ''}`));
+    if (err) console.log(err.description || err);
     await Promise.allSettled([deleteProject(answers, project), deleteFolder(answers)]);
     process.exit(1);
   }
