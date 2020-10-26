@@ -10,6 +10,16 @@ yarn
 
 ## Scripts
 
+### Environment Secrets
+
+There is an `envhelper` binary included in the project when starting it with `yarn create`. If you cloned an
+existing project you should fetch the binary separately.
+
+```shell
+curl -o ./tools/envhelper 'https://cdn.greenhousegroup.com/ghg-nl/meh/binaries/envhelper-latest'
+chmod +x ./tools/envhelper
+```
+
 #### `yarn download-env`
 
 Creates local dotenv files (`.env.<test|acc|prod>`) from remote Kubernetes secrets.
