@@ -34,18 +34,6 @@ module.exports = async ({ framework, cwd }) => {
       ],
       { cwd },
     );
-
-    // Install envhelper
-    await spawnPromise(
-      'curl',
-      [
-        '-o',
-        './tools/envhelper',
-        'https://cdn.greenhousegroup.com/ghg-nl/meh/binaries/envhelper-latest',
-        '&& (chmod +x ./tools/envhelper)',
-      ],
-      { cwd },
-    );
   } catch (err) {
     bar.updateBottomBar('');
     console.log(chalk.red('✘ Installing failed'));
