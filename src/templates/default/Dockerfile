@@ -1,5 +1,5 @@
 # Setup
-FROM node:12-alpine AS image
+FROM node:14-alpine AS image
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 
