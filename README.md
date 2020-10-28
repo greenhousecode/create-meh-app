@@ -30,7 +30,7 @@ yarn create meh-app /root-folder/my-app
 
 ## Prerequisites
 
-- [Node.js](https://nodejs.org/) >=12 (LTS)
+- [Node.js](https://nodejs.org/) >=14 (LTS)
 - [Yarn](https://yarnpkg.com/)
 - [Kubectl v1.14.9](https://storage.googleapis.com/kubernetes-release/release/v1.14.9/bin/darwin/amd64/kubectl)
 - GitLab [personal access token](https://gitlab.com/profile/personal_access_tokens) ("api"-scoped)
