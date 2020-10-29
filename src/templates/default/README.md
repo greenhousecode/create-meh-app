@@ -14,11 +14,6 @@ yarn
 
 > There is an `envhelper` binary added to the project (`tools/envhelper`) when installing dependencies with `yarn` through a `postinstall` script.
 
-```shell
-curl -o ./tools/envhelper 'https://cdn.greenhousegroup.com/ghg-nl/meh/binaries/envhelper-latest'
-chmod +x ./tools/envhelper
-```
-
 #### `yarn download-env`
 
 Creates local dotenv files (`.env.<test|acc|prod>`) from remote Kubernetes secrets.
