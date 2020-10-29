@@ -10,7 +10,7 @@
     "{{dagStartScript}}start": "echo 'No start specified'",
     "download-env": "GITLAB_GROUP={{gitlabNamespace}} tools/envhelper download -p {{appName}}",
     "upload-env": "GITLAB_GROUP={{gitlabNamespace}} tools/envhelper upload -p {{appName}}",
-    "postinstall": "curl -o ./tools/envhelper https://cdn.greenhousegroup.com/ghg-nl/meh/binaries/envhelper-latest && chmod +x ./tools/envhelper"
+    "postinstall": "curl -o ./tools/envhelper --create-dirs https://cdn.greenhousegroup.com/ghg-nl/meh/binaries/envhelper-latest && chmod +x ./tools/envhelper"
   },
   "lint-staged": {
     "{{lintStagedGlob}}": [
