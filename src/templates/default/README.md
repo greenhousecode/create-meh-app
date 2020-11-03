@@ -10,6 +10,10 @@ yarn
 
 ## Scripts
 
+### Environment Secrets
+
+> There is an `envhelper` binary added to the project (`tools/envhelper`) when installing dependencies with `yarn` through a `postinstall` script.
+
 #### `yarn download-env`
 
 Creates local dotenv files (`.env.<test|acc|prod>`) from remote Kubernetes secrets.
