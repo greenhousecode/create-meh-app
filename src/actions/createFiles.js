@@ -48,7 +48,7 @@ module.exports = (answers) => {
 
   if (!answers.stages.includes('test')) gitlabCi.variables.CREATE_TEST_ENV = 'false';
   if (answers.stages.includes('acc')) gitlabCi.variables.CREATE_ACCEPTANCE_ENV = 'true';
-  if (answers.addons.includes('airflow')) gitlabCi.variables.DAG_FILE_PATH = 'airflow/*.py';
+  if (answers.addons.includes('airflow')) gitlabCi.variables.DAG_FILE_PATH = 'airflow/';
 
   const data = {
     ...answers,
