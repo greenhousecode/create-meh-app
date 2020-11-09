@@ -7,8 +7,6 @@ COPY package.json yarn.lock ./
 FROM image AS build
 ARG VERSION
 COPY . .
-RUN yarn
-RUN yarn build --cache-bust=$VERSION
 
 # Install
 FROM image
