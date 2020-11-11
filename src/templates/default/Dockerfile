@@ -1,15 +1,9 @@
 # Setup
 FROM node:14-alpine AS image
 WORKDIR /usr/src/app
-COPY package.json yarn.lock ./
 
-# Copy build from artifacts
-FROM image AS build
+# Install (copy from pipeline artifacts)
 COPY . .
-
-# Install
-FROM image
-COPY --from=build /usr/src/app/build build
 RUN yarn --production
 
 # Run
