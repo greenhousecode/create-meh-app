@@ -3,9 +3,8 @@ FROM node:14-alpine AS image
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 
-# Build
+# Copy build from artifacts
 FROM image AS build
-ARG VERSION
 COPY . .
 
 # Install
