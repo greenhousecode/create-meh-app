@@ -1,5 +1,5 @@
 # Setup
-FROM node:14-alpine AS image
+FROM node:14-alpine
 WORKDIR /usr/src/app
 
 # Install (copy from pipeline artifacts)
