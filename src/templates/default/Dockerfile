@@ -1,13 +1,9 @@
-# Build arguments
-ARG BUILD_PATH
-ARG NODE_VERSION
-
 # Setup
-FROM node:$NODE_VERSION AS image
+FROM node:14-alpine AS image
 WORKDIR /usr/src/app
 
 # Install (copy from pipeline artifacts)
-COPY $BUILD_PATH $BUILD_PATH
+COPY . .
 RUN yarn --production
 
 # Run
