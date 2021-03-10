@@ -13,4 +13,4 @@ containerResources:
   limits:
     memory: 256M
     cpu: 100m
-envSecretName: {{appName}}__STAGE__-secret-env
+envSecretName: {{appName}}__STAGE__-secret-env{{serviceAccountName}}

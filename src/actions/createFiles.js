@@ -70,6 +70,7 @@ module.exports = (answers) => {
     redis: `${answers.addons.includes('redis')}`,
     mongodb: `${answers.addons.includes('mongodb')}`,
     uptimeRobot: answers.addons.includes('uptimeRobot') ? '' : '\n  pingdom: false',
+    serviceAccount: answers.serviceAccount ? `\nserviceAccountName: ${answers.serviceAccount}` : '',
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),

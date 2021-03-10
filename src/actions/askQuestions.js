@@ -176,6 +176,19 @@ module.exports = async (input) => {
         { name: 'Every month', value: '@monthly' },
       ],
     },
+    {
+      name: 'serviceAccount',
+      type: 'input',
+      message:
+        'Do you want to set a custom service account name? If not, leave empty for the default',
+      filter,
+      validate: (serviceAccount) => {
+        if (serviceAccount && !/^[a-z0-9-]+$/.test(serviceAccount))
+          return 'Only use [a-z0-9-] for your service account name';
+
+        return true;
+      },
+    },
   ]);
 
   return { ...DEFAULTS, ...answers, gitlabData, appName, cwd };
