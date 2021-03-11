@@ -121,13 +121,16 @@ module.exports = async (input) => {
     {
       name: 'addons',
       type: 'checkbox',
-      message: 'Check any of the following you want to include:',
+      message: 'Check any of the following services you plan on using:',
       choices: ({ projectType }) => {
         const isWeb = projectType === 'web';
         return [
           { name: 'Airflow DAG(s)', value: 'airflow', checked: !isWeb },
           { name: 'Redis database', value: 'redis' },
           { name: 'MongoDB database', value: 'mongodb' },
+          { name: 'AWS CloudFront', value: 'cloudfront' },
+          { name: 'AWS SES', value: 'ses' },
+          { name: 'AWS S3', value: 's3' },
           {
             name: 'Uptime Robot monitoring',
             value: 'uptimeRobot',
