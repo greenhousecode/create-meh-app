@@ -46,6 +46,26 @@ module.exports = (answers) => {
     });
   }
 
+  let serviceAccount;
+
+  switch (true) {
+    case (answers.stages.includes('s3') || answers.stages.includes('cloudfront')) &&
+      answers.stages.includes('ses'):
+      serviceAccount = 'apps-meh-s3-ses';
+      break;
+
+    case answers.stages.includes('s3') || answers.stages.includes('cloudfront'):
+      serviceAccount = 'apps-meh-s3';
+      break;
+
+    case answers.stages.includes('ses'):
+      serviceAccount = 'apps-meh-ses';
+      break;
+
+    default:
+      break;
+  }
+
   if (!answers.stages.includes('test')) gitlabCi.variables.CREATE_TEST_ENV = 'false';
   if (answers.stages.includes('acc')) gitlabCi.variables.CREATE_ACCEPTANCE_ENV = 'true';
   if (answers.addons.includes('airflow')) gitlabCi.variables.DAG_FOLDER = 'airflow';
@@ -70,7 +90,7 @@ module.exports = (answers) => {
     redis: `${answers.addons.includes('redis')}`,
     mongodb: `${answers.addons.includes('mongodb')}`,
     uptimeRobot: answers.addons.includes('uptimeRobot') ? '' : '\n  pingdom: false',
-    serviceAccount: answers.serviceAccount ? `\nserviceAccountName: ${answers.serviceAccount}` : '',
+    serviceAccount: serviceAccount ? `\nserviceAccountName: ${serviceAccount}` : '',
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
