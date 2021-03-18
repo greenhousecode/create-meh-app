@@ -34,6 +34,7 @@ dag = DAG(
 k = GHKubernetesPodOperator(
     secrets=[Secret('env', None, '__SECRETS__')],
     labels={'app': 'airflow', 'dag': dag_id, 'tier': '__NAME__'},
+    service_account_name={{serviceAccountDag}},
     arguments=['start:' + filename],
     image='__DOCKER_IMAGE__',
     task_id=dag_id,
