@@ -46,25 +46,24 @@ module.exports = (answers) => {
     });
   }
 
-  let serviceAccount;
+  const { addons } = answers;
+  const availableServices = ['athena', 's3', 'ses'];
+  const availableServiceAccounts = [
+    'apps-meh-athena',
+    'apps-meh-s3',
+    'apps-meh-s3-ses',
+    'apps-meh-s3-ses-athena',
+    'apps-meh-ses',
+  ];
 
-  switch (true) {
-    case (answers.stages.includes('s3') || answers.stages.includes('cloudfront')) &&
-      answers.stages.includes('ses'):
-      serviceAccount = 'apps-meh-s3-ses';
-      break;
+  // Exception: CloudFront access is provided by the S3 service account
+  if (addons.includes('cloudfront')) addons[addons.indexOf('cloudfront')] = 's3';
 
-    case answers.stages.includes('s3') || answers.stages.includes('cloudfront'):
-      serviceAccount = 'apps-meh-s3';
-      break;
-
-    case answers.stages.includes('ses'):
-      serviceAccount = 'apps-meh-ses';
-      break;
-
-    default:
-      break;
-  }
+  const serviceAccount = availableServiceAccounts.find((sa) =>
+    availableServices
+      .filter((service) => addons.includes(service))
+      .reduce((acc, chosenService) => (!acc ? acc : sa.includes(chosenService)), true),
+  );
 
   if (!answers.stages.includes('test')) gitlabCi.variables.CREATE_TEST_ENV = 'false';
   if (answers.stages.includes('acc')) gitlabCi.variables.CREATE_ACCEPTANCE_ENV = 'true';
@@ -91,6 +90,7 @@ module.exports = (answers) => {
     mongodb: `${answers.addons.includes('mongodb')}`,
     uptimeRobot: answers.addons.includes('uptimeRobot') ? '' : '\n  pingdom: false',
     serviceAccount: serviceAccount ? `\nserviceAccountName: ${serviceAccount}` : '',
+    serviceAccountDag: serviceAccount ? `'${serviceAccount}'` : 'None',
     year: now.getFullYear(),
     month: now.getMonth() + 1,
     day: now.getDate(),
