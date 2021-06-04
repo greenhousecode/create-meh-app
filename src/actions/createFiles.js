@@ -96,11 +96,13 @@ module.exports = (answers) => {
     day: now.getDate(),
   };
 
-  const overrideContents = (transformFileName = undefined) => (file) => ({
-    ...file,
-    fileName: transformFileName ? transformFileName(file.fileName) : file.fileName,
-    fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
-  });
+  const overrideContents =
+    (transformFileName = undefined) =>
+    (file) => ({
+      ...file,
+      fileName: transformFileName ? transformFileName(file.fileName) : file.fileName,
+      fileContents: file.fileContents.replace(/{{([^}]+)}}/g, (_, match) => data[match] || ''),
+    });
 
   // Copy over template files and replace macros
   copyTemplates(
