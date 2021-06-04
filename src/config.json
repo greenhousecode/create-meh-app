@@ -24,7 +24,7 @@
   "ESLINT_EXTENDS": {
     "none": "[\"airbnb-base\", \"plugin:prettier/recommended\"]",
     "react": "[\"airbnb\", \"plugin:prettier/recommended\"]",
-    "vue": "[\"plugin:vue/recommended\", \"airbnb-base\", \"prettier\", \"plugin:prettier/recommended\"]"
+    "vue": "[\"plugin:vue/recommended\", \"airbnb-base\", \"plugin:prettier/recommended\"]"
   },
   "DEFAULT_DEPENDENCIES": ["meh-logging"],
   "DEFAULT_DEV_DEPENDENCIES": [
